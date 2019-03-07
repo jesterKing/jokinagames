@@ -39,9 +39,15 @@ public class PortableGameNotationReader {
         }
         Util.println("Käytetään " + this.gameFile);
 
+        String osname = System.getProperty("os.name");
+
         // alustetaan nappulamerkki hashmappi
         for(int i = 0; i < pieces.length; i++) {
-           nappulaMerkit.put(pieces[i], Util.charFromInt(firstPiece+i));
+            if(osname.startsWith("Windows")) {
+                nappulaMerkit.put(pieces[i], pieces[i]);
+            } else {
+                nappulaMerkit.put(pieces[i], Util.charFromInt(firstPiece + i));
+            }
         }
     }
 
