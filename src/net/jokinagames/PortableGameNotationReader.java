@@ -18,6 +18,7 @@ public class PortableGameNotationReader {
 
     final private int firstPiece = (int)('\u2654');
     final private char[] pieces = new char[] {'K', 'Q', 'R', 'B', 'N', 'P', 'k', 'q', 'r', 'b', 'n', 'p'};
+    final private String nappulat = "KQRBNPkqrbnp";
     final private HashMap<Character, Character> nappulaMerkit = new HashMap<>();
 
     /**
@@ -42,11 +43,11 @@ public class PortableGameNotationReader {
         String osname = System.getProperty("os.name");
 
         // alustetaan nappulamerkki hashmappi
-        for(int i = 0; i < pieces.length; i++) {
+        for(int i = 0; i < nappulat.length(); i++) {
             if(osname.startsWith("Windows")) {
-                nappulaMerkit.put(pieces[i], pieces[i]);
+                nappulaMerkit.put(nappulat.charAt(i), nappulat.charAt(i));
             } else {
-                nappulaMerkit.put(pieces[i], Util.charFromInt(firstPiece + i));
+                nappulaMerkit.put(nappulat.charAt(i), Util.charFromInt(firstPiece + i));
             }
         }
     }
@@ -156,7 +157,8 @@ public class PortableGameNotationReader {
                         Util.print("    ");
                     }
                 } else {
-                    Util.print(" " + nappulaMerkit.get(rivi.charAt(i)) + "  ");
+                    Util.Color col = Character.isLowerCase(rivi.charAt(i)) ? Util.Color.BLACK : Util.Color.WHITE;
+                    Util.print(" " + nappulaMerkit.get(rivi.charAt(i)) + "  ", col);
                 }
             }
             Util.ln();
