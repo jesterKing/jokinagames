@@ -1,0 +1,317 @@
+<Project>
+  <Name>net.jokinagames</Name>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <Name>shakki</Name>
+    <Language>Java</Language>
+    <Entities>
+      <Entity type="Class" nhmTableName="" idGenerator="">
+        <GeneratorParameters />
+        <Name>Lauta</Name>
+        <Access>Public</Access>
+        <Location left="858" top="194" />
+        <Size width="243" height="241" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private final Nappula[][] ruudut = new Nappula[8][8]</Member>
+        <Member type="Method">public static Lauta uusiPerusAsettelu()</Member>
+        <Member type="Method">public static int uusiTranscendentalAsettelu()</Member>
+        <Member type="Method">public boolean onkoVapaa(Koordinaatti paikka)</Member>
+        <Member type="Method">public boolean sallittuSiirto(Siirto siirto)</Member>
+        <Member type="Method">public String annaLauta()</Member>
+        <Member type="Method">public Lauta teeSiirto(Siirto siirto)</Member>
+        <Member type="Constructor">private Lauta()</Member>
+        <Modifier>None</Modifier>
+        <Stereotype>
+        </Stereotype>
+      </Entity>
+      <Entity type="Class" nhmTableName="" idGenerator="">
+        <GeneratorParameters />
+        <Name>Peli</Name>
+        <Access>Public</Access>
+        <Location left="418" top="194" />
+        <Size width="322" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private Pelaaja pelaaja1</Member>
+        <Member type="Field">private Pelaaja pelaaja2</Member>
+        <Member type="Field">protected ArrayList&lt;Lauta&gt; siirrot</Member>
+        <Member type="Method">public static Peli uusiPeli(Pelaaja yksi, Pelaaja kaksi, Lauta alku)</Member>
+        <Member type="Constructor">private Peli(Pelaaja yksi, Pelaaja kaksi)</Member>
+        <Member type="Method">public Lauta seuraavaSiirto()</Member>
+        <Member type="Method">public boolean peliOhi()</Member>
+        <Member type="Method">public boolean onkoShakki()</Member>
+        <Modifier>None</Modifier>
+        <Stereotype>
+        </Stereotype>
+      </Entity>
+      <Entity type="Class" nhmTableName="" idGenerator="">
+        <GeneratorParameters />
+        <Name>Nappula</Name>
+        <Access>Public</Access>
+        <Location left="1440" top="194" />
+        <Size width="187" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private final Vari vari</Member>
+        <Member type="Constructor">public Nappula(Vari vari)</Member>
+        <Member type="Method">public abstract List&lt;Siirto&gt; mahdollisetSiirrot()</Member>
+        <Member type="Method">public Vari annaVari()</Member>
+        <Modifier>Abstract</Modifier>
+        <Stereotype>
+        </Stereotype>
+      </Entity>
+      <Entity type="Class" nhmTableName="" idGenerator="">
+        <GeneratorParameters />
+        <Name>Kuningatar</Name>
+        <Access>Public</Access>
+        <Location left="1452" top="683" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public Kuningatar(Vari vari)</Member>
+        <Member type="Method">public List&lt;Siirto&gt; mahdollisetSiirrot()</Member>
+        <Modifier>None</Modifier>
+        <Stereotype>
+        </Stereotype>
+      </Entity>
+      <Entity type="Class" nhmTableName="" idGenerator="">
+        <GeneratorParameters />
+        <Name>Kuningas</Name>
+        <Access>Public</Access>
+        <Location left="1623" top="683" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public Kuningas(Vari vari)</Member>
+        <Member type="Method">public List&lt;Siirto&gt; mahdollisetSiirrot()</Member>
+        <Modifier>None</Modifier>
+        <Stereotype>
+        </Stereotype>
+      </Entity>
+      <Entity type="Class" nhmTableName="" idGenerator="">
+        <GeneratorParameters />
+        <Name>Torni</Name>
+        <Access>Public</Access>
+        <Location left="1110" top="683" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public Torni(Vari vari)</Member>
+        <Member type="Method">public List&lt;Siirto&gt; mahdollisetSiirrot()</Member>
+        <Modifier>None</Modifier>
+        <Stereotype>
+        </Stereotype>
+      </Entity>
+      <Entity type="Class" nhmTableName="" idGenerator="">
+        <GeneratorParameters />
+        <Name>Lähetti</Name>
+        <Access>Public</Access>
+        <Location left="1279" top="683" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public Lähetti(Vari vari)</Member>
+        <Member type="Method">public List&lt;Siirto&gt; mahdollisetSiirrot()</Member>
+        <Modifier>None</Modifier>
+        <Stereotype>
+        </Stereotype>
+      </Entity>
+      <Entity type="Class" nhmTableName="" idGenerator="">
+        <GeneratorParameters />
+        <Name>Ratsu</Name>
+        <Access>Public</Access>
+        <Location left="941" top="683" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public Ratsu(Vari vari)</Member>
+        <Member type="Method">public List&lt;Siirto&gt; mahdollisetSiirrot()</Member>
+        <Modifier>None</Modifier>
+        <Stereotype>
+        </Stereotype>
+      </Entity>
+      <Entity type="Class" nhmTableName="sotilas" idGenerator="">
+        <GeneratorParameters />
+        <Name>Sotilas</Name>
+        <Access>Public</Access>
+        <Location left="773" top="683" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public Sotilas(Vari vari)</Member>
+        <Member type="Method">public List&lt;Siirto&gt; mahdollisetSiirrot()</Member>
+        <Modifier>None</Modifier>
+        <Stereotype>
+        </Stereotype>
+      </Entity>
+      <Entity type="Class" nhmTableName="pelaaja" idGenerator="">
+        <GeneratorParameters />
+        <Name>Pelaaja</Name>
+        <Access>Public</Access>
+        <Location left="29" top="194" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private final Vari vari</Member>
+        <Member type="Field">private String nimi</Member>
+        <Member type="Constructor">public Pelaaja(String nimi, Vari vari)</Member>
+        <Member type="Method">public String annaNimi()</Member>
+        <Modifier>None</Modifier>
+        <Stereotype>
+        </Stereotype>
+      </Entity>
+      <Entity type="Enum">
+        <GeneratorParameters />
+        <Name>Vari</Name>
+        <Access>Public</Access>
+        <Location left="271" top="45" />
+        <Size width="162" height="95" />
+        <Collapsed>False</Collapsed>
+        <Value>VALKOINEN</Value>
+        <Value>MUSTA</Value>
+      </Entity>
+      <Entity type="Class" nhmTableName="replay" idGenerator="">
+        <GeneratorParameters />
+        <Name>Replay</Name>
+        <Access>Public</Access>
+        <Location left="271" top="478" />
+        <Size width="162" height="77" />
+        <Collapsed>False</Collapsed>
+        <Modifier>None</Modifier>
+        <Stereotype>
+        </Stereotype>
+      </Entity>
+      <Entity type="Comment">
+        <Text>Joka siirron yhteydessä luodaan uusi Lauta. Lauta-instansseja pidetään siirrot-listassa, joten on helppoa selata pelihistoriassa eteen- ja taaksepäin</Text>
+        <Location left="673" top="45" />
+        <Size width="221" height="75" />
+      </Entity>
+      <Entity type="Comment">
+        <Text>mahdollisetSiirrot ei ota kantaa siirtojen kelpoisuuteen, vaan kertoo ainoastaan mistä minne Nappula pääsisi rajoituksetta.</Text>
+        <Location left="1668" top="194" />
+        <Size width="195" height="76" />
+      </Entity>
+      <Entity type="Class" nhmTableName="" idGenerator="">
+        <GeneratorParameters />
+        <Name>Siirto</Name>
+        <Access>Public</Access>
+        <Location left="1351" top="34" />
+        <Size width="162" height="111" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private Koordinaatti A</Member>
+        <Member type="Field">private Koordinaatti B</Member>
+        <Modifier>None</Modifier>
+        <Stereotype>
+        </Stereotype>
+      </Entity>
+      <Entity type="Comment">
+        <Text>Siirto edustaa siirtoa laudalla. Ei ole vielä varmaa miten se tullaan esittämään, joten vielä "tyhjä" luokka. Vaihtoehtoina ainakin algebraaista notaatiota (PGN), tai sitten indeksejä suoraan Laudan ruuduille, ehkä muita</Text>
+        <Location left="1575" top="34" />
+        <Size width="262" height="95" />
+      </Entity>
+      <Entity type="Class" nhmTableName="" idGenerator="">
+        <GeneratorParameters />
+        <Name>Koordinaatti</Name>
+        <Access>Public</Access>
+        <Location left="1136" top="34" />
+        <Size width="162" height="77" />
+        <Collapsed>False</Collapsed>
+        <Modifier>None</Modifier>
+        <Stereotype>
+        </Stereotype>
+      </Entity>
+      <Entity type="Comment">
+        <Text>Paikka laudalla</Text>
+        <Location left="1019" top="107" />
+        <Size width="82" height="50" />
+      </Entity>
+      <Entity type="Comment">
+        <Text>Lukee PGN-notaatiotiedoston ja luo Pelin, ml. kaikki pelaajat ja siirrot valmiiksi.</Text>
+        <Location left="29" top="478" />
+        <Size width="160" height="75" />
+      </Entity>
+    </Entities>
+    <Relationships>
+      <Relationship type="Generalization" first="8" second="2">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Generalization" first="7" second="2">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Generalization" first="5" second="2">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Generalization" first="6" second="2">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Generalization" first="3" second="2">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Generalization" first="4" second="2">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Association" first="1" second="0">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Bidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+        <StartRole>peli</StartRole>
+        <EndRole>siirtoja</EndRole>
+        <StartMultiplicity>1</StartMultiplicity>
+        <EndMultiplicity>0..*</EndMultiplicity>
+      </Relationship>
+      <Relationship type="Association" first="0" second="2">
+        <Label>nolla tai useampi nappula</Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Bidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+        <StartMultiplicity>1</StartMultiplicity>
+        <EndMultiplicity>0..*</EndMultiplicity>
+      </Relationship>
+      <Relationship type="Association" first="1" second="9">
+        <Label>pelaajaa osallistuu peliin</Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Bidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+        <StartMultiplicity>1</StartMultiplicity>
+        <EndMultiplicity>2</EndMultiplicity>
+      </Relationship>
+      <Relationship type="Association" first="14" second="16">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Bidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+      </Relationship>
+      <Relationship type="Comment" first="18" second="11">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Association" first="11" second="1">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <Direction>Bidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Comment" first="13" second="2">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Comment" first="12" second="1">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Comment" first="12" second="0">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Comment" first="17" second="16">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Comment" first="15" second="14">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+    </Relationships>
+  </ProjectItem>
+</Project>
