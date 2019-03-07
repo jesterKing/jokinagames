@@ -31,6 +31,7 @@ public class PortableGameNotationReader {
         if(laskePelit()==0) {
             throw new IOException("Tiedostossa ei ole pelejä.");
         }
+        System.out.println("Käytetään " + this.gameFile);
     }
 
     /**
