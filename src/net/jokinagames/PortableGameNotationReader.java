@@ -96,12 +96,24 @@ public class PortableGameNotationReader {
         return gameCount;
     }
 
+    /**
+     * Lue PGN-tiedostosta peli annetussa indeksissa
+     *
+     * Jos PGN-pelissa MOVETEXT ja lopputulos ovat eri riveillä
+     * nämä yhdistetään yhdeksi riviksi, välilyönnillä erotettuna.
+     *
+     * Tyhjat rivit jätetään välistä.
+     * @param index
+     * @return ArrayList<String> jossa pelin tagit ja movetext
+     */
     private ArrayList<String> luePeli(int index) {
         ArrayList<String> peliPgn = new ArrayList<>(15);
         int pos = -1;
         try {
             BufferedReader br = new BufferedReader(new FileReader(gameFile));
             String line;
+            String movetext = "";
+            int movetextidx = -1;
             while ((line = br.readLine()) != null) {
                 if (line.startsWith("[Event")) pos++;
                 {
@@ -109,8 +121,22 @@ public class PortableGameNotationReader {
                         peliPgn.add(line);
                         while(true) {
                             line = br.readLine();
-                            if(line == null || line.startsWith("[Event")) return peliPgn;
-                            peliPgn.add(line);
+                            if(line == null || line.startsWith("[Event")) {
+                                return peliPgn;
+                            }
+                            line = line.trim();
+                            if(line.isEmpty()) continue;
+                            if(!line.startsWith("[") && movetextidx<0) {
+                                movetext = line;
+                                movetextidx = peliPgn.size();
+                                peliPgn.add(line);
+                            } else if (!line.startsWith("[") && movetext.length()>0 && movetextidx>=0) {
+                                movetext = movetext + " " + line;
+                                peliPgn.set(movetextidx, movetext);
+                            } else {
+                                peliPgn.add(line);
+                            }
+
                         }
                     }
                 }
