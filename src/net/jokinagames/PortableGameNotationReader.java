@@ -31,7 +31,7 @@ public class PortableGameNotationReader {
         if(laskePelit()==0) {
             throw new IOException("Tiedostossa ei ole pelejä.");
         }
-        System.out.println("Käytetään " + this.gameFile);
+        Util.println("Käytetään " + this.gameFile);
     }
 
     /**
@@ -46,18 +46,26 @@ public class PortableGameNotationReader {
         return parsePgn(0);
     }
 
+    private int gameCount = 0;
+    private long fileSize = 0;
     private int laskePelit() {
-        int s = 0;
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(gameFile));
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.startsWith("[Event")) s++;
-            }
-        } catch (IOException ioe) {
+        File f = new File(gameFile);
 
+        if(gameCount==0 || fileSize!=f.length()) {
+            int s = 0;
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(gameFile));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    if (line.startsWith("[Event")) s++;
+                }
+            } catch (IOException ioe) {
+
+            }
+            gameCount = s;
+            fileSize = f.length();
         }
-        return s;
+        return gameCount;
     }
 
     /**
