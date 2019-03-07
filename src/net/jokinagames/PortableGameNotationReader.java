@@ -1,6 +1,7 @@
 package net.jokinagames;
 
 import java.io.*;
+import java.util.HashMap;
 
 /**
  * Luokka, jolla parsitaan PGN-muodon tiedostoja. Luokka osaa
@@ -15,14 +16,19 @@ import java.io.*;
 public class PortableGameNotationReader {
     private final String gameFile;
 
+    final private int firstPiece = (int)('\u2654');
+    final private char[] pieces = new char[] {'K', 'Q', 'R', 'B', 'N', 'P', 'k', 'q', 'r', 'b', 'n', 'p'};
+    final private HashMap<Character, Character> nappulaMerkit = new HashMap<>();
+
     /**
      * Konstruktori, joka ottaa polun PGN-tiedostoon.
      *
      * @param gameFile polku PGN-tiedostoon.
      */
     public PortableGameNotationReader(String gameFile) throws IOException {
-        // TODO tarkista onko tiedosto olemassa
         this.gameFile = gameFile;
+
+
         File f = new File(gameFile);
         if (!f.isFile()) {
             throw new FileNotFoundException("Tiedosto ei ole olemassa: " + gameFile + ".");
@@ -32,6 +38,11 @@ public class PortableGameNotationReader {
             throw new IOException("Tiedostossa ei ole pelejä.");
         }
         Util.println("Käytetään " + this.gameFile);
+
+        // alustetaan nappulamerkki hashmappi
+        for(int i = 0; i < pieces.length; i++) {
+           nappulaMerkit.put(pieces[i], Util.charFromInt(firstPiece+i));
+        }
     }
 
     /**
@@ -111,6 +122,9 @@ public class PortableGameNotationReader {
      * Parsitaan FEN-notaation mukaisen merkkijonon, ja luodaan
      * sen perusteella Lauta.
      * <p>
+     * Tämä implementaatio käyttää vain alkuasettelumäärittely, eli
+     * kaikki ensimmäiseen välilyöntiin
+     * <p>
      * Esimerkki FEN:
      * rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1
      * <p>
@@ -122,6 +136,25 @@ public class PortableGameNotationReader {
      */
     public Lauta parseFen(String fen) {
         Lauta fenLauta = new Lauta();
+
+        String[] splitOnWhitespace = fen.split(" ");
+        String lautaString = splitOnWhitespace[0];
+        String[] rivit = lautaString.split("/");
+
+        for(String rivi : rivit) {
+            //Util.println(rivi);
+            for(int i = 0; i < rivi.length(); i++) {
+                int emptcnt = "0123456789".indexOf(rivi.charAt(i));
+                if(emptcnt>0) {
+                    for(int j=0; j< emptcnt;j++) {
+                        Util.print(" ");
+                    }
+                } else {
+                    Util.print("" + nappulaMerkit.get(rivi.charAt(i)));
+                }
+            }
+            Util.println("");
+        }
 
         return fenLauta;
     }

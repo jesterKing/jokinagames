@@ -21,6 +21,7 @@ public class jesterTester {
         try {
             PortableGameNotationReader pgnReader = new PortableGameNotationReader(dataFolder + "test_regular_game.pgn");
             Peli peli = pgnReader.parsePgn();
+            pgnReader.parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1");
             Util.println(peli.toString());
         } catch (FileNotFoundException fnfe) {
             Util.println(fnfe.getMessage());
