@@ -1,5 +1,6 @@
 package net.jokinagames;
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -7,6 +8,7 @@ import java.nio.file.FileSystems;
 
 public class jesterTester {
     public static void main(String[] args) {
+        Util.alusta();
         // haetaan current working dir.
         // data oletetaan olevan siinä alla, eli $CWD$/data, jne.
         final String rootFolder = FileSystems.getDefault().getPath(".").normalize().toAbsolutePath().toString();

@@ -147,13 +147,13 @@ public class PortableGameNotationReader {
                 int emptcnt = "0123456789".indexOf(rivi.charAt(i));
                 if(emptcnt>0) {
                     for(int j=0; j< emptcnt;j++) {
-                        Util.print(" ");
+                        Util.print("    ");
                     }
                 } else {
-                    Util.print("" + nappulaMerkit.get(rivi.charAt(i)));
+                    Util.print(" " + nappulaMerkit.get(rivi.charAt(i)) + "  ");
                 }
             }
-            Util.println("");
+            Util.ln();
         }
 
         return fenLauta;
