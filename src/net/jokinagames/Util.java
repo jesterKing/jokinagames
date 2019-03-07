@@ -16,4 +16,8 @@ public class Util {
     public static void print(String string) {
         pw.print(string);
     }
+
+    public static char charFromInt(int nr) {
+        return (char)nr;
+    }
 }
