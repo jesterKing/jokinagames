@@ -6,10 +6,11 @@ import java.util.*;
 public class Pelaaja {
 
 	private final Vari vari;
-	private String nimi;
+	private final String nimi;
 
 	public Pelaaja(String nimi, Vari vari) {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+	    this.nimi = nimi;
+	    this.vari = vari;
 	}
 
 	public String annaNimi() {

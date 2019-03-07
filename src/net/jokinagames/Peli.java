@@ -10,11 +10,15 @@ public class Peli {
 	protected ArrayList<Lauta> siirrot;
 
 	public static Peli uusiPeli(Pelaaja yksi, Pelaaja kaksi, Lauta alku) {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+	    Peli p = new Peli(yksi, kaksi);
+	    p.siirrot.add(alku);
+	    return p;
 	}
 
 	private Peli(Pelaaja yksi, Pelaaja kaksi) {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		siirrot = new ArrayList<>();
+	    pelaaja1 = yksi;
+	    pelaaja2 = kaksi;
 	}
 
 	public Lauta seuraavaSiirto() {
