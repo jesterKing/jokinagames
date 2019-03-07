@@ -1,7 +1,23 @@
 package net.jokinagames;
 
+/**
+ * Luokka, jolla parsitaan PGN-muodon tiedostoja. Luokka osaa
+ * antaa Peli-olion jokaista tiedostossa esiintyvää peliä kohden.
+ *
+ * PGN-tiedosto voi sisältää FEN-notaatiolla alkuasetelmia perusnappuloilla
+ * ja peruslaudalle (8x8).
+ *
+ * PGN-spesifikaatio löytyy osoitteesta
+ * http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm
+ */
 public class PortableGameNotationReader {
     private final String gameFile;
+
+    /**
+     * Konstruktori, joka ottaa polun PGN-tiedostoon.
+     *
+     * @param gameFile polku PGN-tiedostoon.
+     */
     public PortableGameNotationReader(String gameFile) {
         this.gameFile = gameFile;
     }
@@ -20,8 +36,8 @@ public class PortableGameNotationReader {
     /**
      * Parsitaan PGN-tiedostosta peli annetusta indeksistä.
      *
-     * @param index
-     * @return
+     * @param index [0, pelien määrä)
+     * @return Peli-olio valitusta pelistä
      */
     public Peli parsePgn(int index) throws IndexOutOfBoundsException {
 
