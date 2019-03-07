@@ -1,6 +1,11 @@
 package net.jokinagames;
 
 import java.io.*;
+import java.lang.reflect.Array;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.util.regex.MatchResult;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -86,6 +91,47 @@ public class PortableGameNotationReader {
         return gameCount;
     }
 
+    private ArrayList<String> luePeli(int index) {
+        ArrayList<String> peliPgn = new ArrayList<>(15);
+        int pos = -1;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(gameFile));
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("[Event")) pos++;
+                {
+                    if(pos==index) {
+                        peliPgn.add(line);
+                        while(true) {
+                            line = br.readLine();
+                            if(line == null || line.startsWith("[Event")) return peliPgn;
+                            peliPgn.add(line);
+                        }
+                    }
+                }
+            }
+        } catch (IOException ioe) {
+
+        }
+
+        return peliPgn;
+    }
+
+    private String tagArvo(String syote, String tagName) {
+        String pattern = "\\[" + tagName + " \"?(.*?)\"??\\]";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(syote);
+        if(m.find()) {
+            return m.group(1);
+        }
+        return "<?>";
+    }
+
+    private void tulostaTagArvo(String prompt, String arvo) {
+        Util.print(prompt + ": " + arvo , Util.Color.YELLOW_BOLD, Util.Color.BLACK_BACKGROUND);
+        Util.ln();
+    }
+
     /**
      * Parsitaan PGN-tiedostosta peli annetusta indeksistä.
      *
@@ -99,18 +145,49 @@ public class PortableGameNotationReader {
         }
         /*
             TODO
-            - avaa tiedosto
-            - laske pelien määrä
-            - varmista että index on [0, pelien määrä)
             - lue PGN-pelin yhteen stringiin
             - pätkistä tageihin ja siirtomerkkijonoon
             - parsii pelaajat
             - parsii muut tagit ja aseta Peliin (tapahtuma, pvm, kierros, jne)
          */
 
+        ArrayList<String> peliRivit = luePeli(index);
+        String ekanimi = null;
+        String tokanimi = null;
+        for(String tag : peliRivit) {
+            if(tag.startsWith("[Event ")) {
+                String event = tagArvo(tag, "Event");
+                tulostaTagArvo("Tapahtuman nimi", event);
+            }
+            else if(tag.startsWith("[Site ")) {
+                String site = tagArvo(tag, "Site");
+                tulostaTagArvo("Tapaptuman paikka", site);
+            }
+            else if(tag.startsWith("[White ")) {
+                ekanimi = tagArvo(tag, "White");
+                tulostaTagArvo("Valkoinen pelaaja", ekanimi);
+            }
+            else if(tag.startsWith("[Black ")) {
+                tokanimi = tagArvo(tag, "Black");
+                tulostaTagArvo("Musta pelaaja", tokanimi);
+            }
+            else if(tag.startsWith("[Date ")) {
+                String date = tagArvo(tag, "Date");
+                tulostaTagArvo("Pelin päivämäärä", date);
+            }
+            else if(tag.startsWith("[Round ")) {
+                String round = tagArvo(tag, "Round");
+                tulostaTagArvo("Tapahtuman kierros", round);
+            }
+            else if(tag.startsWith("[Result ")) {
+                String result = tagArvo(tag, "Result");
+                tulostaTagArvo("Pelin tulos", result);
+            }
+        }
+
         // TODO parsii pelaajat
-        Pelaaja valkoinen = new Pelaaja("eka", Vari.VALKOINEN);
-        Pelaaja musta = new Pelaaja("toka", Vari.MUSTA);
+        Pelaaja valkoinen = new Pelaaja(ekanimi, Vari.VALKOINEN);
+        Pelaaja musta = new Pelaaja(tokanimi, Vari.MUSTA);
 
         // TODO luo alkulauta, joko FENistä, tai regular
         Lauta lauta = new Lauta();

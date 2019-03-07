@@ -117,12 +117,15 @@ public class Util {
         flip = !flip;
     }
 
-    public static void print(String string, Color fg/*, Color bg*/) {
+    public static void print(String string, Color fg) {
         Color bg = flip ? Color.RED_BACKGROUND : Color.GREEN_BACKGROUND;
-        AnsiConsole.out.print(fg); // + /*"" + Color.WHITE_BRIGHT +*/ string /* + Color.RESET*/);
-        AnsiConsole.out.print(bg); // + /*"" + Color.WHITE_BRIGHT +*/ string /* + Color.RESET*/);
-        AnsiConsole.out.print(string); // + /*"" + Color.WHITE_BRIGHT +*/ string /* + Color.RESET*/);
+        print(string, fg, bg);
         flip = !flip;
+    }
+    public static void print(String string, Color fg, Color bg) {
+        AnsiConsole.out.print(fg);
+        AnsiConsole.out.print(bg);
+        AnsiConsole.out.print(string);
     }
 
     public static void ln() {
