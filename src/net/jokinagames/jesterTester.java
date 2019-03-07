@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileSystems;
+import java.util.Random;
 
 public class jesterTester {
     public static void main(String[] args) {
@@ -25,6 +26,12 @@ public class jesterTester {
             Peli peli = pgnReader.parsePgn();
             pgnReader.parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1");
             Util.println(peli.toString());
+            pgnReader = new PortableGameNotationReader(dataFolder + "test_regular_game_many.pgn");
+            int pelienMaara = pgnReader.laskePelit();
+            Random rand = new Random();
+            int valkattuPeli = rand.nextInt(pelienMaara);
+            Util.println("Tiedostossa on " + pelienMaara + ", josta luemme peli " + (valkattuPeli+1));
+            peli = pgnReader.parsePgn(valkattuPeli);
         } catch (FileNotFoundException fnfe) {
             Util.println(fnfe.getMessage());
         } catch (IOException ioe) {

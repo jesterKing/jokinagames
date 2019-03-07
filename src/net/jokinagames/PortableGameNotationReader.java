@@ -71,7 +71,12 @@ public class PortableGameNotationReader {
 
     private int gameCount = 0;
     private long fileSize = 0;
-    private int laskePelit() {
+
+    /**
+     * Laskee pelien määrä annetussa PGN-tiedostossa
+     * @return pelien määrä
+     */
+    public int laskePelit() {
         File f = new File(gameFile);
 
         if(gameCount==0 || fileSize!=f.length()) {
