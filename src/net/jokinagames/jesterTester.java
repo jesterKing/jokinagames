@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class jesterTester {
     public static void main(String[] args) {
-        Random rand = new Random(13);
+        Random rand = new Random(); //13);
         Util.alusta();
         // haetaan current working dir.
         // data oletetaan olevan siinä alla, eli $CWD$/data, jne.
@@ -30,25 +30,31 @@ public class jesterTester {
         }
         Util.println("");
 
+        int totalgamesparsed = 0;
         // Nathan PGN testin alku - voi kommentoida pois jos ei sitä vielä kaipaa.
         try {
-            String pgnFile = dataFolder + pgnFiles[rand.nextInt(pgnFiles.length)];
+            /*String pgnFile = dataFolder + pgnFiles[rand.nextInt(pgnFiles.length)];
             PortableGameNotationReader pgnReader = new PortableGameNotationReader(pgnFile); //dataFolder + "test_regular_game.pgn");
-            pgnReader.parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1");
-            pgnReader.parseFen("r1bq1rk1/4bppp/p1n2n2/1pppp3/4P3/2PP1N2/PPB2PPP/R1BQRNK1 w - - 0 1");
+            //pgnReader.parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1");
+            //pgnReader.parseFen("r1bq1rk1/4bppp/p1n2n2/1pppp3/4P3/2PP1N2/PPB2PPP/R1BQRNK1 w - - 0 1");
             Peli peli = pgnReader.parsePgn();
-            Util.println(peli.toString());
-            pgnFile = dataFolder + pgnFiles[rand.nextInt(pgnFiles.length)];
-            pgnReader = new PortableGameNotationReader(pgnFile); //dataFolder + "test_regular_game_many.pgn");
-            int pelienMaara = pgnReader.laskePelit();
-            int valkattuPeli = rand.nextInt(pelienMaara);
-            Util.println("Tiedostossa on " + pelienMaara + ", josta luemme peli " + (valkattuPeli+1));
-            peli = pgnReader.parsePgn(valkattuPeli);
+            Util.println(peli.toString());*/
+            for(String name : pgnFiles) {
+                String pgnFile = dataFolder + name;
+                PortableGameNotationReader pgnReader = new PortableGameNotationReader(pgnFile); //dataFolder + "test_regular_game_many.pgn");
+                int pelienMaara = pgnReader.laskePelit();
+                Util.println("Tiedostossa on " + pelienMaara + " peliä");
+                for(int i=0; i< pelienMaara; i++) {
+                    Peli peli = pgnReader.parsePgn(i);
+                    Util.println(peli.toString());
+                    totalgamesparsed++;
+                }
+            }
         } catch (FileNotFoundException fnfe) {
             Util.println(fnfe.getMessage());
         } catch (IOException ioe) {
             Util.println(ioe.getMessage());
         }
-
+        Util.print("Käsitelty " + totalgamesparsed + " peliä\n", Util.Color.BLUE_BOLD_BRIGHT, Util.Color.WHITE_BACKGROUND);
     }
 }
