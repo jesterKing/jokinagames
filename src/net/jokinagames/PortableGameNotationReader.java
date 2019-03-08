@@ -122,6 +122,9 @@ public class PortableGameNotationReader {
         // siivotaan NAGit pois
         cleaned = cleaned.replaceAll("\\$\\d+", "");
 
+        // siivotaan siirtojatkot
+        cleaned = cleaned.replaceAll("\\s+\\d+\\.{2,}\\s+", " ");
+
         peliPgn.set(peliPgn.size()-1, cleaned);
     }
 
