@@ -119,6 +119,9 @@ public class PortableGameNotationReader {
             cleancount++;
         }
 
+        // siivotaan NAGit pois
+        cleaned = cleaned.replaceAll("\\$\\d+", "");
+
         peliPgn.set(peliPgn.size()-1, cleaned);
     }
 
