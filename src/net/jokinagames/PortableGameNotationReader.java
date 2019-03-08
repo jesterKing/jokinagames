@@ -22,9 +22,9 @@ public class PortableGameNotationReader {
     private final String gameFile;
 
     final private int firstPiece = (int)('\u2654');
-    final private char[] pieces = new char[] {'K', 'Q', 'R', 'B', 'N', 'P', 'k', 'q', 'r', 'b', 'n', 'p'};
-    final private String nappulat = "KQRBNPkqrbnp";
-    final private HashMap<Character, Character> nappulaMerkit = new HashMap<>();
+    static final public String nappulat = "KQRBNPkqrbnp";
+    static final public HashMap<Character, Character> nappulaMerkit = new HashMap<>();
+    static private boolean nappulatAlustettu = false;
 
     /**
      * Konstruktori, joka ottaa polun PGN-tiedostoon.
@@ -47,13 +47,16 @@ public class PortableGameNotationReader {
 
         String osname = System.getProperty("os.name");
 
-        // alustetaan nappulamerkki hashmappi
-        for(int i = 0; i < nappulat.length(); i++) {
-            if(osname.startsWith("Windows")) {
-                nappulaMerkit.put(nappulat.charAt(i), nappulat.charAt(i));
-            } else {
-                nappulaMerkit.put(nappulat.charAt(i), Util.charFromInt(firstPiece + i));
+        if(!nappulatAlustettu) {
+            // alustetaan nappulamerkki hashmappi
+            for (int i = 0; i < nappulat.length(); i++) {
+                if (osname.startsWith("Windows")) {
+                    nappulaMerkit.put(nappulat.charAt(i), nappulat.charAt(i));
+                } else {
+                    nappulaMerkit.put(nappulat.charAt(i), Util.charFromInt(firstPiece + i));
+                }
             }
+            nappulatAlustettu = true;
         }
     }
 
@@ -115,13 +118,13 @@ public class PortableGameNotationReader {
             String movetext = "";
             int movetextidx = -1;
             while ((line = br.readLine()) != null) {
-                if (line.startsWith("[Event")) pos++;
+                if (line.startsWith("[Event ")) pos++;
                 {
                     if(pos==index) {
                         peliPgn.add(line);
                         while(true) {
                             line = br.readLine();
-                            if(line == null || line.startsWith("[Event")) {
+                            if(line == null || line.startsWith("[Event ")) {
                                 return peliPgn;
                             }
                             line = line.trim();
