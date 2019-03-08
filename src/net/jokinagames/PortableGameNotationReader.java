@@ -88,7 +88,7 @@ public class PortableGameNotationReader {
                 BufferedReader br = new BufferedReader(new FileReader(gameFile));
                 String line;
                 while ((line = br.readLine()) != null) {
-                    if (line.startsWith("[Event")) s++;
+                    if (line.startsWith("[Event ")) s++;
                 }
             } catch (IOException ioe) {
 
@@ -97,6 +97,29 @@ public class PortableGameNotationReader {
             fileSize = f.length();
         }
         return gameCount;
+    }
+
+    private void siistiMovetext(ArrayList<String> peliPgn ) {
+        String movetext = peliPgn.get(peliPgn.size()-1);
+        String curlyBraces = "\\{[^\\{\\}]*?\\}";
+        String parentheses= "\\([^\\(\\)]*?\\)";
+        String cleaned = movetext.replaceAll(curlyBraces, "");
+
+        int cleancount = 0;
+        while((cleaned.indexOf('{')>-1 || cleaned.indexOf('}')>-1) && cleancount < 5) {
+            cleaned = cleaned.replaceAll(curlyBraces, "");
+            cleancount++;
+        }
+
+        // esiintyy sisäkkäisiä kommenteja, joten käytetään mahdollisimman
+        // tiukkaa regexiä ja ajetaan se kunnes ei ole enää sulkuja.
+        cleancount = 0;
+        while((cleaned.indexOf('(') > -1 || cleaned.indexOf(')') > -1) && cleancount < 5) {
+            cleaned = cleaned.replaceAll(parentheses, "");
+            cleancount++;
+        }
+
+        peliPgn.set(peliPgn.size()-1, cleaned);
     }
 
     /**
@@ -125,6 +148,7 @@ public class PortableGameNotationReader {
                         while(true) {
                             line = br.readLine();
                             if(line == null || line.startsWith("[Event ")) {
+                                siistiMovetext(peliPgn);
                                 return peliPgn;
                             }
                             line = line.trim();
@@ -145,7 +169,7 @@ public class PortableGameNotationReader {
                 }
             }
         } catch (IOException ioe) {
-
+            Util.println("something happen");
         }
 
         return peliPgn;
@@ -217,6 +241,17 @@ public class PortableGameNotationReader {
                 String result = tagArvo(tag, "Result");
                 tulostaTagArvo("Pelin tulos", result);
             }
+            else if(tag.startsWith("[FEN ")) {
+                String fen = tagArvo(tag, "FEN");
+                tulostaTagArvo("FEN", fen);
+                parseFen(fen);
+            }
+        }
+
+        try {
+            tulostaTagArvo("movetext", peliRivit.get(peliRivit.size() - 1));
+        } catch (ArrayIndexOutOfBoundsException a) {
+            Util.println("hmm");
         }
 
         // TODO parsii pelaajat
