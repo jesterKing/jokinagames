@@ -1,16 +1,29 @@
 package net.jokinagames;
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.FileSystems;
+import java.util.Random;
 
 public class jesterTester {
     public static void main(String[] args) {
+        Random rand = new Random(13);
+        Util.alusta();
         // haetaan current working dir.
         // data oletetaan olevan siinä alla, eli $CWD$/data, jne.
         final String rootFolder = FileSystems.getDefault().getPath(".").normalize().toAbsolutePath().toString();
         String dataFolder = rootFolder + File.separator + "data" + File.separator;
+        String[] pgnFiles = null;
+
+        File data = new File(dataFolder);
+        if(data.isDirectory()) {
+            FilenameFilter pgnsOnly = (dir, name) -> name.toLowerCase().endsWith(".pgn");
+            pgnFiles = data.list(pgnsOnly);
+
+        }
 
         for(int i = (int)('\u2654'); i<(int)('\u2654')+12; i++) {
             Util.print("" + (char)(i));
@@ -19,10 +32,18 @@ public class jesterTester {
 
         // Nathan PGN testin alku - voi kommentoida pois jos ei sitä vielä kaipaa.
         try {
-            PortableGameNotationReader pgnReader = new PortableGameNotationReader(dataFolder + "test_regular_game.pgn");
-            Peli peli = pgnReader.parsePgn();
+            String pgnFile = dataFolder + pgnFiles[rand.nextInt(pgnFiles.length)];
+            PortableGameNotationReader pgnReader = new PortableGameNotationReader(pgnFile); //dataFolder + "test_regular_game.pgn");
             pgnReader.parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1");
+            pgnReader.parseFen("r1bq1rk1/4bppp/p1n2n2/1pppp3/4P3/2PP1N2/PPB2PPP/R1BQRNK1 w - - 0 1");
+            Peli peli = pgnReader.parsePgn();
             Util.println(peli.toString());
+            pgnFile = dataFolder + pgnFiles[rand.nextInt(pgnFiles.length)];
+            pgnReader = new PortableGameNotationReader(pgnFile); //dataFolder + "test_regular_game_many.pgn");
+            int pelienMaara = pgnReader.laskePelit();
+            int valkattuPeli = rand.nextInt(pelienMaara);
+            Util.println("Tiedostossa on " + pelienMaara + ", josta luemme peli " + (valkattuPeli+1));
+            peli = pgnReader.parsePgn(valkattuPeli);
         } catch (FileNotFoundException fnfe) {
             Util.println(fnfe.getMessage());
         } catch (IOException ioe) {

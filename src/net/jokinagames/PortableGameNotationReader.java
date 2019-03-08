@@ -1,6 +1,11 @@
 package net.jokinagames;
 
 import java.io.*;
+import java.lang.reflect.Array;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.util.regex.MatchResult;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -17,8 +22,9 @@ public class PortableGameNotationReader {
     private final String gameFile;
 
     final private int firstPiece = (int)('\u2654');
-    final private char[] pieces = new char[] {'K', 'Q', 'R', 'B', 'N', 'P', 'k', 'q', 'r', 'b', 'n', 'p'};
-    final private HashMap<Character, Character> nappulaMerkit = new HashMap<>();
+    static final public String nappulat = "KQRBNPkqrbnp";
+    static final public HashMap<Character, Character> nappulaMerkit = new HashMap<>();
+    static private boolean nappulatAlustettu = false;
 
     /**
      * Konstruktori, joka ottaa polun PGN-tiedostoon.
@@ -39,9 +45,18 @@ public class PortableGameNotationReader {
         }
         Util.println("Käytetään " + this.gameFile);
 
-        // alustetaan nappulamerkki hashmappi
-        for(int i = 0; i < pieces.length; i++) {
-           nappulaMerkit.put(pieces[i], Util.charFromInt(firstPiece+i));
+        String osname = System.getProperty("os.name");
+
+        if(!nappulatAlustettu) {
+            // alustetaan nappulamerkki hashmappi
+            for (int i = 0; i < nappulat.length(); i++) {
+                if (osname.startsWith("Windows")) {
+                    nappulaMerkit.put(nappulat.charAt(i), nappulat.charAt(i));
+                } else {
+                    nappulaMerkit.put(nappulat.charAt(i), Util.charFromInt(firstPiece + i));
+                }
+            }
+            nappulatAlustettu = true;
         }
     }
 
@@ -59,7 +74,12 @@ public class PortableGameNotationReader {
 
     private int gameCount = 0;
     private long fileSize = 0;
-    private int laskePelit() {
+
+    /**
+     * Laskee pelien määrä annetussa PGN-tiedostossa
+     * @return pelien määrä
+     */
+    public int laskePelit() {
         File f = new File(gameFile);
 
         if(gameCount==0 || fileSize!=f.length()) {
@@ -80,6 +100,73 @@ public class PortableGameNotationReader {
     }
 
     /**
+     * Lue PGN-tiedostosta peli annetussa indeksissa
+     *
+     * Jos PGN-pelissa MOVETEXT ja lopputulos ovat eri riveillä
+     * nämä yhdistetään yhdeksi riviksi, välilyönnillä erotettuna.
+     *
+     * Tyhjat rivit jätetään välistä.
+     * @param index
+     * @return ArrayList<String> jossa pelin tagit ja movetext
+     */
+    private ArrayList<String> luePeli(int index) {
+        ArrayList<String> peliPgn = new ArrayList<>(15);
+        int pos = -1;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(gameFile));
+            String line;
+            String movetext = "";
+            int movetextidx = -1;
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("[Event ")) pos++;
+                {
+                    if(pos==index) {
+                        peliPgn.add(line);
+                        while(true) {
+                            line = br.readLine();
+                            if(line == null || line.startsWith("[Event ")) {
+                                return peliPgn;
+                            }
+                            line = line.trim();
+                            if(line.isEmpty()) continue;
+                            if(!line.startsWith("[") && movetextidx<0) {
+                                movetext = line;
+                                movetextidx = peliPgn.size();
+                                peliPgn.add(line);
+                            } else if (!line.startsWith("[") && movetext.length()>0 && movetextidx>=0) {
+                                movetext = movetext + " " + line;
+                                peliPgn.set(movetextidx, movetext);
+                            } else {
+                                peliPgn.add(line);
+                            }
+
+                        }
+                    }
+                }
+            }
+        } catch (IOException ioe) {
+
+        }
+
+        return peliPgn;
+    }
+
+    private String tagArvo(String syote, String tagName) {
+        String pattern = "\\[" + tagName + " \"?(.*?)\"??\\]";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(syote);
+        if(m.find()) {
+            return m.group(1);
+        }
+        return "<?>";
+    }
+
+    private void tulostaTagArvo(String prompt, String arvo) {
+        Util.print(prompt + ": " + arvo , Util.Color.YELLOW_BOLD, Util.Color.BLACK_BACKGROUND);
+        Util.ln();
+    }
+
+    /**
      * Parsitaan PGN-tiedostosta peli annetusta indeksistä.
      *
      * @param index [0, pelien määrä)
@@ -92,18 +179,49 @@ public class PortableGameNotationReader {
         }
         /*
             TODO
-            - avaa tiedosto
-            - laske pelien määrä
-            - varmista että index on [0, pelien määrä)
             - lue PGN-pelin yhteen stringiin
             - pätkistä tageihin ja siirtomerkkijonoon
             - parsii pelaajat
             - parsii muut tagit ja aseta Peliin (tapahtuma, pvm, kierros, jne)
          */
 
+        ArrayList<String> peliRivit = luePeli(index);
+        String ekanimi = null;
+        String tokanimi = null;
+        for(String tag : peliRivit) {
+            if(tag.startsWith("[Event ")) {
+                String event = tagArvo(tag, "Event");
+                tulostaTagArvo("Tapahtuman nimi", event);
+            }
+            else if(tag.startsWith("[Site ")) {
+                String site = tagArvo(tag, "Site");
+                tulostaTagArvo("Tapaptuman paikka", site);
+            }
+            else if(tag.startsWith("[White ")) {
+                ekanimi = tagArvo(tag, "White");
+                tulostaTagArvo("Valkoinen pelaaja", ekanimi);
+            }
+            else if(tag.startsWith("[Black ")) {
+                tokanimi = tagArvo(tag, "Black");
+                tulostaTagArvo("Musta pelaaja", tokanimi);
+            }
+            else if(tag.startsWith("[Date ")) {
+                String date = tagArvo(tag, "Date");
+                tulostaTagArvo("Pelin päivämäärä", date);
+            }
+            else if(tag.startsWith("[Round ")) {
+                String round = tagArvo(tag, "Round");
+                tulostaTagArvo("Tapahtuman kierros", round);
+            }
+            else if(tag.startsWith("[Result ")) {
+                String result = tagArvo(tag, "Result");
+                tulostaTagArvo("Pelin tulos", result);
+            }
+        }
+
         // TODO parsii pelaajat
-        Pelaaja valkoinen = new Pelaaja("eka", Vari.VALKOINEN);
-        Pelaaja musta = new Pelaaja("toka", Vari.MUSTA);
+        Pelaaja valkoinen = new Pelaaja(ekanimi, Vari.VALKOINEN);
+        Pelaaja musta = new Pelaaja(tokanimi, Vari.MUSTA);
 
         // TODO luo alkulauta, joko FENistä, tai regular
         Lauta lauta = new Lauta();
@@ -147,13 +265,14 @@ public class PortableGameNotationReader {
                 int emptcnt = "0123456789".indexOf(rivi.charAt(i));
                 if(emptcnt>0) {
                     for(int j=0; j< emptcnt;j++) {
-                        Util.print(" ");
+                        Util.print("    ");
                     }
                 } else {
-                    Util.print("" + nappulaMerkit.get(rivi.charAt(i)));
+                    Util.Color col = Character.isLowerCase(rivi.charAt(i)) ? Util.Color.BLACK : Util.Color.WHITE;
+                    Util.print(" " + nappulaMerkit.get(rivi.charAt(i)) + "  ", col);
                 }
             }
-            Util.println("");
+            Util.ln();
         }
 
         return fenLauta;
