@@ -88,7 +88,7 @@ public class PortableGameNotationReader {
                 BufferedReader br = new BufferedReader(new FileReader(gameFile));
                 String line;
                 while ((line = br.readLine()) != null) {
-                    if (line.startsWith("[Event")) s++;
+                    if (line.startsWith("[Event ")) s++;
                 }
             } catch (IOException ioe) {
 
