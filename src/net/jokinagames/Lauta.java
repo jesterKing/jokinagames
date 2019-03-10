@@ -14,6 +14,9 @@ public class Lauta {
      * Luo perusshakki -Lauta-olion
      */
     public Lauta() {
+
+        char [][] palikat = new char [8][8];
+
         //throw new UnsupportedOperationException("Ei toteutettu");
     }
 
