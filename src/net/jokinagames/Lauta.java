@@ -14,10 +14,35 @@ public class Lauta {
     /**
      * Luo perusshakki -Lauta-olion
      */
-    public Lauta(){}
+    public Lauta() {
+        palikat = new char[8][8];
+        String[] s = {"rnbqkbnr", "pppppppp", " ", "PPPPPPPP", "RNBQKBNR" };        //Pitäis olla nappulat paikallaan
+        for (int i = 0; i < 8; i++) {
+            palikat[i][0] = s[0].charAt(i);
+            palikat[i][1] = s[1].charAt(i);
+            for (int j = 2; j < 6; j++) {
+                palikat[i][j] = s[2].charAt(0);
+            }
+            palikat[i][6] = s[3].charAt(i);
+            palikat[i][7] = s[4].charAt(i);
+        }
+        for (int i = 0; i < 8; i++) {                                   //Tulostetaan luotu lauta näkyville.
+            System.out.println("");
+            for (int j = 0; j < 8; j++) {
+                System.out.print(palikat[j][i]);
+            }
+        }
+    }
 
-    public Lauta(char[][] s){                                           //täällä periaatteesa luodaan se itse lauta.
-        palikat = s;
+
+    public Lauta(char[][] s){                    //täällä luodaan itse lauta joka siirron jälkeen uudestaan.
+        palikat = s;                             //ja tulostetaan nähtäville
+        for(int n=0;n<8;n++){
+            System.out.println("");
+            for(int j=0;j<8;j++){
+                System.out.print(palikat[j][n]);
+            }
+        }
     }
 
 
@@ -34,4 +59,4 @@ public class Lauta {
         return new Lauta(palikat);
     }
 
-        }
+}
