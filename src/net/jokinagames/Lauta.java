@@ -1,7 +1,7 @@
 package net.jokinagames;
 
 public class Lauta {
-    protected char [][] palikat;
+    protected final char [][] palikat;
 
     /**
      * Luo Lauta-olion antaman FEN-kuvauksen mukaan
@@ -27,22 +27,14 @@ public class Lauta {
             palikat[i][7] = s[4].charAt(i);
         }
         for (int i = 0; i < 8; i++) {                                   //Tulostetaan luotu lauta näkyville.
-            System.out.println("");
+            System.out.println();
             for (int j = 0; j < 8; j++) {
                 System.out.print(palikat[j][i]);
             }
         }
     }
-
-
-    public Lauta(char[][] s){                    //täällä luodaan itse lauta joka siirron jälkeen uudestaan.
-        palikat = s;                             //ja tulostetaan nähtäville
-        for(int n=0;n<8;n++){
-            System.out.println("");
-            for(int j=0;j<8;j++){
-                System.out.print(palikat[j][n]);
-            }
-        }
+    public Lauta(char[][] s) {
+        palikat = s;
     }
 
 
@@ -52,11 +44,17 @@ public class Lauta {
      * @param b
      * @return Lauta-olio, joka kuvaa siirronjälkeisen tilanteen
      */
-    public Lauta teeSiirto(Koordinaatti a, Koordinaatti b) {        //Koordinaatista a kordinaattiin b tehty "nappulan" siirto.
-        char s = palikat [a.annaRivi()][a.annaSarake()];            //pitäisi palauttaa uusi lauta näillä siirroilla muutettuna.
-        palikat [a.annaRivi()][a.annaSarake()] = ' ';
-        palikat[b.annaRivi()][b.annaSarake()] = s;
-        return new Lauta(palikat);
+    public Lauta teeSiirto(Koordinaatti a, Koordinaatti b) {
+        Lauta l = new Lauta(getPalikat());                              //Tehdää uus lauta vanhoilla palikoilla
+        char[][] s = l.getPalikat();                                    //Otetaan palikat käsittelyyn
+        char c = s[a.annaRivi()][a.annaSarake()];                       //Käpistellään
+        s[a.annaRivi()][a.annaSarake()] = ' ';
+        s[b.annaRivi()][b.annaSarake()] = c;
+        l = new Lauta(s);                                                   //Luodaan uus lauta käpistelyn jälkeen.
+        return l;
     }
 
+    public char[][] getPalikat() {
+        return palikat;
+    }
 }
