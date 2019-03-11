@@ -35,7 +35,7 @@ public class Lauta {
     }
     public Lauta(char[][] s) {
         palikat = s;
-    }
+        }
 
 
     /**
@@ -45,12 +45,17 @@ public class Lauta {
      * @return Lauta-olio, joka kuvaa siirronjälkeisen tilanteen
      */
     public Lauta teeSiirto(Koordinaatti a, Koordinaatti b) {
-        Lauta l = new Lauta(getPalikat());                              //Tehdää uus lauta vanhoilla palikoilla
-        char[][] s = l.getPalikat();                                    //Otetaan palikat käsittelyyn
-        char c = s[a.annaRivi()][a.annaSarake()];                       //Käpistellään
+        char[][] s = new char[8][8];
+        char[][] alkup = getPalikat();
+        for(int i=0; i<8; i++){
+            for(int j=0; j<8; j++) {
+                s[i][j] = alkup[i][j];
+            }
+        }
+        char c = s[a.annaRivi()][a.annaSarake()];
         s[a.annaRivi()][a.annaSarake()] = ' ';
         s[b.annaRivi()][b.annaSarake()] = c;
-        l = new Lauta(s);                                                   //Luodaan uus lauta käpistelyn jälkeen.
+        Lauta l = new Lauta(s);
         return l;
     }
 
