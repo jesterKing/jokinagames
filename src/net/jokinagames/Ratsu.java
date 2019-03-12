@@ -11,28 +11,31 @@ public class Ratsu extends Nappula {
         super(vari);
     }
 
+    private List<int[]> n = Arrays.asList( // Mahdollisten siirtojen luominen
+            new int[]{2, 1},
+            new int[]{2, -1},
+            new int[]{1, 2},
+            new int[]{1, -2},
+            new int[]{-2, 1},
+            new int[]{-2, -1},
+            new int[]{-1, 2},
+            new int[]{-1, -2});
+    private String[] koordinaatit = {"abcdefgh", "12345678"}; // Apuna käytettävät Stringit
+
     public List<Siirto> mahdollisetSiirrot(Koordinaatti A) {
         List<Siirto> Siirrot = new ArrayList<>(); // Alustetaan uusi palautettava lista siirroista
-        String[] koordinaatit = {"abcdefgh", "12345678"}; // Apuna käytettävät Stringit
-        List<Integer> testi = new ArrayList<>(Arrays.asList(0,1,2,3,4,5,6,7)); // Lista laudallaolotarkastusta varten
+
         int lr = A.annaRivi(); // lahtorivi
         int ls = A.annaSarake(); // lahtosarake
-        List<int[]> n = Arrays.asList( // Mahdollisten siirtojen luominen
-                new int[]{2, 1},
-                new int[]{2, -1},
-                new int[]{1, 2},
-                new int[]{1, -2},
-                new int[]{-2, 1},
-                new int[]{-2, -1},
-                new int[]{-1, 2},
-                new int[]{-1, -2});
+
 
         for (int[] a:n){ // Käydään mahdollisten siirtojen lista läpi
-            if (testi.contains(a[0] + lr) && testi.contains(a[1] + ls)){// Tarkistetaan, että ollaanko laudalla ko.
-                                                                        // siirron tapauksessa
-                Siirrot.add(new Siirto(A, new Koordinaatti(koordinaatit[0].charAt(a[0]+lr)
-                        +""+koordinaatit[1].charAt(a[1]+ls)))); // Jos ollaan, generoidaan uusi siirto
-                                                                // ja lisätään siirtolistaan
+            int ur = a[0] + lr; // Muuttuja uudelle riville
+            int us = a[1] + ls; // Muuttuja uudelle sarakkeelle
+            if (ur>=0 && ur<=7 && us>=0 && us<=7){  // Tarkistetaan, että ollaanko laudalla ko. siirron tapauksessa
+                Koordinaatti uk = new Koordinaatti(koordinaatit[0].charAt(ur) +""+koordinaatit[1].charAt(us)); // Luodaan uusi koordinaatti
+                Siirto uS = new Siirto(A, uk);  // Jos ollaan, generoidaan uusi siirto
+                Siirrot.add(uS);                // ja lisätään siirtolistaan
             }
         }
 
