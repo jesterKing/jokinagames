@@ -20,8 +20,6 @@ public class Ratsu extends Nappula {
         List<int[]> n = Arrays.asList( // Mahdollisten siirtojen luominen
                 new int[]{2, 1},
                 new int[]{2, -1},
-                new int[]{2, 1},
-                new int[]{2, -1},
                 new int[]{1, 2},
                 new int[]{1, -2},
                 new int[]{-2, 1},
