@@ -74,8 +74,8 @@ public class Lauta {
         for (int i=0; i<8; i++){
             for int j=0;j<8;j++){
                 Nappula n = indx[i][j];
-                if (n instanceof (Ratsu)){
-                    if (n.annaVari() == VALKOINEN) ;
+                if (n instanceof Ratsu){
+                    if (n.annaVari() == Vari.VALKOINEN) ;
                     System.out.print("N");
                 }
             }}}}
