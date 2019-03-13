@@ -56,5 +56,7 @@ public class jesterTester {
             Util.println(ioe.getMessage());
         }
         Util.print("Käsitelty " + totalgamesparsed + " peliä\n", Util.Color.BLUE_BOLD_BRIGHT, Util.Color.WHITE_BACKGROUND);
+        Util.println(PortableGameNotationReader.sekoitettuTakarivi(Vari.MUSTA));
+        Util.println(PortableGameNotationReader.sekoitettuTakarivi(Vari.VALKOINEN));
     }
 }

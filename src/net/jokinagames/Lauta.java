@@ -47,7 +47,7 @@ public class Lauta {
         return l;
     }
 
-    public Lauta teeSiirto(Nappula n, Koordinaatti b) {              //Ylikuormitettu versio siirrosta nappulaoliolla.
+    public Lauta teeSiirto(Nappula n, Koordinaatti a, Koordinaatti b) {              //Ylikuormitettu versio siirrosta nappulaoliolla.
         Nappula[][] s = new Nappula[8][8];
         Nappula[][] alkup = getPalikat();
         for(int i=0; i<8; i++){
@@ -55,10 +55,12 @@ public class Lauta {
                 s[i][j] = alkup[i][j];
             }
         }
-        Siirto si = n.mahdollisetSiirrot().get(0);
-        Koordinaatti k = si.getA();                                 //Tänne jonnekki tulee sitten oman värin tarkastusta jne.
-        s[k.annaRivi()][k.annaSarake()] = null;
-        s[b.annaRivi()][b.annaSarake()] = n;
+        if(n instanceof Ratsu) {
+            Siirto si = n.mahdollisetSiirrot(a).get(0);                 //Apurivi jotta saadaan aloituskoordinaatti nappulalta
+            Koordinaatti k = si.getA();                                 //Sarake josta lähdetään.
+            s[k.annaRivi()][k.annaSarake()] = null;
+            s[b.annaRivi()][b.annaSarake()] = n;
+        }                                                               //Täällä jossain sitten tarkastellaan luokan mukaiset reitit.
         Lauta l = new Lauta(s);
         return l;
     }
