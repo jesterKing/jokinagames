@@ -24,9 +24,7 @@ public class Koordinaatti {
     }
 
 
-    public Koordinaatti() {
-
-    }
+    public Koordinaatti() { }
 
     public Koordinaatti (String paikka){        //Pitäis luoda koordinaatti sen mukaan minkä ruudun saa syötteenä.
         String sar = "abcdefgh";                //Esim. c3 asettaa koordinaatin rivin ja sarakkeen indx 2,2.
