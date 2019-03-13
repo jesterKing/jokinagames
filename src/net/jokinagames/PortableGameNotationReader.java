@@ -1,12 +1,14 @@
 package net.jokinagames;
 
+import com.sun.tools.javac.util.StringUtils;
+
 import java.io.*;
 import java.lang.reflect.Array;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.regex.MatchResult;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.stream.Collectors;
 
 /**
  * Luokka, jolla parsitaan PGN-muodon tiedostoja. Luokka osaa
@@ -25,6 +27,8 @@ public class PortableGameNotationReader {
     static final public String nappulat = "KQRBNPkqrbnp";
     static final public HashMap<Character, Character> nappulaMerkit = new HashMap<>();
     static private boolean nappulatAlustettu = false;
+
+    static final public String perusUpseeriAsetelma = "RNBQKBNR";
 
     /**
      * Konstruktori, joka ottaa polun PGN-tiedostoon.
@@ -82,7 +86,7 @@ public class PortableGameNotationReader {
     public int laskePelit() {
         File f = new File(gameFile);
 
-        if(gameCount==0 || fileSize!=f.length()) {
+        if (gameCount == 0 || fileSize != f.length()) {
             int s = 0;
             try {
                 BufferedReader br = new BufferedReader(new FileReader(gameFile));
@@ -320,5 +324,16 @@ public class PortableGameNotationReader {
         }
 
         return fenLauta;
+    }
+
+    public static String sekoitettuTakarivi(Vari vari) {
+
+        List<Character> l = perusUpseeriAsetelma.chars().mapToObj(c -> (char) c).collect(Collectors.toList());
+        Collections.shuffle(l);
+        StringBuilder sb = new StringBuilder();
+        l.forEach(c -> sb.append(c));
+        if(vari == Vari.MUSTA) { return sb.toString().toLowerCase();}
+        else { return sb.toString(); }
+
     }
 }
