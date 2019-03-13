@@ -72,7 +72,7 @@ public class Lauta {
     public void tulostaLauta(Lauta l){                                //HOXHOX KESKEN! (Pistetään jos koetaan tarpeeliseksi)
         Nappula[][] indx = l.getPalikat();                              // Tulostaa laudan senhetkisen tilan tavallisilla ASCII merkeillä
         for (int i=0; i<8; i++){
-            for int j=0;j<8;j++){
+            for (int j=0;j<8;j++){
                 Nappula n = indx[i][j];
                 if (n instanceof Ratsu){
                     if (n.annaVari() == Vari.VALKOINEN) ;
