@@ -6,11 +6,14 @@ import java.util.*;
 public class Lahetti extends Nappula {
 
 	public Lahetti(Vari vari) {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+	    // TODO toteuta
 	}
 
 	public List<Siirto> mahdollisetSiirrot(Koordinaatti A) {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		ArrayList<Siirto> siirrot = new ArrayList<>();
+	    // TODO toteuta
+
+		return siirrot;
 	}
 
 }

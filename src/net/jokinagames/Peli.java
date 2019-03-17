@@ -9,6 +9,14 @@ public class Peli {
 	private Pelaaja pelaaja2;
 	protected ArrayList<Lauta> siirrot;
 
+	/*
+		TODO:
+		lisää seuraavat attribuutit:
+		- tapahtuman nimi
+		- pelin paikka
+		- pelin pvm
+	 */
+
 	public static Peli uusiPeli(Pelaaja yksi, Pelaaja kaksi, Lauta alku) {
 	    Peli p = new Peli(yksi, kaksi);
 	    p.siirrot.add(alku);
