@@ -9,7 +9,7 @@ public class Kuningas extends Nappula {
 		throw new UnsupportedOperationException("The method is not implemented yet.");
 	}
 
-	public List<Siirto> mahdollisetSiirrot() {
+	public List<Siirto> mahdollisetSiirrot(Koordinaatti A) {
 		throw new UnsupportedOperationException("The method is not implemented yet.");
 	}
 
