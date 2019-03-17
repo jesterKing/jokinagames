@@ -62,4 +62,15 @@ public class Lauta {
     public char[][] getPalikat() {
         return palikat;
     }
+
+    /**
+     * Aseta annettu Nappula laudalle kohtaan x.
+     *
+     * Tätä metodia käytetään kun valmistetaan lautaa peliä varten
+     * @param n Nappula-luokasta perivän luokan olio (Sotilas, Ratsu, Lahetti, Torni, Kuningatar, Kuningas)
+     * @param x Koordinaatti, joka ilmaisee minne Nappula menee
+     */
+    public void asetaNappula(Nappula n, Koordinaatti x) {
+        // TODO: toteuta
+    }
 }
