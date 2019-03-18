@@ -76,8 +76,14 @@ public class Lauta {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 Nappula n = indx[i][j];
+                /*
+                    TODO toteuta Nappula-luokkaan esim char annaMerkki()
+                         jolloin tarvii vain testata onko Nappula n null.
+                         Jos ei ole null niin riittää että n.annaMerkki().
+                 */
+
                 if (n instanceof Ratsu) {
-                    if (n.annaVari() == Vari.VALKOINEN) ;
+                    if (n.annaVari() == Vari.VALKOINEN) ; // todo tämä if-lohko on väärin toteutettu
                     System.out.print("N");
                 }
             }
