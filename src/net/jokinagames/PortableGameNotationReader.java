@@ -25,6 +25,7 @@ public class PortableGameNotationReader {
 
     final private int firstPiece = (int)('\u2654');
     static final public String nappulat = "KQRBNPkqrbnp";
+    static final public String sarakkeet = "abcdefgh";
     static final public HashMap<Character, Character> nappulaMerkit = new HashMap<>();
     static private boolean nappulatAlustettu = false;
 
@@ -214,17 +215,11 @@ public class PortableGameNotationReader {
         if (index < 0 || index >= pelienMaara) {
             throw new IndexOutOfBoundsException("Virheellinen indeksi PGN-tiedostoon.");
         }
-        /*
-            TODO
-            - lue PGN-pelin yhteen stringiin
-            - pätkistä tageihin ja siirtomerkkijonoon
-            - parsii pelaajat
-            - parsii muut tagit ja aseta Peliin (tapahtuma, pvm, kierros, jne)
-         */
 
         ArrayList<String> peliRivit = luePeli(index);
         String ekanimi = null;
         String tokanimi = null;
+        String fen = null;
         for(String tag : peliRivit) {
             if(tag.startsWith("[Event ")) {
                 String event = tagArvo(tag, "Event");
@@ -255,7 +250,7 @@ public class PortableGameNotationReader {
                 tulostaTagArvo("Pelin tulos", result);
             }
             else if(tag.startsWith("[FEN ")) {
-                String fen = tagArvo(tag, "FEN");
+                fen = tagArvo(tag, "FEN");
                 tulostaTagArvo("FEN", fen);
                 parseFen(fen);
             }
@@ -267,19 +262,20 @@ public class PortableGameNotationReader {
             Util.println("hmm");
         }
 
-        // TODO parsii pelaajat
         Pelaaja valkoinen = new Pelaaja(ekanimi, Vari.VALKOINEN);
         Pelaaja musta = new Pelaaja(tokanimi, Vari.MUSTA);
 
-        // TODO luo alkulauta, joko FENistä, tai regular
-        Lauta lauta = new Lauta();
+        Lauta lauta;
+        if(fen==null) {
+            lauta = alustaTavallinenPeli();
+        } else {
+            // luodaan FENistä
+            lauta = parseFen(fen);
+        }
 
         // Luo peli
         Peli peli = Peli.uusiPeli(valkoinen, musta, lauta);
-
         // TODO lue PGN:stä kaikki siirrot ja lisää peliin.
-
-        //
 
         return peli;
     }
@@ -307,17 +303,50 @@ public class PortableGameNotationReader {
         String lautaString = splitOnWhitespace[0];
         String[] rivit = lautaString.split("/");
 
-        for(String rivi : rivit) {
-            //Util.println(rivi);
-            for(int i = 0; i < rivi.length(); i++) {
-                int emptcnt = "0123456789".indexOf(rivi.charAt(i));
+        if(rivit.length!=8) throw new IllegalArgumentException("Virheellinen FEN: " + fen);
+
+        for(int riviIndeksi=0; riviIndeksi<8; riviIndeksi++) {
+            String rivi = rivit[riviIndeksi];
+            int sarakeIndeksi = 0;
+            for(int nappulaIndeksi = 0; nappulaIndeksi < rivi.length(); nappulaIndeksi++) {
+                int emptcnt = "0123456789".indexOf(rivi.charAt(nappulaIndeksi));
                 if(emptcnt>0) {
                     for(int j=0; j< emptcnt;j++) {
                         Util.print("    ");
+                        sarakeIndeksi++;
                     }
                 } else {
-                    Util.Color col = Character.isLowerCase(rivi.charAt(i)) ? Util.Color.BLACK : Util.Color.WHITE;
-                    Util.print(" " + nappulaMerkit.get(rivi.charAt(i)) + "  ", col);
+                    char nappulaChar = rivi.charAt(nappulaIndeksi);
+                    String nappulaS = ("" + nappulaChar).toLowerCase();
+                    boolean isBlack = Character.isLowerCase(nappulaChar);
+                    Vari v = isBlack ? Vari.MUSTA : Vari.VALKOINEN;
+                    String paikka = sarakkeet.charAt(sarakeIndeksi) + "" + riviIndeksi;
+                    Koordinaatti x = new Koordinaatti(paikka);
+                    Nappula n = null;
+                    switch(nappulaS) {
+                        case "k":
+                            n = new Kuningas(v);
+                            break;
+                        case "q":
+                            n = new Kuningatar(v);
+                            break;
+                        case "r":
+                            n = new Torni(v);
+                            break;
+                        case "b":
+                            n = new Lahetti(v);
+                            break;
+                        case "n":
+                            n = new Ratsu(v);
+                            break;
+                        case "p":
+                            n = new Sotilas(v);
+                            break;
+                    }
+                    fenLauta.asetaNappula(n, x);
+                    Util.Color col = isBlack ? Util.Color.BLACK : Util.Color.WHITE;
+                    Util.print(" " + nappulaMerkit.get(nappulaChar) + "  ", col);
+                    sarakeIndeksi++;
                 }
             }
             Util.ln();
@@ -326,6 +355,22 @@ public class PortableGameNotationReader {
         return fenLauta;
     }
 
+    /**
+     * Alustaa Lauta-olion perusshakki-asettelulla.
+     * @return
+     */
+    public Lauta alustaTavallinenPeli() {
+        return parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1");
+    }
+
+    /**
+     * Antaa takarivin, joka on sekoitettu versio perustakarivistä.
+     *
+     * @param vari
+     * @return Sekoitettu merkkijono värin mukaan. Pienet kirjaimet
+     *         mustia nappuloita ja isot kirjaimet valkoisia nappuloita
+     *         varten
+     */
     public static String sekoitettuTakarivi(Vari vari) {
 
         List<Character> l = perusUpseeriAsetelma.chars().mapToObj(c -> (char) c).collect(Collectors.toList());
