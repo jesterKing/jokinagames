@@ -33,12 +33,22 @@ public class jesterTester {
         int totalgamesparsed = 0;
         // Nathan PGN testin alku - voi kommentoida pois jos ei sitä vielä kaipaa.
         try {
-            /*String pgnFile = dataFolder + pgnFiles[rand.nextInt(pgnFiles.length)];
+            String pgnFile = dataFolder + pgnFiles[rand.nextInt(pgnFiles.length)];
             PortableGameNotationReader pgnReader = new PortableGameNotationReader(pgnFile); //dataFolder + "test_regular_game.pgn");
             //pgnReader.parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1");
             //pgnReader.parseFen("r1bq1rk1/4bppp/p1n2n2/1pppp3/4P3/2PP1N2/PPB2PPP/R1BQRNK1 w - - 0 1");
-            Peli peli = pgnReader.parsePgn();
-            Util.println(peli.toString());*/
+            Lauta l = pgnReader.parseFen("n6n/8/8/8/8/8/8/N6N w - - 0 1");
+            l.tulostaLauta(l);
+            Ratsu r = new Ratsu(Vari.MUSTA);
+            Koordinaatti y = new Koordinaatti("b3");
+            Koordinaatti x = new Koordinaatti("a1");
+            Lauta siirronjalkeen = l.teeSiirto(x, y);
+            siirronjalkeen.tulostaLauta(siirronjalkeen);
+            //Peli peli = pgnReader.parsePgn();
+            //Util.println(peli.toString());
+
+
+            /*
             for(String name : pgnFiles) {
                 String pgnFile = dataFolder + name;
                 PortableGameNotationReader pgnReader = new PortableGameNotationReader(pgnFile); //dataFolder + "test_regular_game_many.pgn");
@@ -50,6 +60,8 @@ public class jesterTester {
                     totalgamesparsed++;
                 }
             }
+            */
+
         } catch (FileNotFoundException fnfe) {
             Util.println(fnfe.getMessage());
         } catch (IOException ioe) {
