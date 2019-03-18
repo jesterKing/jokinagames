@@ -252,7 +252,7 @@ public class PortableGameNotationReader {
             else if(tag.startsWith("[FEN ")) {
                 fen = tagArvo(tag, "FEN");
                 tulostaTagArvo("FEN", fen);
-                parseFen(fen);
+                //parseFen(fen);
             }
         }
 
@@ -271,6 +271,7 @@ public class PortableGameNotationReader {
         } else {
             // luodaan FENistä
             lauta = parseFen(fen);
+            lauta.tulostaLauta(lauta);
         }
 
         // Luo peli
@@ -312,7 +313,7 @@ public class PortableGameNotationReader {
                 int emptcnt = "0123456789".indexOf(rivi.charAt(nappulaIndeksi));
                 if(emptcnt>0) {
                     for(int j=0; j< emptcnt;j++) {
-                        Util.print("    ");
+                        //Util.print("    ");
                         sarakeIndeksi++;
                     }
                 } else {
@@ -320,7 +321,7 @@ public class PortableGameNotationReader {
                     String nappulaS = ("" + nappulaChar).toLowerCase();
                     boolean isBlack = Character.isLowerCase(nappulaChar);
                     Vari v = isBlack ? Vari.MUSTA : Vari.VALKOINEN;
-                    String paikka = sarakkeet.charAt(sarakeIndeksi) + "" + riviIndeksi;
+                    String paikka = sarakkeet.charAt(sarakeIndeksi) + "" + (riviIndeksi+1);
                     Koordinaatti x = new Koordinaatti(paikka);
                     Nappula n = null;
                     switch(nappulaS) {
@@ -344,12 +345,12 @@ public class PortableGameNotationReader {
                             break;
                     }
                     fenLauta.asetaNappula(n, x);
-                    Util.Color col = isBlack ? Util.Color.BLACK : Util.Color.WHITE;
-                    Util.print(" " + nappulaMerkit.get(nappulaChar) + "  ", col);
+                    //Util.Color col = isBlack ? Util.Color.BLACK : Util.Color.WHITE;
+                    //Util.print(" " + nappulaMerkit.get(nappulaChar) + "  ", col);
                     sarakeIndeksi++;
                 }
             }
-            Util.ln();
+            //Util.ln();
         }
 
         return fenLauta;
