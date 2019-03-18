@@ -1,10 +1,13 @@
 package net.jokinagames;
 
+import java.util.List;
+
 public class Lauta {
-    protected final char [][] palikat;
+    protected final Nappula[][] palikat;
 
     /**
      * Luo Lauta-olion antaman FEN-kuvauksen mukaan
+     *
      * @param fen asettelukuvaus (FEN)
      */
     public Lauta(String fen) {
@@ -15,62 +18,74 @@ public class Lauta {
      * Luo perusshakki -Lauta-olion
      */
     public Lauta() {
-        palikat = new char[8][8];
-        String[] s = {"rnbqkbnr", "pppppppp", " ", "PPPPPPPP", "RNBQKBNR" };        //Pitäis olla nappulat paikallaan
-        for (int i = 0; i < 8; i++) {
-            palikat[i][0] = s[0].charAt(i);
-            palikat[i][1] = s[1].charAt(i);
-            for (int j = 2; j < 6; j++) {
-                palikat[i][j] = s[2].charAt(0);
-            }
-            palikat[i][6] = s[3].charAt(i);
-            palikat[i][7] = s[4].charAt(i);
-        }
-        for (int i = 0; i < 8; i++) {                                   //Tulostetaan luotu lauta näkyville.
-            System.out.println();
-            for (int j = 0; j < 8; j++) {
-                System.out.print(palikat[j][i]);
-            }
-        }
+        palikat = new Nappula[8][8];                                            // Kesken, ei castaa laudalle minkäänlaista alkuasetelmaa.
     }
-    public Lauta(char[][] s) {
+
+
+    public Lauta(Nappula[][] s) {
         palikat = s;
-        }
+    }
 
 
     /**
      * Siirrä Nappula a:sta b:hen
+     *
      * @param a
      * @param b
      * @return Lauta-olio, joka kuvaa siirronjälkeisen tilanteen
      */
-    public Lauta teeSiirto(Koordinaatti a, Koordinaatti b) {
-        char[][] s = new char[8][8];
-        char[][] alkup = getPalikat();
-        for(int i=0; i<8; i++){
-            for(int j=0; j<8; j++) {
+    public Lauta teeSiirto(Koordinaatti a, Koordinaatti b) {                        //Siirto pelkällä koordinaateilla
+        Nappula[][] s = new Nappula[8][8];
+        Nappula[][] alkup = getPalikat();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
                 s[i][j] = alkup[i][j];
             }
         }
-        char c = s[a.annaRivi()][a.annaSarake()];
-        s[a.annaRivi()][a.annaSarake()] = ' ';
+        Nappula c = s[a.annaRivi()][a.annaSarake()];                                //Tänne jonnekki tulee oman värin tarkastusta jne.
+        s[a.annaRivi()][a.annaSarake()] = null;
         s[b.annaRivi()][b.annaSarake()] = c;
         Lauta l = new Lauta(s);
         return l;
     }
 
-    public char[][] getPalikat() {
+    public Lauta teeSiirto(Nappula n, Koordinaatti a, Koordinaatti b) {              //Ylikuormitettu versio siirrosta nappulaoliolla.
+        Nappula[][] s = new Nappula[8][8];
+        Nappula[][] alkup = getPalikat();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                s[i][j] = alkup[i][j];
+            }
+        }
+        if (n instanceof Ratsu) {
+            Siirto si = n.mahdollisetSiirrot(a).get(0);                 //Apurivi jotta saadaan aloituskoordinaatti nappulalta
+            Koordinaatti k = si.getA();                                 //Sarake josta lähdetään.
+            s[k.annaRivi()][k.annaSarake()] = null;
+            s[b.annaRivi()][b.annaSarake()] = n;
+        }                                                               //Täällä jossain sitten tarkastellaan luokan mukaiset reitit.
+        Lauta l = new Lauta(s);
+        return l;
+    }
+
+    public Nappula[][] getPalikat() {
         return palikat;
     }
 
-    /**
-     * Aseta annettu Nappula laudalle kohtaan x.
-     *
-     * Tätä metodia käytetään kun valmistetaan lautaa peliä varten
-     * @param n Nappula-luokasta perivän luokan olio (Sotilas, Ratsu, Lahetti, Torni, Kuningatar, Kuningas)
-     * @param x Koordinaatti, joka ilmaisee minne Nappula menee
-     */
+    public void tulostaLauta(Lauta l) {                                //HOXHOX KESKEN! (Pistetään jos koetaan tarpeeliseksi)
+        Nappula[][] indx = l.getPalikat();                              // Tulostaa laudan senhetkisen tilan tavallisilla ASCII merkeillä
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Nappula n = indx[i][j];
+                if (n instanceof Ratsu) {
+                    if (n.annaVari() == Vari.VALKOINEN) ;
+                    System.out.print("N");
+                }
+            }
+        }
+    }
+
+
     public void asetaNappula(Nappula n, Koordinaatti x) {
-        // TODO: toteuta
+        palikat[x.annaRivi()][x.annaSarake()] = n;                      //Käpistellään ilman getteriä, liekö väliä.
     }
 }

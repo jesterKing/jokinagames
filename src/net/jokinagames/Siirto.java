@@ -11,4 +11,12 @@ public class Siirto {
 		this.A = A;
 		this.B = B;
 	}
+
+	public Koordinaatti getA() {
+		return A;
+	}
+
+	public Koordinaatti getB() {
+		return B;
+	}
 }

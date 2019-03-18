@@ -16,7 +16,7 @@ public abstract class Nappula {
 	public abstract List<Siirto> mahdollisetSiirrot(Koordinaatti A);
 
 	public Vari annaVari() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return vari;
 	}
 
 }
