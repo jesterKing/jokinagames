@@ -81,25 +81,10 @@ public class Lauta {
                     System.out.println();
                 }
                 Nappula n = indx[i][j];
-                if(n instanceof Sotilas){
-                    n = (Sotilas) n;
+                if(n!=null){
+                    System.out.print(n.annaNappula());
                 }
-                if(n instanceof Torni){
-                    n = (Torni) n;
-                }
-                if(n instanceof Kuningas){
-                    n = (Kuningas) n;
-                }
-                if(n instanceof Kuningatar){
-                    n = (Kuningatar) n;
-                }
-                if(n instanceof Lahetti){
-                    n = (Lahetti) n;
-                }
-                if(n instanceof Ratsu){
-                    n = (Ratsu) n;
-                }
-                System.out.print(n.annaNappula());
+                else{System.out.print("[ ]");}
             }
             System.out.println();
         }
