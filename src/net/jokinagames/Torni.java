@@ -35,5 +35,11 @@ public class Torni extends Nappula {
 		}
 		return Siirrot;
 	}
-
+    public String annaNappula() {
+        if (this.annaVari() == Vari.VALKOINEN) {
+            return "[R]";
+        } else {
+            return "[r]";
+        }
+    }
 }

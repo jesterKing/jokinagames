@@ -42,4 +42,12 @@ public class Ratsu extends Nappula {
         return Siirrot; // Palautetaan siirtolista
 
     }
+    public String annaNappula() {
+        if (this.annaVari() == Vari.VALKOINEN) {
+            return "[N]";
+        } else {
+            return "[n]";
+        }
+    }
+
 }
