@@ -74,12 +74,11 @@ public class Lauta {
     public void tulostaLauta(Lauta l) {                                //HOXHOX KESKEN! (Pistetään jos koetaan tarpeeliseksi)
         Nappula[][] indx = l.getPalikat();                              // Tulostaa laudan senhetkisen tilan tavallisilla ASCII merkeillä
         for (int i = 0; i < 8; i++) {
+            if(i==0){
+                System.out.println("[a][b][c][d][e][f][g][h]");
+            }
             System.out.print(i + 1);
-            for (int j = 0; j < 8; j++) {
-                if (j == 0) {
-                    System.out.print("[a][b][c][d][e][f][g][h]");
-                    System.out.println();
-                }
+            for (int j = 0; j < 8; j++){
                 Nappula n = indx[i][j];
                 if(n!=null){
                     System.out.print(n.annaNappula());
