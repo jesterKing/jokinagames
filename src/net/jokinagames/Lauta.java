@@ -74,19 +74,16 @@ public class Lauta {
     public void tulostaLauta(Lauta l) {                                //HOXHOX KESKEN! (Pistetään jos koetaan tarpeeliseksi)
         Nappula[][] indx = l.getPalikat();                              // Tulostaa laudan senhetkisen tilan tavallisilla ASCII merkeillä
         for (int i = 0; i < 8; i++) {
+            System.out.print(i + 1);
             for (int j = 0; j < 8; j++) {
-                Nappula n = indx[i][j];
-                /*
-                    TODO toteuta Nappula-luokkaan esim char annaMerkki()
-                         jolloin tarvii vain testata onko Nappula n null.
-                         Jos ei ole null niin riittää että n.annaMerkki().
-                 */
-
-                if (n instanceof Ratsu) {
-                    if (n.annaVari() == Vari.VALKOINEN) ; // todo tämä if-lohko on väärin toteutettu
-                    System.out.print("N");
+                if (j == 0) {
+                    System.out.print("[a][b][c][d][e][f][g][h]");
+                    System.out.println();
                 }
+                Nappula n = indx[i][j];
+                System.out.print(Nappula.annaNappula(n));
             }
+            System.out.println();
         }
     }
 
