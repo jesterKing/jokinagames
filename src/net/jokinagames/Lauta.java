@@ -18,7 +18,7 @@ public class Lauta {
      * Luo perusshakki -Lauta-olion
      */
     public Lauta() {
-        palikat = new Nappula[8][8];                                            // Kesken, ei castaa laudalle minkäänlaista alkuasetelmaa.
+        palikat = new Nappula[8][8];
     }
 
 
@@ -81,7 +81,25 @@ public class Lauta {
                     System.out.println();
                 }
                 Nappula n = indx[i][j];
-                System.out.print(Nappula.annaNappula(n));
+                if(n instanceof Sotilas){
+                    n = (Sotilas) n;
+                }
+                if(n instanceof Torni){
+                    n = (Torni) n;
+                }
+                if(n instanceof Kuningas){
+                    n = (Kuningas) n;
+                }
+                if(n instanceof Kuningatar){
+                    n = (Kuningatar) n;
+                }
+                if(n instanceof Lahetti){
+                    n = (Lahetti) n;
+                }
+                if(n instanceof Ratsu){
+                    n = (Ratsu) n;
+                }
+                System.out.print(n.annaNappula());
             }
             System.out.println();
         }

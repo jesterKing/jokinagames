@@ -39,4 +39,12 @@ public class Kuningatar extends Nappula {
 		return Siirrot;
 	}
 
+	public String annaNappula() {
+		if (this.annaVari() == Vari.VALKOINEN) {
+			return "[Q]";
+		} else {
+			return "[q]";
+		}
+	}
+
 }

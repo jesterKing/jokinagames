@@ -38,6 +38,11 @@ public class Kuningas extends Nappula {
 		return Siirrot;
 
 	}
-
-
+	public String annaNappula() {
+		if (this.annaVari() == Vari.VALKOINEN) {
+			return "[K]";
+		} else {
+			return "[k]";
+		}
+	}
 }

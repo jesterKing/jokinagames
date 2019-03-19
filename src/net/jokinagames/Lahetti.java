@@ -35,4 +35,12 @@ public class Lahetti extends Nappula {
 			return Siirrot;
 		}
 
+		public String annaNappula() {
+		if (this.annaVari() == Vari.VALKOINEN) {
+			return "[B]";
+		} else {
+			return "[b]";
+		}
 	}
+
+}
