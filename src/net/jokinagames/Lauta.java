@@ -47,8 +47,8 @@ public class Lauta {
             }
         }
         Nappula c = s[a.annaRivi()][a.annaSarake()];                                //Tänne jonnekki tulee oman värin tarkastusta jne.
-        s[a.annaSarake()][a.annaRivi()] = null;
-        s[b.annaSarake()][b.annaRivi()] = c;
+        s[a.annaRivi()][a.annaSarake()] = null;
+        s[b.annaRivi()][b.annaSarake()] = c;
         Lauta l = new Lauta(s);
         return l;
     }
@@ -63,7 +63,7 @@ public class Lauta {
         }
         if(a.equals(b)) {
             System.out.println("Siirto tehty");
-            s[a.annaSarake()][a.annaRivi()] = n;
+            s[a.annaRivi()][a.annaSarake()] = n;
             Lauta l = new Lauta(s);
             return l;
         }
@@ -72,7 +72,7 @@ public class Lauta {
         Koordinaatti k = new Koordinaatti(a.annaSarake()+suunta[0],a.annaRivi()+suunta[1]);     //Seuraava määränpääkoordinaatti.
         for(Siirto si:siirt){
             if(si.getB().equals(k)){                                            //Onko määränpää sallittujen listalla.
-                if(alkup[si.getA().annaSarake()][si.getA().annaRivi()].annaVari()!=alkup[si.getB().annaSarake()][si.getB().annaRivi()].annaVari()&&alkup[si.getB().annaSarake()][si.getB().annaRivi()].annaVari()!=null){     //Tarkistetaan tapahtuuko syönti siirrettäessä.
+                if(alkup[si.getA().annaRivi()][si.getA().annaSarake()].annaVari()!=alkup[si.getB().annaRivi()][si.getB().annaSarake()].annaVari()&&alkup[si.getB().annaRivi()][si.getB().annaSarake()].annaVari()!=null){     //Tarkistetaan tapahtuuko syönti siirrettäessä.
                     teeSiirto(n,b,b);
                 }
                 teeSiirto(n,k,b);
@@ -117,10 +117,10 @@ public class Lauta {
         List<Siirto> siirrot = new ArrayList<>();                       // uusi sallittujen siirtojen lista.
         for (Siirto s:e){
             Koordinaatti k = s.getB();                                  //Haetaan määränpääkoordinaatti.
-            if(palikat[k.annaSarake()][k.annaRivi()]!=null){            //Mikäli koordinaatti ei vapaa, tarkistetaan kenen on.
+            if(palikat[k.annaRivi()][k.annaSarake()]!=null){            //Mikäli koordinaatti ei vapaa, tarkistetaan kenen on.
                 Koordinaatti o = s.getA();                                  // Apunappulat värin tarkistuksen
-                Nappula n2 = palikat[o.annaSarake()][o.annaRivi()];
-                Nappula n = palikat[k.annaSarake()][k.annaRivi()];
+                Nappula n2 = palikat[o.annaRivi()][o.annaSarake()];
+                Nappula n = palikat[k.annaRivi()][k.annaSarake()];
                 if(n2.annaVari()!=n.annaVari()){
                     siirrot.add(s);                                     //Jos vastustajan nappula, siirto mahdollinen(tähän joku logiikka syömiselle)
                 }
@@ -152,7 +152,7 @@ public class Lauta {
         if(rivi<0) {
             rivi = -1;
         }
-        int[] suunta = {sarake,rivi};                                   //Tarkastamme siis mihin suuntaan lähdetään.
+        int[] suunta = {rivi, sarake};                                   //Tarkastamme siis mihin suuntaan lähdetään.
         return suunta;
     }
 }
