@@ -118,9 +118,8 @@ public class Lauta {
                 Nappula n2 = palikat[o.annaSarake()][o.annaRivi()];
                 Nappula n = palikat[k.annaSarake()][k.annaRivi()];
                 if(n2.annaVari()!=n.annaVari()){
-                    Lauta l = teeSiirto(n2,o,k);                            //HOXHOX! Väliaikanen ratkaisu. Pelaajan vaihto jne tänne.
-                    tulostaLauta(l);
-                    break;
+                    teeSiirto(n2,o,k);                            //HOXHOX! Väliaikanen ratkaisu. Pelaajan vaihto jne tänne.
+                    break;                                                  //Tässä siis stoppaa liikkumisen vastustajan nappulaan.
                 }
                 continue;
 
