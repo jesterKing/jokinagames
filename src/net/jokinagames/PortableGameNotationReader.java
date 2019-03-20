@@ -321,7 +321,7 @@ public class PortableGameNotationReader {
                     String nappulaS = ("" + nappulaChar).toLowerCase();
                     boolean isBlack = Character.isLowerCase(nappulaChar);
                     Vari v = isBlack ? Vari.MUSTA : Vari.VALKOINEN;
-                    String paikka = sarakkeet.charAt(sarakeIndeksi) + "" + (riviIndeksi+1);
+                    String paikka = sarakkeet.charAt(sarakeIndeksi) + "" + (8-riviIndeksi);
                     Koordinaatti x = new Koordinaatti(paikka);
                     Nappula n = null;
                     switch(nappulaS) {

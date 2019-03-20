@@ -31,7 +31,7 @@ public class Sotilas extends Nappula {
 		for (int[] a:n) { // Käydään mahdollisten siirtojen lista läpi
 			int ur = kerroin * a[0] + lr; // Muuttuja uudelle riville, väri huomioitu kertoimella
 			int us = a[1] + ls; // Muuttuja uudelle sarakkeelle
-			if (ur >= 1 && ur <= 8 && us >= 1 && us <= 8) {  // Tarkistetaan, että ollaanko laudalla ko. siirron tapauksessa
+			if (ur >= 0 && ur <= 7 && us >= 0 && us <= 7) {  // Tarkistetaan, että ollaanko laudalla ko. siirron tapauksessa
 				Koordinaatti uk = new Koordinaatti(koordinaatit[0].charAt(ur) + "" + koordinaatit[1].charAt(us)); // Luodaan uusi koordinaatti
 				Siirto uS = new Siirto(A, uk);  // Jos ollaan, generoidaan uusi siirto
 				Siirrot.add(uS);                // ja lisätään siirtolistaan

@@ -3,6 +3,7 @@ package net.jokinagames;
 public class Koordinaatti {
     private int sarake = 0; // file
     private int rivi = 0; // rank
+    private final String san;
     /**
      * Luo Koordinaatti-oliot annetun SAN-notaation mukaan
      * @param san
@@ -22,17 +23,17 @@ public class Koordinaatti {
 
         return new Koordinaatti[] {a, b};
     }
-
-    public Koordinaatti(){}
-
-    public Koordinaatti(int sar, int riv) {
-        this.sarake = sar;
-        this.rivi = riv;
+    public Koordinaatti(int a, int b){
+        this.sarake = a;
+        this.rivi = b;
     }
+
+    private Koordinaatti() { san = "a1"; }
 
     public Koordinaatti (String paikka){        //Pitäis luoda koordinaatti sen mukaan minkä ruudun saa syötteenä.
         String sar = "abcdefgh";                //Esim. a1 asettaa koordinaatin rivin ja sarakkeen indx [0],[7].
         String riv = "87654321";
+        san = paikka;
         this.sarake = sar.indexOf(paikka.charAt(0));
         this.rivi = riv.indexOf(paikka.charAt(1));
     }
@@ -42,5 +43,6 @@ public class Koordinaatti {
     public int annaRivi(){
         return rivi;
     }
+    public String annaSan() { return san; }
 
 }
