@@ -4,6 +4,8 @@ public class Koordinaatti {
     private int sarake = 0; // file
     private int rivi = 0; // rank
     private final String san;
+    private static String sar = "abcdefgh";                //Esim. a1 asettaa koordinaatin rivin ja sarakkeen indx [0],[7].
+    private static String riv = "87654321";
     /**
      * Luo Koordinaatti-oliot annetun SAN-notaation mukaan
      * @param san
@@ -26,13 +28,12 @@ public class Koordinaatti {
     public Koordinaatti(int a, int b){
         this.sarake = a;
         this.rivi = b;
+        san = sar.charAt(a) + "" + riv.charAt(b);
     }
 
     private Koordinaatti() { san = "a1"; }
 
     public Koordinaatti (String paikka){        //Pitäis luoda koordinaatti sen mukaan minkä ruudun saa syötteenä.
-        String sar = "abcdefgh";                //Esim. a1 asettaa koordinaatin rivin ja sarakkeen indx [0],[7].
-        String riv = "87654321";
         san = paikka;
         this.sarake = sar.indexOf(paikka.charAt(0));
         this.rivi = riv.indexOf(paikka.charAt(1));
