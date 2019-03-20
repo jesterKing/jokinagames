@@ -77,7 +77,7 @@ public class Lauta {
             if(i==0){
                 System.out.println(" [a][b][c][d][e][f][g][h]");
             }
-            System.out.print(i + 1);
+            System.out.print(8 - i);
             for (int j = 0; j < 8; j++){
                 Nappula n = indx[i][j];
                 if(n!=null){
