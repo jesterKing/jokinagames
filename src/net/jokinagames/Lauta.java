@@ -72,9 +72,14 @@ public class Lauta {
         Koordinaatti k = new Koordinaatti(a.annaSarake()+suunta[0],a.annaRivi()+suunta[1]);     //Seuraava määränpääkoordinaatti.
         for(Siirto si:siirt){
             if(si.getB().equals(k)){                                            //Onko määränpää sallittujen listalla.
-                if(alkup[si.getA().annaRivi()][si.getA().annaSarake()].annaVari()!=alkup[si.getB().annaRivi()][si.getB().annaSarake()].annaVari()&&alkup[si.getB().annaRivi()][si.getB().annaSarake()].annaVari()!=null){     //Tarkistetaan tapahtuuko syönti siirrettäessä.
+                if(alkup[si.getA().annaRivi()][si.getA().annaSarake()].annaVari()!=alkup[si.getB().annaRivi()][si.getB().annaSarake()].annaVari()
+                   && alkup[si.getB().annaRivi()][si.getB().annaSarake()].annaVari()!=null){     //Tarkistetaan tapahtuuko syönti siirrettäessä.
                     teeSiirto(n,b,b);
                 }
+                s[si.getA().annaSarake()][si.getA().annaRivi()]=null;
+                s[si.getB().annaSarake()][si.getB().annaRivi()]=n;
+                Lauta l = new Lauta(s);
+                tulostaLauta(l);
                 teeSiirto(n,k,b);
             }
             else {
