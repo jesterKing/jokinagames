@@ -1,6 +1,10 @@
 package net.jokinagames;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class Lauta {
     protected final Nappula[][] palikat;
@@ -43,8 +47,8 @@ public class Lauta {
             }
         }
         Nappula c = s[a.annaRivi()][a.annaSarake()];                                //Tänne jonnekki tulee oman värin tarkastusta jne.
-        s[a.annaRivi()][a.annaSarake()] = null;
-        s[b.annaRivi()][b.annaSarake()] = c;
+        s[a.annaSarake()][a.annaRivi()] = null;
+        s[b.annaSarake()][b.annaRivi()] = c;
         Lauta l = new Lauta(s);
         return l;
     }
@@ -57,21 +61,32 @@ public class Lauta {
                 s[i][j] = alkup[i][j];
             }
         }
-        if (n instanceof Ratsu) {
-            Siirto si = n.mahdollisetSiirrot(a).get(0);                 //Apurivi jotta saadaan aloituskoordinaatti nappulalta
-            Koordinaatti k = si.getA();                                 //Sarake josta lähdetään.
-            s[k.annaRivi()][k.annaSarake()] = null;
-            s[b.annaRivi()][b.annaSarake()] = n;
-        }                                                               //Täällä jossain sitten tarkastellaan luokan mukaiset reitit.
-        Lauta l = new Lauta(s);
-        return l;
+        if(a.equals(b)) {
+            System.out.println("Siirto tehty");
+            Lauta l = new Lauta(alkup);
+            return l;
+        }
+        int[] suunta = annaSuunta(a, b);                                                //Mihin suuntaan lähdetään liikkumaan.
+        List<Siirto> siirt = sallitutSiirrot(n.mahdollisetSiirrot(a));                  //Mahdolliset ja sallitut siirrot nappulalla.
+        for(Siirto sii:siirt){
+            Koordinaatti k = new Koordinaatti(a.annaSarake()+suunta[0],a.annaRivi()+suunta[1]);     //Tarkastetaan kuuluuko seuraava siirto vielä sallittuihin.
+            if(sii.getB().equals(k)){
+                teeSiirto(n,k,b);
+            }
+            else {
+                System.out.println("Ei mahdollinen siirto");
+                break;
+            }
+        }
+        return null;
     }
 
-    public Nappula[][] getPalikat() {
+
+    private Nappula[][] getPalikat() {
         return palikat;
     }
 
-    public void tulostaLauta(Lauta l) {                                //HOXHOX KESKEN! (Pistetään jos koetaan tarpeeliseksi)
+    public void tulostaLauta(Lauta l) {                                //(Pistetään jos koetaan tarpeeliseksi)
         Nappula[][] indx = l.getPalikat();                              // Tulostaa laudan senhetkisen tilan tavallisilla ASCII merkeillä
         for (int i = 0; i < 8; i++) {
             if(i==0){
@@ -93,4 +108,51 @@ public class Lauta {
     public void asetaNappula(Nappula n, Koordinaatti x) {
         palikat[x.annaRivi()][x.annaSarake()] = n;                      //Käpistellään ilman getteriä, liekö väliä.
     }
+
+    public List<Siirto> sallitutSiirrot(List<Siirto> e) {
+        List<Siirto> siirrot = new ArrayList<>();                       // uusi sallittujen siirtojen lista.
+        for (Siirto s:e){
+            Koordinaatti k = s.getB();                                  //Haetaan määränpääkoordinaatti.
+            if(palikat[k.annaSarake()][k.annaRivi()]!=null){
+                Koordinaatti o = s.getA();                                  // Apunappulat värin tarkistuksen
+                Nappula n2 = palikat[o.annaSarake()][o.annaRivi()];
+                Nappula n = palikat[k.annaSarake()][k.annaRivi()];
+                if(n2.annaVari()!=n.annaVari()){
+                    Lauta l = teeSiirto(n2,o,k);                            //HOXHOX! Väliaikanen ratkaisu. Pelaajan vaihto jne tänne.
+                    tulostaLauta(l);
+                    break;
+                }
+                continue;
+
+            }
+            siirrot.add(s);
+        }
+        return siirrot;
+    }
+
+
+
+    public int[] annaSuunta(Koordinaatti a, Koordinaatti b){
+        int yy = a.annaSarake();                                        //Tässä pitäs olla hellpo seurata ajatuksen kulkua.
+        int kaa = a.annaRivi();
+        int koo = b.annaSarake();
+        int nee = b.annaRivi();
+        int sarake = yy - koo;
+        int rivi = kaa - nee;
+        if(sarake>0){
+            sarake = 1;
+        }
+        if(sarake<0) {
+            sarake = -1;
+        }
+        if(rivi>0){
+            rivi = 1;
+        }
+        if(rivi<0) {
+            rivi = -1;
+        }
+        int[] suunta = {sarake,rivi};                                   //Tarkastamme siis mihin suuntaan lähdetään.
+        return suunta;
+    }
 }
+
