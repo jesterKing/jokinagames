@@ -46,4 +46,12 @@ public class Koordinaatti {
     }
     public String annaSan() { return san; }
 
+    @Override
+    public boolean equals(Object b) {
+        if(!(b instanceof Koordinaatti)) return false;
+        Koordinaatti y = (Koordinaatti)b;
+
+        return sarake==y.sarake && rivi==y.rivi;
+    }
+
 }
