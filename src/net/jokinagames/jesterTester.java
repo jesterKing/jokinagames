@@ -53,6 +53,10 @@ public class jesterTester {
             }
             Lauta siirronjalkeen = l.teeSiirto(x, y);
             siirronjalkeen.tulostaLauta(siirronjalkeen);
+            siirronjalkeen = siirronjalkeen.teeSiirto(y, x);
+            siirronjalkeen.tulostaLauta(siirronjalkeen);
+            siirronjalkeen = siirronjalkeen.teeSiirto(r, x, y);
+            siirronjalkeen.tulostaLauta(siirronjalkeen);
             //Peli peli = pgnReader.parsePgn();
             //Util.println(peli.toString());
 
