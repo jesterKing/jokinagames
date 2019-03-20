@@ -118,18 +118,19 @@ public class Lauta {
     public void tulostaLauta(Lauta l) {                                //(Pistetään jos koetaan tarpeeliseksi)
         Nappula[][] indx = l.getPalikat();                              // Tulostaa laudan senhetkisen tilan tavallisilla ASCII merkeillä
         for (int i = 0; i < 8; i++) {
-            if(i==0){
-                System.out.println(" [a][b][c][d][e][f][g][h]");
-            }
             System.out.print(8 - i);
-            for (int j = 0; j < 8; j++){
+            for (int j = 0; j < 8; j++) {
                 Nappula n = indx[i][j];
-                if(n!=null){
+                if (n != null) {
                     System.out.print(n.annaNappula());
+                } else {
+                    System.out.print("[ ]");
                 }
-                else{System.out.print("[ ]");}
             }
             System.out.println();
+            if (i == 7) {
+                System.out.println(" [a][b][c][d][e][f][g][h]");
+            }
         }
     }
 
