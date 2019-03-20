@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.FileSystems;
+import java.util.List;
 import java.util.Random;
 
 public class jesterTester {
@@ -39,9 +40,17 @@ public class jesterTester {
             //pgnReader.parseFen("r1bq1rk1/4bppp/p1n2n2/1pppp3/4P3/2PP1N2/PPB2PPP/R1BQRNK1 w - - 0 1");
             Lauta l = pgnReader.parseFen("n6n/8/8/8/8/8/8/N6N w - - 0 1");
             l.tulostaLauta(l);
-            Ratsu r = new Ratsu(Vari.MUSTA);
+            Ratsu r = new Ratsu(Vari.VALKOINEN);
             Koordinaatti y = new Koordinaatti("b3");
             Koordinaatti x = new Koordinaatti("a1");
+            List<Siirto> mahdollisetSiirrot = r.mahdollisetSiirrot(x);
+            for(Siirto s:mahdollisetSiirrot) {
+                Util.println(s.getA().annaSan() + " - " + s.getB().annaSan());
+            }
+            mahdollisetSiirrot = r.mahdollisetSiirrot(y);
+            for(Siirto s:mahdollisetSiirrot) {
+                Util.println(s.getA().annaSan() + " - " + s.getB().annaSan());
+            }
             Lauta siirronjalkeen = l.teeSiirto(x, y);
             siirronjalkeen.tulostaLauta(siirronjalkeen);
             //Peli peli = pgnReader.parsePgn();
