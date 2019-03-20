@@ -63,14 +63,18 @@ public class Lauta {
         }
         if(a.equals(b)) {
             System.out.println("Siirto tehty");
-            Lauta l = new Lauta(alkup);
+            s[a.annaSarake()][a.annaRivi()] = n;
+            Lauta l = new Lauta(s);
             return l;
         }
         int[] suunta = annaSuunta(a, b);                                                //Mihin suuntaan lähdetään liikkumaan.
-        List<Siirto> siirt = sallitutSiirrot(n.mahdollisetSiirrot(a));                  //Mahdolliset ja sallitut siirrot nappulalla.
-        for(Siirto sii:siirt){
-            Koordinaatti k = new Koordinaatti(a.annaSarake()+suunta[0],a.annaRivi()+suunta[1]);     //Tarkastetaan kuuluuko seuraava siirto vielä sallittuihin.
-            if(sii.getB().equals(k)){
+        List<Siirto> siirt = sallitutSiirrot(n.mahdollisetSiirrot(a));                  //Kaikki sallitut siirrot
+        Koordinaatti k = new Koordinaatti(a.annaSarake()+suunta[0],a.annaRivi()+suunta[1]);     //Seuraava määränpääkoordinaatti.
+        for(Siirto si:siirt){
+            if(si.getB().equals(k)){                                            //Onko määränpää sallittujen listalla.
+                if(alkup[si.getA().annaSarake()][si.getA().annaRivi()].annaVari()!=alkup[si.getB().annaSarake()][si.getB().annaRivi()].annaVari()&&alkup[si.getB().annaSarake()][si.getB().annaRivi()].annaVari()!=null){     //Tarkistetaan tapahtuuko syönti siirrettäessä.
+                    teeSiirto(n,b,b);
+                }
                 teeSiirto(n,k,b);
             }
             else {
@@ -113,16 +117,14 @@ public class Lauta {
         List<Siirto> siirrot = new ArrayList<>();                       // uusi sallittujen siirtojen lista.
         for (Siirto s:e){
             Koordinaatti k = s.getB();                                  //Haetaan määränpääkoordinaatti.
-            if(palikat[k.annaSarake()][k.annaRivi()]!=null){
+            if(palikat[k.annaSarake()][k.annaRivi()]!=null){            //Mikäli koordinaatti ei vapaa, tarkistetaan kenen on.
                 Koordinaatti o = s.getA();                                  // Apunappulat värin tarkistuksen
                 Nappula n2 = palikat[o.annaSarake()][o.annaRivi()];
                 Nappula n = palikat[k.annaSarake()][k.annaRivi()];
                 if(n2.annaVari()!=n.annaVari()){
-                    teeSiirto(n2,o,k);                            //HOXHOX! Väliaikanen ratkaisu. Pelaajan vaihto jne tänne.
-                    break;                                                  //Tässä siis stoppaa liikkumisen vastustajan nappulaan.
+                    siirrot.add(s);                                     //Jos vastustajan nappula, siirto mahdollinen(tähän joku logiikka syömiselle)
                 }
-                continue;
-
+                continue;                                           //Jos oma, ei lisätä siirtoa listaan, koska ei sallittu.
             }
             siirrot.add(s);
         }
