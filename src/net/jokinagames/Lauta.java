@@ -61,7 +61,28 @@ public class Lauta {
                 s[i][j] = alkup[i][j];
             }
         }
-        if(a.equals(b)) {
+
+        List<Siirto> sallitut = sallitutSiirrot(n.mahdollisetSiirrot(a));
+
+        // silmukka, jossa katsotaan löytyykö b sallituista. Jos löytyy
+        // tehdään siirto. Jos ei löydy huudetaan
+        boolean found = false;
+        for(Siirto siirto : sallitut) {
+            if(siirto.getB().equals(b)) {
+                found = true;
+                break;
+            }
+        }
+        if(found) {
+            s[a.annaRivi()][a.annaSarake()] = null;
+            s[b.annaRivi()][b.annaSarake()] = n;
+            Util.println("Siirto tehty");
+            return new Lauta(s);
+        } else {
+            Util.println("Siirto mahdoton");
+            return null;
+        }
+        /*if(a.equals(b)) {
             System.out.println("Siirto tehty");
             s[a.annaRivi()][a.annaSarake()] = n;
             Lauta l = new Lauta(s);
@@ -76,8 +97,8 @@ public class Lauta {
                    && alkup[si.getB().annaRivi()][si.getB().annaSarake()].annaVari()!=null){     //Tarkistetaan tapahtuuko syönti siirrettäessä.
                     teeSiirto(n,b,b);
                 }
-                s[si.getA().annaSarake()][si.getA().annaRivi()]=null;
-                s[si.getB().annaSarake()][si.getB().annaRivi()]=n;
+                s[si.getA().annaRivi()][si.getA().annaSarake()]=null;
+                s[si.getB().annaRivi()][si.getB().annaSarake()]=n;
                 Lauta l = new Lauta(s);
                 tulostaLauta(l);
                 teeSiirto(n,k,b);
@@ -86,8 +107,7 @@ public class Lauta {
                 System.out.println("Ei mahdollinen siirto");
                 break;
             }
-        }
-        return null;
+        }*/
     }
 
 
@@ -143,8 +163,8 @@ public class Lauta {
         int kaa = a.annaRivi();
         int koo = b.annaSarake();
         int nee = b.annaRivi();
-        int sarake = yy - koo;
-        int rivi = kaa - nee;
+        int sarake = koo - yy;
+        int rivi = kaa - nee ;
         if(sarake>0){
             sarake = 1;
         }
