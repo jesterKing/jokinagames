@@ -53,6 +53,9 @@ public class Lauta {
         return l;
     }
 
+    /* TAUOLLA HETKEN. PALAA REMONTIN JÄLKEEN!
+
+
     public Lauta teeSiirto(Nappula n, Koordinaatti a, Koordinaatti b) {              //Ylikuormitettu versio siirrosta nappulaoliolla.
         Nappula[][] s = new Nappula[8][8];
         Nappula[][] alkup = getPalikat();
@@ -67,13 +70,13 @@ public class Lauta {
         // silmukka, jossa katsotaan löytyykö b sallituista. Jos löytyy
         // tehdään siirto. Jos ei löydy huudetaan
         boolean found = false;
-        for(Siirto siirto : sallitut) {
-            if(siirto.getB().equals(b)) {
+        for (Siirto siirto : sallitut) {
+            if (siirto.getB().equals(b)) {
                 found = true;
                 break;
             }
         }
-        if(found) {
+        if (found) {
             s[a.annaRivi()][a.annaSarake()] = null;
             s[b.annaRivi()][b.annaSarake()] = n;
             Util.println("Siirto tehty");
@@ -108,7 +111,7 @@ public class Lauta {
                 break;
             }
         }*/
-    }
+
 
 
     private Nappula[][] getPalikat() {
@@ -139,6 +142,13 @@ public class Lauta {
         palikat[x.annaRivi()][x.annaSarake()] = n;                      //Käpistellään ilman getteriä, liekö väliä.
     }
 
+    public Nappula annaNappula(Koordinaatti k) {
+        return palikat[k.annaRivi()][k.annaSarake()];
+    }
+}
+
+
+    /*
     public List<Siirto> sallitutSiirrot(List<Siirto> e) {
         List<Siirto> siirrot = new ArrayList<>();                       // uusi sallittujen siirtojen lista.
         for (Siirto s:e){
@@ -183,3 +193,4 @@ public class Lauta {
     }
 }
 
+*/
