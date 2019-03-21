@@ -53,8 +53,6 @@ public class Lauta {
         return l;
     }
 
-    /* TAUOLLA HETKEN. PALAA REMONTIN JÄLKEEN!
-
 
     public Lauta teeSiirto(Nappula n, Koordinaatti a, Koordinaatti b) {              //Ylikuormitettu versio siirrosta nappulaoliolla.
         Nappula[][] s = new Nappula[8][8];
@@ -64,16 +62,17 @@ public class Lauta {
                 s[i][j] = alkup[i][j];
             }
         }
-
-        List<Siirto> sallitut = sallitutSiirrot(n.mahdollisetSiirrot(a));
-
-        // silmukka, jossa katsotaan löytyykö b sallituista. Jos löytyy
-        // tehdään siirto. Jos ei löydy huudetaan
+        Siirrot siirt = sallitutSiirrot(n.mahdollisetSiirrot(a));
         boolean found = false;
-        for (Siirto siirto : sallitut) {
-            if (siirto.getB().equals(b)) {
-                found = true;
+        for (int i = 0; i < 8; i++) {
+            if(found){                                           //Mikäli löyty, lopetetaan läpikäynti.
                 break;
+            }
+            for (Siirto si : siirt.annaSuunta(i)) {             //Käydään kaikki mahdolliset siirrot ja ilmansuunnat läpi.
+                if (si.getB().equals(b)) {                      //Jos siirto löytyy sallituista, tehdään siirto.
+                    found = true;
+                    break;
+                }
             }
         }
         if (found) {
@@ -85,6 +84,8 @@ public class Lauta {
             Util.println("Siirto mahdoton");
             return null;
         }
+    }
+
         /*if(a.equals(b)) {
             System.out.println("Siirto tehty");
             s[a.annaRivi()][a.annaSarake()] = n;
@@ -113,39 +114,58 @@ public class Lauta {
         }*/
 
 
+        private Nappula[][] getPalikat () {
+            return palikat;
+        }
 
-    private Nappula[][] getPalikat() {
-        return palikat;
-    }
-
-    public void tulostaLauta(Lauta l) {                                //(Pistetään jos koetaan tarpeeliseksi)
-        Nappula[][] indx = l.getPalikat();                              // Tulostaa laudan senhetkisen tilan tavallisilla ASCII merkeillä
-        for (int i = 0; i < 8; i++) {
-            System.out.print(8 - i);
-            for (int j = 0; j < 8; j++) {
-                Nappula n = indx[i][j];
-                if (n != null) {
-                    System.out.print(n.annaNappula());
-                } else {
-                    System.out.print("[ ]");
+        public void tulostaLauta (Lauta l){                                //(Pistetään jos koetaan tarpeeliseksi)
+            Nappula[][] indx = l.getPalikat();                              // Tulostaa laudan senhetkisen tilan tavallisilla ASCII merkeillä
+            for (int i = 0; i < 8; i++) {
+                System.out.print(8 - i);
+                for (int j = 0; j < 8; j++) {
+                    Nappula n = indx[i][j];
+                    if (n != null) {
+                        System.out.print(n.annaNappula());
+                    } else {
+                        System.out.print("[ ]");
+                    }
+                }
+                System.out.println();
+                if (i == 7) {
+                    System.out.println(" [a][b][c][d][e][f][g][h]");
                 }
             }
-            System.out.println();
-            if (i == 7) {
-                System.out.println(" [a][b][c][d][e][f][g][h]");
+        }
+
+
+        public void asetaNappula (Nappula n, Koordinaatti x){
+            palikat[x.annaRivi()][x.annaSarake()] = n;                      //Käpistellään ilman getteriä, liekö väliä.
+        }
+
+        public Nappula annaNappula (Koordinaatti k){
+            return palikat[k.annaRivi()][k.annaSarake()];
+        }
+        public Siirrot sallitutSiirrot (Siirrot mahdolliset){
+            Siirrot sallitut = new Siirrot();
+            for (int i = 0; i < 8; i++) {
+                for (Siirto mahd : mahdolliset.annaSuunta(i)) {
+                    Nappula n1 = annaNappula(mahd.getA());                      //Lähtö
+                    Nappula n2 = annaNappula(mahd.getB());                      //Määränpää
+                    if (n1 == null) sallitut.annaSuunta(i).add(mahd);                          //Jos tyhjä, saa liikkua.
+                    else {
+                        if (n1.annaVari() == n2.annaVari()) {                       //Jos oma, matka tyssää sinne suuntaan siihen.
+                            break;
+                        } else {
+                            sallitut.annaSuunta(i).add(mahd);                               //Jos vihulainen, sallittu ja viimeinen.
+                            break;
+                        }
+                    }
+                }
             }
+            return sallitut;
         }
     }
 
-
-    public void asetaNappula(Nappula n, Koordinaatti x) {
-        palikat[x.annaRivi()][x.annaSarake()] = n;                      //Käpistellään ilman getteriä, liekö väliä.
-    }
-
-    public Nappula annaNappula(Koordinaatti k) {
-        return palikat[k.annaRivi()][k.annaSarake()];
-    }
-}
 
 
     /*

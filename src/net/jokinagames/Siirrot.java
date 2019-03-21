@@ -23,5 +23,33 @@ public class Siirrot {
         W = new ArrayList<>();
         NW = new ArrayList<>();
     }
+    public List<Siirto> annaSuunta(int i) {
+        if (i == 0) {
+            return N;
+        }
+        if (i == 1) {
+            return NE;
+        }
+        if (i == 2) {
+            return E;
+        }
+        if (i == 3) {
+            return SE;
+        }
+        if (i == 4) {
+            return S;
+        }
+        if (i == 5) {
+            return SW;
+        }
+        if (i == 6) {
+            return W;
+        }
+        if (i == 7) {
+            return NW;
+        }
+        return null;
+    }
 }
+
 
