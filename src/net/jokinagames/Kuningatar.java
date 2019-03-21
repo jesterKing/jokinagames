@@ -24,19 +24,18 @@ public class Kuningatar extends Nappula {
 
 		int lr = A.annaRivi(); // lahtorivi
 		int ls = A.annaSarake(); // lahtosarake
-		int i = 0; // laskuri siirrot luokan siirtoja varten
-		for (int[] a:n){
 
+		for (int[] a:n){
+            int i = n.indexOf(a); // apumuuttuja siirrot luokan ilmansuuntien hakemista varten
 			int ur = a[0] + lr; // Muuttuja uudelle riville
 			int us = a[1] + ls; // Muuttuja uudelle sarakkeelle
 			while (ur>=0 && ur<=7 && us>=0 && us<=7){
 				Koordinaatti uk = new Koordinaatti(koordinaatit[0].charAt(ur) +""+koordinaatit[1].charAt(us)); // Luodaan uusi koordinaatti
 				Siirto uS = new Siirto(A, uk);  // Jos ollaan, generoidaan uusi siirto
-				siirrot.annaSuunta(i).add(uS);
+				siirrot.annaSuunta(i).add(uS); // ja lisätään siirtolistaan
 				ur = a[0] + ur;
 				us = a[1] + us;
 			}
-			i+=1;
 		}
 		return siirrot;
 	}

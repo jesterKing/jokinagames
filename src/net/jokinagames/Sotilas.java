@@ -10,13 +10,13 @@ public class Sotilas extends Nappula {
 	}
 
 	private static final List<int[]> n = Arrays.asList( // Mahdollisten siirtojen luominen
-			new int[]{1, 0},
-			new int[]{1, 1},
-			new int[]{1, -1});
+			new int[]{1, 0}, // N
+			new int[]{1, 1}, // NE
+			new int[]{1, -1}); // NW
 
 
-	public List<Siirto> mahdollisetSiirrot(Koordinaatti A) {
-		List<Siirto> Siirrot = new ArrayList<>(); // Alustetaan uusi palautettava lista siirroista
+	public Siirrot mahdollisetSiirrot(Koordinaatti A) {
+		Siirrot siirrot = new Siirrot(); // Alustetaan uusi palautettava lista siirroista
 
 		int lr = A.annaRivi(); // lahtorivi
 		int ls = A.annaSarake(); // lahtosarake
@@ -25,30 +25,47 @@ public class Sotilas extends Nappula {
 		if (this.annaVari() == Vari.VALKOINEN){ // Apukerroin suunnan määrittämiseen, VALKOINEN 1, MUSTA -1
 			kerroin = kerroin +1;
 		} else {
-			kerroin = kerroin -1;
+			kerroin = kerroin -1; // S
 		}
-
+		String apu = "";
 		for (int[] a:n) { // Käydään mahdollisten siirtojen lista läpi
 			int ur = kerroin * a[0] + lr; // Muuttuja uudelle riville, väri huomioitu kertoimella
 			int us = a[1] + ls; // Muuttuja uudelle sarakkeelle
+
+
 			if (ur >= 0 && ur <= 7 && us >= 0 && us <= 7) {  // Tarkistetaan, että ollaanko laudalla ko. siirron tapauksessa
+
+
 				Koordinaatti uk = new Koordinaatti(koordinaatit[0].charAt(ur) + "" + koordinaatit[1].charAt(us)); // Luodaan uusi koordinaatti
 				Siirto uS = new Siirto(A, uk);  // Jos ollaan, generoidaan uusi siirto
-				Siirrot.add(uS);                // ja lisätään siirtolistaan
+				if (n.indexOf(a) == 0){
+					siirrot.N.add(uS);                // ja lisätään siirtolistaan
+				} else if (n.indexOf(a) == 1 ){
+					siirrot.NE.add(uS);
+				} else if (n.indexOf(a) == 2){
+					siirrot.NW.add(uS);
+				} else if (n.indexOf(a) == 0 && kerroin == -1){
+					siirrot.S.add(uS);
+				} else if (n.indexOf(a) == 1  && kerroin == -1){
+					siirrot.SE.add(uS);
+				} else if (n.indexOf(a) == 2 && kerroin == -1){
+					siirrot.SW.add(uS);
+				}
+
 			}
 		}
 
 		if(lr==1 && this.annaVari() == Vari.VALKOINEN) { // Tarkistetaan vielä oliko ensimmäine siirto vai ei
 			Koordinaatti uK = new Koordinaatti(koordinaatit[0].charAt(lr + 2) + "" + koordinaatit[1].charAt(ls));
 			Siirto uS1 = new Siirto(A, uK);
-			Siirrot.add(uS1);
+			siirrot.N.add(uS1);
 		} else if (lr==7 && this.annaVari() == Vari.MUSTA){
 			Koordinaatti uK = new Koordinaatti(koordinaatit[0].charAt(lr - 2) + "" + koordinaatit[1].charAt(ls));
 			Siirto uS1 = new Siirto(A, uK);
-			Siirrot.add(uS1);
+			siirrot.S.add(uS1);
 		}
 
-		return Siirrot;
+		return siirrot;
 
 	}
 	public String annaNappula() {
