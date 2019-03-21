@@ -13,7 +13,7 @@ public abstract class Nappula {
 		this.vari = vari;
 	}
 
-	public abstract List<Siirto> mahdollisetSiirrot(Koordinaatti A);
+	public abstract Siirrot mahdollisetSiirrot(Koordinaatti A);
 
 	public Vari annaVari() {
 		return vari;
