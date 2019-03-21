@@ -123,7 +123,7 @@ public class Lauta {
             for (Siirto mahd : mahdolliset.annaSuunta(i)) {
                 Nappula n1 = annaNappula(mahd.getA());                         //Lähtö
                 Nappula n2 = annaNappula(mahd.getB());                      //Määränpää
-                if (n1 == null) {
+                if (n2 == null) {
                     sallitut.annaSuunta(i).add(mahd);                          //Jos tyhjä, saa liikkua.
                 } else {
                     if (n1.annaVari() == n2.annaVari()) {                       //Jos oma, matka tyssää sinne suuntaan siihen.
