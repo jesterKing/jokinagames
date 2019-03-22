@@ -30,7 +30,7 @@ public class Siirto {
 
 	/**
 	 * Anna kohderuudun koordinaatti
-	 * @return kohderuudun koordinaatti
+	 * @return	kohderuudun koordinaatti
 	 */
 	public Koordinaatti annaKohderuutu() {
 		return B;

@@ -1,5 +1,8 @@
 package net.jokinagames;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Lauta {
     private final Nappula[][] palikat;
 
@@ -15,6 +18,28 @@ public class Lauta {
         palikat = s;
     }
 
+    public List<Siirto> annaNappulatJoillaSiirtoMahdollinen(Koordinaatti kohde, Nappula nappula) {
+        Vari vuoro = nappula.annaVari() ;
+        ArrayList<Siirto> loydot = new ArrayList<>();
+        for (int rivi = 0; rivi < 8; rivi++) {
+            for (int sarake = 0; sarake < 8; sarake++) {
+
+                Koordinaatti lna = new Koordinaatti(sarake, rivi);
+                Nappula ln = this.annaNappula(lna);
+                if (ln == null || ln.annaVari() != vuoro) continue;
+                if(ln.getClass() == nappula.getClass()) {
+                    Siirrot mahdolliset = ln.mahdollisetSiirrot(lna);
+                    Siirrot sallitut = this.sallitutSiirrot(mahdolliset);
+                    Siirto tark = new Siirto(lna, kohde);
+                    if(sallitut.loytyySiirto(tark)) {
+                        loydot.add(tark);
+                    }
+                }
+            }
+        }
+        return loydot;
+    }
+
 
     /**
      * Siirrä Nappula a:sta b:hen
@@ -24,13 +49,7 @@ public class Lauta {
      * @return Lauta-olio, joka kuvaa siirronjälkeisen tilanteen
      */
     public Lauta teeSiirto(Koordinaatti a, Koordinaatti b) {                        //Siirto pelkällä koordinaateilla
-        Nappula[][] s = new Nappula[8][8];
-        Nappula[][] alkup = getPalikat();
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                s[i][j] = alkup[i][j];
-            }
-        }
+        Nappula[][] s = luoNappulaMatriisiKopio();
         Nappula c = s[a.annaRivi()][a.annaSarake()];                                //Tänne jonnekki tulee oman värin tarkastusta jne.
         s[a.annaRivi()][a.annaSarake()] = null;
         s[b.annaRivi()][b.annaSarake()] = c;
@@ -38,15 +57,19 @@ public class Lauta {
         return l;
     }
 
+    public Lauta teeSiirto(Nappula n, Koordinaatti kohde)
+    {
+        Nappula[][] s = luoNappulaMatriisiKopio();
+        List<Siirto> siirtoNappulat = annaNappulatJoillaSiirtoMahdollinen(kohde, n);
+        if(siirtoNappulat.size()==1) {
+            return teeSiirto(n, siirtoNappulat.get(0).annaLahtoruutu(), kohde);
+        }
+
+        return null;
+    }
 
     public Lauta teeSiirto(Nappula n, Koordinaatti a, Koordinaatti b) {              //Ylikuormitettu versio siirrosta nappulaoliolla.
-        Nappula[][] s = new Nappula[8][8];
-        Nappula[][] alkup = getPalikat();
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                s[i][j] = alkup[i][j];
-            }
-        }
+        Nappula[][] s = luoNappulaMatriisiKopio();
         Siirrot siirt = sallitutSiirrot(n.mahdollisetSiirrot(a));
         boolean found = false;
         for (int i = 0; i < 8; i++) {
@@ -71,8 +94,18 @@ public class Lauta {
         }
     }
 
+    private Nappula[][] luoNappulaMatriisiKopio() {
+        Nappula[][] s = new Nappula[8][8];
+        Nappula[][] alkup = getPalikat();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                s[i][j] = alkup[i][j];
+            }
+        }
+        return s;
+    }
+
     public void tulostaLauta() {                                //(Pistetään jos koetaan tarpeeliseksi)
-        Nappula[][] indx = getPalikat();                              // Tulostaa laudan senhetkisen tilan tavallisilla ASCII merkeillä
         System.out.println("--------------------------");
         System.out.println();
         for (int rivi = 7; rivi >= 0; rivi--) {
@@ -101,8 +134,10 @@ public class Lauta {
 
     /**
      * Laita Nappula-olio laudan ruudulle x
-     * @param n Nappula, jota halutaan asettaa. Saa olla null
-     * @param x ruudun koordinaatti
+     * @param   n
+     *          Nappula, jota halutaan asettaa. Saa olla null
+     * @param   x
+     *          ruudun koordinaatti
      */
     public void asetaNappula(Nappula n, Koordinaatti x) {
         palikat[x.annaRivi()][x.annaSarake()] = n;                      //Käpistellään ilman getteriä, liekö väliä.
@@ -110,8 +145,9 @@ public class Lauta {
 
     /**
      * Anna Nappula ruudulla k
-     * @param k ruutu jolla nappula
-     * @return Nappula-olio jos ruudulla k on joku, null jos tyhjä
+     * @param   k
+     *          ruutu jolla nappula
+     * @return  Nappula-olio jos ruudulla k on joku, null jos tyhjä
      */
     public Nappula annaNappula(Koordinaatti k) {                        //Mikä nappula sijaitsee koordinaatissa.
         return palikat[k.annaRivi()][k.annaSarake()];

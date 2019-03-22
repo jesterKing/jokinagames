@@ -64,8 +64,11 @@ public class jesterTester {
 
             Lauta koordtest = pgnReader.parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1");
             koordtest.tulostaLauta();
+            Nappula n = Util.luoNappula("Nc3");
             Siirto koord = Koordinaatti.luoKoordinaatit("Nc3", Vari.VALKOINEN, koordtest);
             Util.println(koord.annaLahtoruutu().toString() + " - " + koord.annaKohderuutu().toString());
+            Lauta siironjalkeen = koordtest.teeSiirto(n, koord.annaKohderuutu()); //koord.annaLahtoruutu(), koord.annaKohderuutu());
+            siironjalkeen.tulostaLauta();
             //pgnReader.parseFen("r1bq1rk1/4bppp/p1n2n2/1pppp3/4P3/2PP1N2/PPB2PPP/R1BQRNK1 w - - 0 1");
             //Lauta l = pgnReader.parseFen("rn4nr/8/8/8/8/8/8/RN4NR w - - 0 1");
             /*Lauta l = pgnReader.alustaTavallinenPeli();

@@ -1,13 +1,14 @@
 package net.jokinagames;
 
 import java.util.ArrayList;
+import java.util.List;
 
 class KoordinaattiVirhe extends Exception {
     public KoordinaattiVirhe(String viesti) { super(viesti); }
 }
 public class Koordinaatti {
-    private int sarake = 0; // file
-    private int rivi = 0; // rank
+    private int sarake; // indeksi jonoon "abcdefgh"
+    private int rivi; // indeksi jonoon "12345678"
     private final String san;
     private static String sar = "abcdefgh";                //Esim. a1 asettaa koordinaatin rivin ja sarakkeen indx [0],[7].
     private static String riv = "12345678";
@@ -49,6 +50,10 @@ public class Koordinaatti {
             n = new Sotilas(vuoro);
         }
 
+        if(n.annaVari()!=vuoro) {
+            throw new KoordinaattiVirhe("Väärä vuoro");
+        }
+
         if(puhdistettuSan.length()==2) {
             b = new Koordinaatti(puhdistettuSan);
         } else {
@@ -57,23 +62,7 @@ public class Koordinaatti {
         }
 
         if(a == null) {
-            ArrayList<Siirto> loydot = new ArrayList<>();
-            for (int rivi = 0; rivi < 8; rivi++) {
-                for (int sarake = 0; sarake < 8; sarake++) {
-
-                    Koordinaatti lna = new Koordinaatti(sarake, rivi);
-                    Nappula ln = l.annaNappula(lna);
-                    if (ln == null || ln.annaVari() != vuoro) continue;
-                    if(ln.getClass() == n.getClass()) {
-                        Siirrot mahdolliset = ln.mahdollisetSiirrot(lna);
-                        Siirrot sallitut = l.sallitutSiirrot(mahdolliset);
-                        Siirto tark = new Siirto(lna, b);
-                        if(sallitut.loytyySiirto(tark)) {
-                            loydot.add(tark);
-                        }
-                    }
-                }
-            }
+            List<Siirto> loydot = l.annaNappulatJoillaSiirtoMahdollinen(b, n);
             if(loydot.size()!=1) {
                 throw new KoordinaattiVirhe("Siirto ei löytynyt");
             } else {

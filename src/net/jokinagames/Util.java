@@ -8,6 +8,21 @@ import java.io.PrintWriter;
 public class Util {
 
     /**
+     * Luo nappula-olio annetulla SAN-merkkijonolla. Merkkijonossa pitää olla
+     * nappulamerkki.
+     * @param   san
+     *          Merkkijono, jonka perusteella luodaan Nappula-olio
+     * @return  Nappula-olio
+     */
+    public static Nappula luoNappula(String san) {
+        if(PortableGameNotationReader.nappulat.indexOf(san.charAt(0))>-1) {
+            // upseeri
+            char nappulaChar = san.charAt(0);
+            return Util.luoNappula(nappulaChar);
+        }
+        return null;
+    }
+    /**
      * Luo Nappula-olio annetulla merkillä.
      *
      * @param   nappulaChar
