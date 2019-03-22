@@ -27,9 +27,9 @@ public class Kuningas extends Nappula {
 
 		for (int[] a:n) { // Käydään mahdollisten siirtojen lista läpi
 			int i = n.indexOf(a); // apumuuttuja siirrot luokan ilmansuuntien hakemista varten
-			int ur = a[0] + lr; // Muuttuja uudelle riville, väri huomioitu kertoimella
+			int ur = a[0] + lr; // Muuttuja uudelle riville
 			int us = a[1] + ls; // Muuttuja uudelle sarakkeelle
-			if (ur >= 1 && ur <= 8 && us >= 1 && us <= 8) {  // Tarkistetaan, että ollaanko laudalla ko. siirron tapauksessa
+			if (ur >= 0 && ur <= 7 && us >= 0 && us <= 7) {  // Tarkistetaan, että ollaanko laudalla ko. siirron tapauksessa
 				Koordinaatti uk = new Koordinaatti(koordinaatit[0].charAt(us) + "" + koordinaatit[1].charAt(ur)); // Luodaan uusi koordinaatti
 				Siirto uS = new Siirto(A, uk);  // Jos ollaan, generoidaan uusi siirto
 				siirrot.annaSuunta(i).add(uS);                // ja lisätään siirtolistaan
