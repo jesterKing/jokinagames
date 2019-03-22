@@ -58,8 +58,8 @@ public class Peli {
 	 */
 	public Lauta seuraavaSiirto(Vari vuoro, String san) throws KoordinaattiVirhe {
 	    Lauta current = nykyinenTilanne();
-	    Koordinaatti[] kds = Koordinaatti.luoKoordinaatit(san, vuoro, current);
-	    Lauta uusi = current.teeSiirto(kds[0], kds[1]);
+	    Siirto siirto = Koordinaatti.luoKoordinaatit(san, vuoro, current);
+	    Lauta uusi = current.teeSiirto(siirto.annaLahtoruutu(), siirto.annaKohderuutu());
 	    siirrot.add(uusi);
 	    return uusi;
 	}

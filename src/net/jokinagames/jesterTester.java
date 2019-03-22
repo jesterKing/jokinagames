@@ -6,10 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.FileSystems;
-import java.util.List;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class jesterTester {
     public static void main(String[] args) {
@@ -67,8 +64,8 @@ public class jesterTester {
 
             Lauta koordtest = pgnReader.parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1");
             koordtest.tulostaLauta();
-            Koordinaatti[] koord = Koordinaatti.luoKoordinaatit("Nc3", Vari.VALKOINEN, koordtest);
-            Util.println(koord[0].toString() + " - " + koord[1].toString());
+            Siirto koord = Koordinaatti.luoKoordinaatit("Nc3", Vari.VALKOINEN, koordtest);
+            Util.println(koord.annaLahtoruutu().toString() + " - " + koord.annaKohderuutu().toString());
             //pgnReader.parseFen("r1bq1rk1/4bppp/p1n2n2/1pppp3/4P3/2PP1N2/PPB2PPP/R1BQRNK1 w - - 0 1");
             //Lauta l = pgnReader.parseFen("rn4nr/8/8/8/8/8/8/RN4NR w - - 0 1");
             /*Lauta l = pgnReader.alustaTavallinenPeli();
@@ -78,11 +75,11 @@ public class jesterTester {
             Koordinaatti x = new Koordinaatti("b1");*/
             /*List<Siirto> mahdollisetSiirrot = r.mahdollisetSiirrot(x);
             for(Siirto s:mahdollisetSiirrot) {
-                Util.println(s.getA().annaSan() + " - " + s.getB().annaSan());
+                Util.println(s.annaLahtoruutu().annaSan() + " - " + s.annaKohderuutu().annaSan());
             }
             mahdollisetSiirrot = r.mahdollisetSiirrot(y);
             for(Siirto s:mahdollisetSiirrot) {
-                Util.println(s.getA().annaSan() + " - " + s.getB().annaSan());
+                Util.println(s.annaLahtoruutu().annaSan() + " - " + s.annaKohderuutu().annaSan());
             }*/
             /*Lauta siirronjalkeen = l.teeSiirto(x, y);
             siirronjalkeen.tulostaLauta(siirronjalkeen);

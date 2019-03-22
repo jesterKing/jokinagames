@@ -1,11 +1,5 @@
 package net.jokinagames;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-
 public class Lauta {
     private final Nappula[][] palikat;
 
@@ -60,7 +54,7 @@ public class Lauta {
                 break;
             }
             for (Siirto si : siirt.annaSuunta(i)) {             //Käydään kaikki mahdolliset siirrot ja ilmansuunnat läpi.
-                if (si.getB().equals(b)) {                      //Jos siirto löytyy sallituista, tehdään siirto.
+                if (si.annaKohderuutu().equals(b)) {                      //Jos siirto löytyy sallituista, tehdään siirto.
                     found = true;
                     break;
                 }
@@ -127,8 +121,8 @@ public class Lauta {
         Siirrot sallitut = new Siirrot();
         for (int i = 0; i < 8; i++) {
             for (Siirto mahd : mahdolliset.annaSuunta(i)) {
-                Nappula n1 = annaNappula(mahd.getA());                         //Lähtö
-                Nappula n2 = annaNappula(mahd.getB());                      //Määränpää
+                Nappula n1 = annaNappula(mahd.annaLahtoruutu());                         //Lähtö
+                Nappula n2 = annaNappula(mahd.annaKohderuutu());                      //Määränpää
                 if (n2 == null) {
                     sallitut.annaSuunta(i).add(mahd);                          //Jos tyhjä, saa liikkua.
                 } else {
@@ -150,9 +144,9 @@ public class Lauta {
     public List<Siirto> sallitutSiirrot(List<Siirto> e) {
         List<Siirto> siirrot = new ArrayList<>();                       // uusi sallittujen siirtojen lista.
         for (Siirto s : e) {
-            Koordinaatti k = s.getB();                                  //Haetaan määränpääkoordinaatti.
+            Koordinaatti k = s.annaKohderuutu();                                  //Haetaan määränpääkoordinaatti.
             if (palikat[k.annaRivi()][k.annaSarake()] != null) {            //Mikäli koordinaatti ei vapaa, tarkistetaan kenen on.
-                Koordinaatti o = s.getA();                                  // Apunappulat värin tarkistuksen
+                Koordinaatti o = s.annaLahtoruutu();                                  // Apunappulat värin tarkistuksen
                 Nappula n2 = palikat[o.annaRivi()][o.annaSarake()];
                 Nappula n = palikat[k.annaRivi()][k.annaSarake()];
                 if (n2.annaVari() != n.annaVari()) {
@@ -199,13 +193,13 @@ public class Lauta {
         List<Siirto> siirt = sallitutSiirrot(n.mahdollisetSiirrot(a));                  //Kaikki sallitut siirrot
         Koordinaatti k = new Koordinaatti(a.annaSarake()+suunta[0],a.annaRivi()+suunta[1]);     //Seuraava määränpääkoordinaatti.
         for(Siirto si:siirt){
-            if(si.getB().equals(k)){                                            //Onko määränpää sallittujen listalla.
-                if(alkup[si.getA().annaRivi()][si.getA().annaSarake()].annaVari()!=alkup[si.getB().annaRivi()][si.getB().annaSarake()].annaVari()
-                   && alkup[si.getB().annaRivi()][si.getB().annaSarake()].annaVari()!=null){     //Tarkistetaan tapahtuuko syönti siirrettäessä.
+            if(si.annaKohderuutu().equals(k)){                                            //Onko määränpää sallittujen listalla.
+                if(alkup[si.annaLahtoruutu().annaRivi()][si.annaLahtoruutu().annaSarake()].annaVari()!=alkup[si.annaKohderuutu().annaRivi()][si.annaKohderuutu().annaSarake()].annaVari()
+                   && alkup[si.annaKohderuutu().annaRivi()][si.annaKohderuutu().annaSarake()].annaVari()!=null){     //Tarkistetaan tapahtuuko syönti siirrettäessä.
                     teeSiirto(n,b,b);
                 }
-                s[si.getA().annaRivi()][si.getA().annaSarake()]=null;
-                s[si.getB().annaRivi()][si.getB().annaSarake()]=n;
+                s[si.annaLahtoruutu().annaRivi()][si.annaLahtoruutu().annaSarake()]=null;
+                s[si.annaKohderuutu().annaRivi()][si.annaKohderuutu().annaSarake()]=n;
                 Lauta l = new Lauta(s);
                 tulostaLauta(l);
                 teeSiirto(n,k,b);

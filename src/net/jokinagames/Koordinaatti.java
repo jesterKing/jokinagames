@@ -28,7 +28,7 @@ public class Koordinaatti {
      * @throws  KoordinaattiVirhe
      *          jos SAN-merkkijonon perusteella ei laudalta löytynyt vastaava siirtoa
      */
-    public static Koordinaatti[] luoKoordinaatit(String san, Vari vuoro, Lauta l) throws KoordinaattiVirhe {
+    public static Siirto luoKoordinaatit(String san, Vari vuoro, Lauta l) throws KoordinaattiVirhe {
         Koordinaatti a = null;
         Koordinaatti b;
 
@@ -77,11 +77,11 @@ public class Koordinaatti {
             if(loydot.size()!=1) {
                 throw new KoordinaattiVirhe("Siirto ei löytynyt");
             } else {
-                a = loydot.get(0).getA();
+                a = loydot.get(0).annaLahtoruutu();
             }
         }
 
-        return new Koordinaatti[] {a, b};
+        return new Siirto(a, b);
     }
 
     /**
