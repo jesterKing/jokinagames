@@ -26,7 +26,7 @@ public class Lahetti extends Nappula {
 				int ur = a[0] + lr; // Muuttuja uudelle riville
 				int us = a[1] + ls; // Muuttuja uudelle sarakkeelle
 				while (ur>=0 && ur<=7 && us>=0 && us<=7){
-					Koordinaatti uk = new Koordinaatti(koordinaatit[0].charAt(ur) +""+koordinaatit[1].charAt(us)); // Luodaan uusi koordinaatti
+					Koordinaatti uk = new Koordinaatti(koordinaatit[0].charAt(us) +""+koordinaatit[1].charAt(ur)); // Luodaan uusi koordinaatti
 					Siirto uS = new Siirto(A, uk);  // Jos ollaan, generoidaan uusi siirto
 					siirrot.annaSuunta(i).add(uS);
 					ur = a[0] + ur;

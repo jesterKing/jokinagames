@@ -81,7 +81,27 @@ public class Koordinaatti {
                         throw new KoordinaattiVirhe("Siirto ei löytynyt, vaikka oli lähtösarake tiedossa");
                     }
                 } else {
-                    throw new KoordinaattiVirhe("Siirto ei löytynyt, eikä lähtösaraketta tiedossa");
+                    if(n instanceof Sotilas) {
+                        if(!syo) { // löydä se suora siirto, ei vinoon kun ei syödä.
+                            for(Siirto test : loydot) {
+                                if(test.annaLahtoruutu().annaSarake()==b.annaSarake()) {
+                                    a = test.annaLahtoruutu();
+                                    break;
+                                }
+                            }
+                        } else { // syödään, etsitään se vino siirto
+                            for(Siirto test : loydot) {
+                                if(test.annaLahtoruutu().annaSarake()!=b.annaSarake()) {
+                                    a = test.annaLahtoruutu();
+                                    break;
+                                }
+                            }
+
+                        }
+                        //a = loydot.get(0).annaLahtoruutu();
+                    } else {
+                        throw new KoordinaattiVirhe("Siirto ei löytynyt, eikä lähtösaraketta tiedossa");
+                    }
                 }
             } else {
                 a = loydot.get(0).annaLahtoruutu();

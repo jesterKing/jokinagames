@@ -281,6 +281,8 @@ public class PortableGameNotationReader {
         while(m.find()) {
             String completeTurn = m.group();
             String[] parts = completeTurn.split(" ");
+            Util.print("Siirto " + parts[0],Util.Color.GREEN_BOLD, Util.Color.BLACK_BACKGROUND);
+            Util.print("\n", Util.Color.RESET);
             try {
                 Util.println(Vari.VALKOINEN.name() + " " + parts[1]);
                 peli.seuraavaSiirto(Vari.VALKOINEN, parts[1]);
@@ -291,7 +293,8 @@ public class PortableGameNotationReader {
                     peli.tulostaNykyinenTila();
                 }
             } catch (KoordinaattiVirhe kv) {
-                Util.print(kv.getMessage()+"\n", Util.Color.RED);
+                Util.print(kv.getMessage(), Util.Color.RED, Util.Color.BLACK_BACKGROUND);
+                Util.print("\n", Util.Color.RESET);
             }
 
 
