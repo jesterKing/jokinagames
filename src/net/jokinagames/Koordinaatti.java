@@ -1,13 +1,14 @@
 package net.jokinagames;
 
 import java.util.ArrayList;
+import java.util.List;
 
 class KoordinaattiVirhe extends Exception {
     public KoordinaattiVirhe(String viesti) { super(viesti); }
 }
 public class Koordinaatti {
-    private int sarake = 0; // file
-    private int rivi = 0; // rank
+    private int sarake; // indeksi jonoon "abcdefgh"
+    private int rivi; // indeksi jonoon "12345678"
     private final String san;
     private static String sar = "abcdefgh";                //Esim. a1 asettaa koordinaatin rivin ja sarakkeen indx [0],[7].
     private static String riv = "12345678";
@@ -28,7 +29,7 @@ public class Koordinaatti {
      * @throws  KoordinaattiVirhe
      *          jos SAN-merkkijonon perusteella ei laudalta löytynyt vastaava siirtoa
      */
-    public static Koordinaatti[] luoKoordinaatit(String san, Vari vuoro, Lauta l) throws KoordinaattiVirhe {
+    public static Siirto luoKoordinaatit(String san, Vari vuoro, Lauta l) throws KoordinaattiVirhe {
         Koordinaatti a = null;
         Koordinaatti b;
 
@@ -39,49 +40,55 @@ public class Koordinaatti {
 
         Nappula n;
 
-        if(PortableGameNotationReader.nappulat.indexOf(san.charAt(0))>-1) {
+        if(san.length()>2 && PortableGameNotationReader.nappulat.indexOf(san.charAt(0))>-1) {
             // upseeri
             char nappulaChar = san.charAt(0);
-            n = Util.luoNappula(nappulaChar);
+            n = Util.luoNappula(nappulaChar, vuoro);
             puhdistettuSan = puhdistettuSan.substring(1);
         } else {
             // sotilas
             n = new Sotilas(vuoro);
         }
+        String lahtoSarake = null;
+
+        if(n.annaVari()!=vuoro) {
+            throw new KoordinaattiVirhe("Väärä vuoro");
+        }
 
         if(puhdistettuSan.length()==2) {
             b = new Koordinaatti(puhdistettuSan);
-        } else {
+        } else if (puhdistettuSan.length()==3) { // sisältää lähtösarakkeen
+            lahtoSarake = puhdistettuSan.substring(0,0);
+            b = new Koordinaatti(puhdistettuSan.substring(1));
+        } else if (puhdistettuSan.length()==4) { // sisältää lähtöruudun
             a = new Koordinaatti(puhdistettuSan.substring(0,1));
             b = new Koordinaatti(puhdistettuSan.substring(2));
+        } else {
+            throw new KoordinaattiVirhe("SAN ei kelvollinen");
         }
 
         if(a == null) {
-            ArrayList<Siirto> loydot = new ArrayList<>();
-            for (int rivi = 0; rivi < 8; rivi++) {
-                for (int sarake = 0; sarake < 8; sarake++) {
-
-                    Koordinaatti lna = new Koordinaatti(sarake, rivi);
-                    Nappula ln = l.annaNappula(lna);
-                    if (ln == null || ln.annaVari() != vuoro) continue;
-                    if(ln.getClass() == n.getClass()) {
-                        Siirrot mahdolliset = ln.mahdollisetSiirrot(lna);
-                        Siirrot sallitut = l.sallitutSiirrot(mahdolliset);
-                        Siirto tark = new Siirto(lna, b);
-                        if(sallitut.loytyySiirto(tark)) {
-                            loydot.add(tark);
+            List<Siirto> loydot = l.annaNappulatJoillaSiirtoMahdollinen(b, n);
+            if(loydot.size()!=1) {
+                if(lahtoSarake!=null) {
+                    for(Siirto test : loydot) {
+                        if(test.annaLahtoruutu().annaSan().contains(lahtoSarake)) {
+                            a = test.annaLahtoruutu();
+                            break;
                         }
                     }
+                    if(a==null) {
+                        throw new KoordinaattiVirhe("Siirto ei löytynyt, vaikka oli lähtösarake tiedossa");
+                    }
+                } else {
+                    throw new KoordinaattiVirhe("Siirto ei löytynyt, eikä lähtösaraketta tiedossa");
                 }
-            }
-            if(loydot.size()!=1) {
-                throw new KoordinaattiVirhe("Siirto ei löytynyt");
             } else {
-                a = loydot.get(0).getA();
+                a = loydot.get(0).annaLahtoruutu();
             }
         }
 
-        return new Koordinaatti[] {a, b};
+        return new Siirto(a, b);
     }
 
     /**

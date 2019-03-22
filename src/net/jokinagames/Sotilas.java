@@ -36,13 +36,13 @@ public class Sotilas extends Nappula {
 			if (ur >= 0 && ur <= 7 && us >= 0 && us <= 7) {  // Tarkistetaan, että ollaanko laudalla ko. siirron tapauksessa
 
 
-				Koordinaatti uk = new Koordinaatti(koordinaatit[0].charAt(ur) + "" + koordinaatit[1].charAt(us)); // Luodaan uusi koordinaatti
+				Koordinaatti uk = new Koordinaatti(koordinaatit[0].charAt(us) + "" + koordinaatit[1].charAt(ur)); // Luodaan uusi koordinaatti
 				Siirto uS = new Siirto(A, uk);  // Jos ollaan, generoidaan uusi siirto
-				if (n.indexOf(a) == 0){
+				if (n.indexOf(a) == 0 && kerroin == 1){
 					siirrot.N.add(uS);                // ja lisätään siirtolistaan
-				} else if (n.indexOf(a) == 1 ){
+				} else if (n.indexOf(a) == 1 && kerroin == 1){
 					siirrot.NE.add(uS);
-				} else if (n.indexOf(a) == 2){
+				} else if (n.indexOf(a) == 2 && kerroin == 1){
 					siirrot.NW.add(uS);
 				} else if (n.indexOf(a) == 0 && kerroin == -1){
 					siirrot.S.add(uS);
@@ -56,11 +56,11 @@ public class Sotilas extends Nappula {
 		}
 
 		if(lr==1 && this.annaVari() == Vari.VALKOINEN) { // Tarkistetaan vielä oliko ensimmäine siirto vai ei
-			Koordinaatti uK = new Koordinaatti(koordinaatit[0].charAt(lr + 2) + "" + koordinaatit[1].charAt(ls));
+			Koordinaatti uK = new Koordinaatti(koordinaatit[0].charAt(ls) + "" + koordinaatit[1].charAt(lr+2));
 			Siirto uS1 = new Siirto(A, uK);
 			siirrot.N.add(uS1);
-		} else if (lr==7 && this.annaVari() == Vari.MUSTA){
-			Koordinaatti uK = new Koordinaatti(koordinaatit[0].charAt(lr - 2) + "" + koordinaatit[1].charAt(ls));
+		} else if (lr==6 && this.annaVari() == Vari.MUSTA){
+			Koordinaatti uK = new Koordinaatti(koordinaatit[0].charAt(ls) + "" + koordinaatit[1].charAt(lr-2));
 			Siirto uS1 = new Siirto(A, uK);
 			siirrot.S.add(uS1);
 		}
