@@ -23,6 +23,16 @@ public class Siirrot {
         W = new ArrayList<>();
         NW = new ArrayList<>();
     }
+
+    public boolean loytyySiirto(Siirto s) {
+        for(int suunta=0; suunta<8; suunta++) {
+            for (Siirto siirrot : annaSuunta(suunta)) {
+                if (siirrot.equals(s)) return true;
+            }
+        }
+        return false;
+    }
+
     public List<Siirto> annaSuunta(int i) {
         if (i == 0) {
             return N;
