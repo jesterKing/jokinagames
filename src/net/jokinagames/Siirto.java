@@ -19,4 +19,11 @@ public class Siirto {
 	public Koordinaatti getB() {
 		return B;
 	}
+
+	@Override
+	public boolean equals(Object s) {
+		if(!(s instanceof Siirto)) return false;
+		Siirto ss = (Siirto)s;
+		return A.equals(ss.A) && B.equals(ss.B);
+	}
 }
