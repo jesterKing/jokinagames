@@ -77,12 +77,15 @@ public class Lauta {
         }
     }
 
-    public void tulostaLauta(Lauta l) {                                //(Pistetään jos koetaan tarpeeliseksi)
-        Nappula[][] indx = l.getPalikat();                              // Tulostaa laudan senhetkisen tilan tavallisilla ASCII merkeillä
-        for (int i = 0; i < 8; i++) {
-            System.out.print(8 - i);
-            for (int j = 0; j < 8; j++) {
-                Nappula n = indx[i][j];
+    public void tulostaLauta() {                                //(Pistetään jos koetaan tarpeeliseksi)
+        Nappula[][] indx = getPalikat();                              // Tulostaa laudan senhetkisen tilan tavallisilla ASCII merkeillä
+        System.out.println("--------------------------");
+        System.out.println();
+        for (int rivi = 7; rivi >= 0; rivi--) {
+            System.out.print(rivi+1 + " ");
+            for (int sarake = 0; sarake < 8; sarake++) {
+                Koordinaatti x = new Koordinaatti(sarake, rivi);
+                Nappula n = annaNappula(x);
                 if (n != null) {
                     System.out.print(n.annaNappula());
                 } else {
@@ -90,8 +93,10 @@ public class Lauta {
                 }
             }
             System.out.println();
-            if (i == 7) {
-                System.out.println(" [a][b][c][d][e][f][g][h]");
+            if (rivi == 0) {
+                System.out.println();
+                System.out.println("  [a][b][c][d][e][f][g][h]");
+                System.out.println("--------------------------");
             }
         }
     }

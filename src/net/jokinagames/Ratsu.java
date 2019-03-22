@@ -19,7 +19,8 @@ public class Ratsu extends Nappula {
             new int[]{-2, -1},
             new int[]{-1, -2},
             new int[]{1, -2},
-            new int[]{2, -1});
+            new int[]{2, -1}
+            );
 
 
     public Siirrot mahdollisetSiirrot(Koordinaatti A) {

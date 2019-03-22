@@ -269,7 +269,7 @@ public class PortableGameNotationReader {
         } else {
             // luodaan FENistä
             lauta = parseFen(fen);
-            lauta.tulostaLauta(lauta);
+            lauta.tulostaLauta();
         }
 
         // Luo peli
