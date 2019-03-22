@@ -10,7 +10,7 @@ public class Koordinaatti {
     private int rivi = 0; // rank
     private final String san;
     private static String sar = "abcdefgh";                //Esim. a1 asettaa koordinaatin rivin ja sarakkeen indx [0],[7].
-    private static String riv = "87654321";
+    private static String riv = "12345678";
     /**
      * Luo Koordinaatti-oliot annetun SAN-notaation mukaan
      *
@@ -76,6 +76,8 @@ public class Koordinaatti {
             }
             if(loydot.size()!=1) {
                 throw new KoordinaattiVirhe("Siirto ei löytynyt");
+            } else {
+                a = loydot.get(0).getA();
             }
         }
 
@@ -84,16 +86,16 @@ public class Koordinaatti {
 
     /**
      * Luo koordinaatti 0-based indeksien avulla. a1 on 0,0
-     * @param a sarake
-     * @param b rivi
+     * @param   sarake
+     *          sarakkeen indeksi (0-7 => a-h)
+     * @param   rivi
+     *          rivin indeksi (0-7 => 1-8)
      */
-    public Koordinaatti(int a, int b){
-        this.sarake = a;
-        this.rivi = b;
-        san = sar.charAt(a) + "" + riv.charAt(b);
+    public Koordinaatti(int sarake, int rivi){
+        this.sarake = sarake;
+        this.rivi = rivi;
+        san = sar.charAt(sarake) + "" + riv.charAt(rivi);
     }
-
-    private Koordinaatti() { this("a1");}
 
     /**
      * Luo koordinaatti SAN-notaation mukaan
@@ -134,6 +136,11 @@ public class Koordinaatti {
      * @return
      */
     public String annaSan() { return san; }
+
+    @Override
+    public String toString() {
+        return annaSan()+ " (" + annaRivi()+ ", " + annaSarake() + ")";
+    }
 
     @Override
     public boolean equals(Object b) {
