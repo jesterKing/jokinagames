@@ -1,12 +1,11 @@
 package net.jokinagames;
 
-import java.io.*;
 import java.util.*;
 
 public class Peli {
 
-	private Pelaaja pelaaja1;
-	private Pelaaja pelaaja2;
+	private Pelaaja valkoinenPelaaja;
+	private Pelaaja mustaPelaaja;
 	protected ArrayList<Lauta> siirrot;
 
 	/*
@@ -17,16 +16,34 @@ public class Peli {
 		- pelin pvm
 	 */
 
-	public static Peli uusiPeli(Pelaaja yksi, Pelaaja kaksi, Lauta alku) {
-	    Peli p = new Peli(yksi, kaksi);
+	/**
+	 * Luo uusi peli, johon osallistuvat pelaajat yksi ja kaksi
+	 * @param	valkoinen
+	 * 			valkoinen pelaaja
+	 * @param	musta
+	 * 			musta pelaaja
+	 * @param	alku
+	 * 			shakkipelin aloitusasetelma
+	 * @return	uusi Peli olio
+	 */
+	public static Peli uusiPeli(Pelaaja valkoinen, Pelaaja musta, Lauta alku) {
+	    Peli p = new Peli(valkoinen, musta);
 	    p.siirrot.add(alku);
 	    return p;
 	}
 
-	private Peli(Pelaaja yksi, Pelaaja kaksi) {
+	/**
+	 * Piilotettu konstruktori, jotta sitä ei vahingossa käytetä. Tällä pyritään
+	 * varmistamaan, että Peli-olio on oikeanmuotoinen
+	 * @param	valkoinen
+	 * 			Valkoinen pelaaja
+	 * @param	musta
+	 * 			Musta pelaaja
+	 */
+	private Peli(Pelaaja valkoinen, Pelaaja musta) {
 		siirrot = new ArrayList<>();
-	    pelaaja1 = yksi;
-	    pelaaja2 = kaksi;
+	    valkoinenPelaaja = valkoinen;
+	    mustaPelaaja = musta;
 	}
 
 	/**
@@ -40,11 +57,19 @@ public class Peli {
 	 * @return	Lauta, joka esittää siirron jälkeistä uutta tilaa
 	 */
 	public Lauta seuraavaSiirto(Vari vuoro, String san) throws KoordinaattiVirhe {
-	    Lauta current = siirrot.get(siirrot.size()-1);
+	    Lauta current = nykyinenTilanne();
 	    Koordinaatti[] kds = Koordinaatti.luoKoordinaatit(san, vuoro, current);
 	    Lauta uusi = current.teeSiirto(kds[0], kds[1]);
 	    siirrot.add(uusi);
 	    return uusi;
+	}
+
+	/**
+	 * Antaa pelin nykyisen tilan
+	 * @return	Lauta, joka esittää nykyistä tilaa
+	 */
+	public Lauta nykyinenTilanne() {
+		return siirrot.get(siirrot.size()-1);
 	}
 
 	public boolean peliOhi() {
@@ -53,6 +78,24 @@ public class Peli {
 
 	public boolean onkoShakki() {
 		throw new UnsupportedOperationException("The method is not implemented yet.");
+	}
+
+	/**
+	 * Anna valkoinen pelaaja
+	 * @return	valkoinen pelaaja
+	 */
+	public Pelaaja annaValkoinenPelaaja()
+	{
+		return valkoinenPelaaja;
+	}
+
+	/**
+	 * Anna musta pelaaja
+	 * @return	musta pelaaja
+	 */
+	public Pelaaja annaMustaPelaaja()
+	{
+		return mustaPelaaja;
 	}
 
 }
