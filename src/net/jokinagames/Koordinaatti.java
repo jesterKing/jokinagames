@@ -40,6 +40,7 @@ public class Koordinaatti {
 
         Nappula n;
 
+        String lahtoSarake = null;
         if(san.length()>2 && PortableGameNotationReader.nappulat.indexOf(san.charAt(0))>-1) {
             // upseeri
             char nappulaChar = san.charAt(0);
@@ -49,7 +50,6 @@ public class Koordinaatti {
             // sotilas
             n = new Sotilas(vuoro);
         }
-        String lahtoSarake = null;
 
         if(n.annaVari()!=vuoro) {
             throw new KoordinaattiVirhe("Väärä vuoro");
@@ -58,10 +58,10 @@ public class Koordinaatti {
         if(puhdistettuSan.length()==2) {
             b = new Koordinaatti(puhdistettuSan);
         } else if (puhdistettuSan.length()==3) { // sisältää lähtösarakkeen
-            lahtoSarake = puhdistettuSan.substring(0,0);
+            lahtoSarake = puhdistettuSan.substring(0,1);
             b = new Koordinaatti(puhdistettuSan.substring(1));
         } else if (puhdistettuSan.length()==4) { // sisältää lähtöruudun
-            a = new Koordinaatti(puhdistettuSan.substring(0,1));
+            a = new Koordinaatti(puhdistettuSan.substring(0,2));
             b = new Koordinaatti(puhdistettuSan.substring(2));
         } else {
             throw new KoordinaattiVirhe("SAN ei kelvollinen");

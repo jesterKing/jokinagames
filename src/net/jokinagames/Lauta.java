@@ -121,7 +121,6 @@ public class Lauta {
             }
             System.out.println();
             if (rivi == 0) {
-                System.out.println();
                 System.out.println("  [a][b][c][d][e][f][g][h]");
                 System.out.println("--------------------------");
             }
