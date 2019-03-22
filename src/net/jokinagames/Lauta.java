@@ -163,10 +163,12 @@ public class Lauta {
                     sallitut.annaSuunta(i).add(mahd);                          //Jos tyhjä, saa liikkua.
                 } else {
                     if (n1.annaVari() == n2.annaVari()) {                       //Jos oma, matka tyssää sinne suuntaan siihen.
-                        break;
+                        if(n1 instanceof Ratsu) continue;
+                        else break;
                     } else {
                         sallitut.annaSuunta(i).add(mahd);                               //Jos vihulainen, sallittu ja viimeinen.
-                        break;
+                        if(n1 instanceof Ratsu) continue;
+                        else break;
                     }
                 }
             }
