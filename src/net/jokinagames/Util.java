@@ -14,11 +14,11 @@ public class Util {
      *          Merkkijono, jonka perusteella luodaan Nappula-olio
      * @return  Nappula-olio
      */
-    public static Nappula luoNappula(String san) {
+    public static Nappula luoNappula(String san, Vari vari) {
         if(PortableGameNotationReader.nappulat.indexOf(san.charAt(0))>-1) {
             // upseeri
             char nappulaChar = san.charAt(0);
-            return Util.luoNappula(nappulaChar);
+            return Util.luoNappula(nappulaChar, vari);
         }
         return null;
     }
@@ -27,31 +27,38 @@ public class Util {
      *
      * @param   nappulaChar
      *          Yksi merkki jonosta "KQRBNPkqrbnp"
+     * @param   vari
+     *          Nappulan väri. PGN movetextissa kaikki siirroissa voi
+     *          olla aina nappulalla iso kirjain, joten pitää kertoa
+     *          tässäkin. Anna Vari.KATSOKIRJAIMESTA kun tietää että
+     *          kirjain kertoo oikean värin (pienet kirjaimet on mustia
+     *          ja isot kirjaiment valkoisia nappuloita).
      * @return  Nappula-olio
      */
-    public static Nappula luoNappula(char nappulaChar) {
+    public static Nappula luoNappula(char nappulaChar, Vari vari) {
+        if(vari==Vari.KATSOKIRJAIMESTA) {
+            vari = Character.isLowerCase(nappulaChar) ? Vari.MUSTA : Vari.VALKOINEN;
+        }
         String nappulaS = ("" + nappulaChar).toLowerCase();
-        boolean isBlack = Character.isLowerCase(nappulaChar);
-        Vari v = isBlack ? Vari.MUSTA : Vari.VALKOINEN;
         Nappula n = null;
         switch(nappulaS) {
             case "k":
-                n = new Kuningas(v);
+                n = new Kuningas(vari);
                 break;
             case "q":
-                n = new Kuningatar(v);
+                n = new Kuningatar(vari);
                 break;
             case "r":
-                n = new Torni(v);
+                n = new Torni(vari);
                 break;
             case "b":
-                n = new Lahetti(v);
+                n = new Lahetti(vari);
                 break;
             case "n":
-                n = new Ratsu(v);
+                n = new Ratsu(vari);
                 break;
             case "p":
-                n = new Sotilas(v);
+                n = new Sotilas(vari);
                 break;
         }
         return n;

@@ -64,6 +64,11 @@ public class Peli {
 	    return uusi;
 	}
 
+	public void tulostaNykyinenTila()
+	{
+		nykyinenTilanne().tulostaLauta();
+	}
+
 	/**
 	 * Antaa pelin nykyisen tilan
 	 * @return	Lauta, joka esittää nykyistä tilaa

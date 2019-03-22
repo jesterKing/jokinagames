@@ -40,15 +40,16 @@ public class Koordinaatti {
 
         Nappula n;
 
-        if(PortableGameNotationReader.nappulat.indexOf(san.charAt(0))>-1) {
+        if(san.length()>2 && PortableGameNotationReader.nappulat.indexOf(san.charAt(0))>-1) {
             // upseeri
             char nappulaChar = san.charAt(0);
-            n = Util.luoNappula(nappulaChar);
+            n = Util.luoNappula(nappulaChar, vuoro);
             puhdistettuSan = puhdistettuSan.substring(1);
         } else {
             // sotilas
             n = new Sotilas(vuoro);
         }
+        String lahtoSarake = null;
 
         if(n.annaVari()!=vuoro) {
             throw new KoordinaattiVirhe("Väärä vuoro");
@@ -56,15 +57,32 @@ public class Koordinaatti {
 
         if(puhdistettuSan.length()==2) {
             b = new Koordinaatti(puhdistettuSan);
-        } else {
+        } else if (puhdistettuSan.length()==3) { // sisältää lähtösarakkeen
+            lahtoSarake = puhdistettuSan.substring(0,0);
+            b = new Koordinaatti(puhdistettuSan.substring(1));
+        } else if (puhdistettuSan.length()==4) { // sisältää lähtöruudun
             a = new Koordinaatti(puhdistettuSan.substring(0,1));
             b = new Koordinaatti(puhdistettuSan.substring(2));
+        } else {
+            throw new KoordinaattiVirhe("SAN ei kelvollinen");
         }
 
         if(a == null) {
             List<Siirto> loydot = l.annaNappulatJoillaSiirtoMahdollinen(b, n);
             if(loydot.size()!=1) {
-                throw new KoordinaattiVirhe("Siirto ei löytynyt");
+                if(lahtoSarake!=null) {
+                    for(Siirto test : loydot) {
+                        if(test.annaLahtoruutu().annaSan().contains(lahtoSarake)) {
+                            a = test.annaLahtoruutu();
+                            break;
+                        }
+                    }
+                    if(a==null) {
+                        throw new KoordinaattiVirhe("Siirto ei löytynyt, vaikka oli lähtösarake tiedossa");
+                    }
+                } else {
+                    throw new KoordinaattiVirhe("Siirto ei löytynyt, eikä lähtösaraketta tiedossa");
+                }
             } else {
                 a = loydot.get(0).annaLahtoruutu();
             }

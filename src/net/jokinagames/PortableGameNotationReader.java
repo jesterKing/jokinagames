@@ -274,10 +274,28 @@ public class PortableGameNotationReader {
 
         // Luo peli
         Peli peli = Peli.uusiPeli(valkoinen, musta, lauta);
-        // TODO lue PGN:stä kaikki siirrot ja lisää peliin.
+        peli.tulostaNykyinenTila();
 
         Pattern p = Pattern.compile("\\d+\\.+ \\S+( \\S+)?");
         Matcher m = p.matcher(movetext);
+        while(m.find()) {
+            String completeTurn = m.group();
+            String[] parts = completeTurn.split(" ");
+            try {
+                Util.println(Vari.VALKOINEN.name() + " " + parts[1]);
+                peli.seuraavaSiirto(Vari.VALKOINEN, parts[1]);
+                peli.tulostaNykyinenTila();
+                if(parts.length==3) {
+                    Util.println(Vari.MUSTA.name() + " " + parts[2]);
+                    peli.seuraavaSiirto(Vari.MUSTA, parts[2]);
+                    peli.tulostaNykyinenTila();
+                }
+            } catch (KoordinaattiVirhe kv) {
+                Util.print(kv.getMessage()+"\n", Util.Color.RED);
+            }
+
+
+        }
 
         return peli;
     }
@@ -322,7 +340,7 @@ public class PortableGameNotationReader {
                     Koordinaatti x = new Koordinaatti(paikka);
 
                     char nappulaChar = rivi.charAt(nappulaIndeksi);
-                    Nappula n = Util.luoNappula(nappulaChar);
+                    Nappula n = Util.luoNappula(nappulaChar, Vari.KATSOKIRJAIMESTA);
                     fenLauta.asetaNappula(n, x);
                     //Util.Color col = isBlack ? Util.Color.BLACK : Util.Color.WHITE;
                     //Util.print(" " + nappulaMerkit.get(nappulaChar) + "  ", col);
