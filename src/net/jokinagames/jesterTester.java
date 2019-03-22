@@ -48,10 +48,17 @@ public class jesterTester {
 
 
             String pgnFile = //dataFolder + pgnFiles[rand.nextInt(pgnFiles.length)];
-            dataFolder + "test_regular_game.pgn";
+            dataFolder + "test_regular_games_many_nocastling.pgn";
             PortableGameNotationReader pgnReader = new PortableGameNotationReader(pgnFile); //dataFolder + "test_regular_game.pgn");
-            Peli peli = pgnReader.parsePgn();
-            System.out.println(peli.siirrot);
+            int pelienMaara = pgnReader.laskePelit();
+            Util.println("Tiedostossa on " + pelienMaara + " peliä");
+            for(int i=0; i< pelienMaara; i++) {
+                Peli peli = pgnReader.parsePgn(i);
+                Util.println(peli.toString());
+                totalgamesparsed++;
+            }
+            //Peli peli = pgnReader.parsePgn();
+            //System.out.println(peli.siirrot);
 
             /*Koordinaatti koordinaattiSanista = new Koordinaatti("a1");
             Koordinaatti koordinaattiIndekseista = new Koordinaatti(0, 0);
