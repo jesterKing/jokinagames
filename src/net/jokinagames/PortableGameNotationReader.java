@@ -1,13 +1,9 @@
 package net.jokinagames;
 
-import com.sun.tools.javac.util.StringUtils;
-
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import java.util.regex.MatchResult;
 import java.util.stream.Collectors;
 
 /**
@@ -256,8 +252,10 @@ public class PortableGameNotationReader {
             }
         }
 
+        String movetext = peliRivit.get(peliRivit.size()-1);
         try {
-            tulostaTagArvo("movetext", peliRivit.get(peliRivit.size() - 1));
+
+            tulostaTagArvo("movetext", movetext);
         } catch (ArrayIndexOutOfBoundsException a) {
             Util.println("hmm");
         }
@@ -277,6 +275,9 @@ public class PortableGameNotationReader {
         // Luo peli
         Peli peli = Peli.uusiPeli(valkoinen, musta, lauta);
         // TODO lue PGN:stä kaikki siirrot ja lisää peliin.
+
+        Pattern p = Pattern.compile("\\d+\\.+ \\S+( \\S+)?");
+        Matcher m = p.matcher(movetext);
 
         return peli;
     }
@@ -317,33 +318,11 @@ public class PortableGameNotationReader {
                         sarakeIndeksi++;
                     }
                 } else {
-                    char nappulaChar = rivi.charAt(nappulaIndeksi);
-                    String nappulaS = ("" + nappulaChar).toLowerCase();
-                    boolean isBlack = Character.isLowerCase(nappulaChar);
-                    Vari v = isBlack ? Vari.MUSTA : Vari.VALKOINEN;
                     String paikka = sarakkeet.charAt(sarakeIndeksi) + "" + (8-riviIndeksi);
                     Koordinaatti x = new Koordinaatti(paikka);
-                    Nappula n = null;
-                    switch(nappulaS) {
-                        case "k":
-                            n = new Kuningas(v);
-                            break;
-                        case "q":
-                            n = new Kuningatar(v);
-                            break;
-                        case "r":
-                            n = new Torni(v);
-                            break;
-                        case "b":
-                            n = new Lahetti(v);
-                            break;
-                        case "n":
-                            n = new Ratsu(v);
-                            break;
-                        case "p":
-                            n = new Sotilas(v);
-                            break;
-                    }
+
+                    char nappulaChar = rivi.charAt(nappulaIndeksi);
+                    Nappula n = Util.luoNappula(nappulaChar);
                     fenLauta.asetaNappula(n, x);
                     //Util.Color col = isBlack ? Util.Color.BLACK : Util.Color.WHITE;
                     //Util.print(" " + nappulaMerkit.get(nappulaChar) + "  ", col);

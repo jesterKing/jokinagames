@@ -6,6 +6,42 @@ import org.fusesource.jansi.AnsiConsole;
 import java.io.PrintWriter;
 
 public class Util {
+
+    /**
+     * Luo Nappula-olio annetulla merkillä.
+     *
+     * @param   nappulaChar
+     *          Yksi merkki jonosta "KQRBNPkqrbnp"
+     * @return  Nappula-olio
+     */
+    public static Nappula luoNappula(char nappulaChar) {
+        String nappulaS = ("" + nappulaChar).toLowerCase();
+        boolean isBlack = Character.isLowerCase(nappulaChar);
+        Vari v = isBlack ? Vari.MUSTA : Vari.VALKOINEN;
+        Nappula n = null;
+        switch(nappulaS) {
+            case "k":
+                n = new Kuningas(v);
+                break;
+            case "q":
+                n = new Kuningatar(v);
+                break;
+            case "r":
+                n = new Torni(v);
+                break;
+            case "b":
+                n = new Lahetti(v);
+                break;
+            case "n":
+                n = new Ratsu(v);
+                break;
+            case "p":
+                n = new Sotilas(v);
+                break;
+        }
+        return n;
+    }
+
     public enum Color {
         RESET("\033[0m"),
 

@@ -7,16 +7,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class Lauta {
-    protected final Nappula[][] palikat;
-
-    /**
-     * Luo Lauta-olion antaman FEN-kuvauksen mukaan
-     *
-     * @param fen asettelukuvaus (FEN)
-     */
-    public Lauta(String fen) {
-        throw new UnsupportedOperationException("Ei toteutettu");
-    }
+    private final Nappula[][] palikat;
 
     /**
      * Luo perusshakki -Lauta-olion
@@ -109,10 +100,20 @@ public class Lauta {
         return palikat;
     }
 
+    /**
+     * Laita Nappula-olio laudan ruudulle x
+     * @param n Nappula, jota halutaan asettaa. Saa olla null
+     * @param x ruudun koordinaatti
+     */
     public void asetaNappula(Nappula n, Koordinaatti x) {
         palikat[x.annaRivi()][x.annaSarake()] = n;                      //Käpistellään ilman getteriä, liekö väliä.
     }
 
+    /**
+     * Anna Nappula ruudulla k
+     * @param k ruutu jolla nappula
+     * @return Nappula-olio jos ruudulla k on joku, null jos tyhjä
+     */
     public Nappula annaNappula(Koordinaatti k) {                        //Mikä nappula sijaitsee koordinaatissa.
         return palikat[k.annaRivi()][k.annaSarake()];
     }
