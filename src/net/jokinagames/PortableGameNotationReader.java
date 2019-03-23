@@ -319,7 +319,7 @@ class PortableGameNotationReader {
      * @param fen FEN-notaation mukainen merkkijono
      * @return Lauta
      */
-    public Lauta parseFen(String fen) {
+    public static Lauta parseFen(String fen) {
         Lauta fenLauta = new Lauta();
 
         String[] splitOnWhitespace = fen.split(" ");
@@ -360,8 +360,16 @@ class PortableGameNotationReader {
      * Alustaa Lauta-olion perusshakki-asettelulla.
      * @return
      */
-    public Lauta alustaTavallinenPeli() {
+    public static Lauta alustaTavallinenPeli() {
         return parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1");
+    }
+
+    /**
+     * Alustaa Lauta-olion transcendental shakkia varten.
+     * @return
+     */
+    public static Lauta alustaTranscendentalPeli() {
+        return parseFen(sekoitettuTakarivi(Vari.MUSTA) + "/pppppppp/8/8/8/8/PPPPPPPP/" + sekoitettuTakarivi(Vari.VALKOINEN) + " w - - 0 1");
     }
 
     /**
