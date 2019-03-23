@@ -37,18 +37,26 @@ public class Main {
             int peliasetelma = s.nextInt();
             if(peliasetelma==1) {
                 System.out.println("Anna pelaajan 1 nimi(Valkoiset).");                 //Nämä kaks tulee jostain syystä samaan aikaan.
-                String nimi1 = s.nextLine();
-                Pelaaja yy = new Pelaaja(nimi1, Vari.VALKOINEN);
-                System.out.println("Anna pelaajan 2 nimi(Mustat)");                     // -||-
-                String nimi2 = s.nextLine();
-                Pelaaja kaa = new Pelaaja(nimi2, Vari.MUSTA);
+                String nimi = s.nextLine();
+                Pelaaja yy = new Pelaaja(nimi, Vari.VALKOINEN);
+                System.out.println("Anna pelaajan 2 nimi(Mustat.)");                     // -||-
+                nimi = s.nextLine();
+                Pelaaja kaa = new Pelaaja(nimi, Vari.MUSTA);
                 Lauta uus = PortableGameNotationReader.alustaTavallinenPeli();
                 Peli uuspeli = Peli.uusiPeli(yy, kaa, uus);
                 while(!uuspeli.peliOhi()){
                     uuspeli.tulostaNykyinenTila();
-                    System.out.println("Valkoinen pelaaja siirtää");
-                    System.out.println("Anna siirto muodossa ????");
+                    System.out.println(yy.annaNimi()+"  siirtää:");
+                    System.out.println("Anna siirto muodossa *a3b4* ");
                     String siirt = s.nextLine();
+                    uuspeli.seuraavaSiirto(yy.annaVari(),siirt);
+                    uuspeli.tulostaNykyinenTila();
+                    System.out.println(kaa.annaNimi()+" siirtää:");
+                    System.out.println("Anna siirto muodossa *a3b4* ");
+                    siirt = s.nextLine();
+                    uuspeli.seuraavaSiirto(yy.annaVari(),siirt);
+
+
 
                 }
 
@@ -62,11 +70,18 @@ public class Main {
                 Pelaaja kaa = new Pelaaja(nimi2, Vari.MUSTA);
                 Lauta uus = PortableGameNotationReader.alustaTranscendentalPeli();
                 Peli uuspeli = Peli.uusiPeli(yy, kaa, uus);
-                while (!uuspeli.peliOhi()) {
+                while(!uuspeli.peliOhi()){
                     uuspeli.tulostaNykyinenTila();
-                    System.out.println("Valkoinen pelaaja siirtää");
-                    System.out.println("Anna siirto muodossa ????");
+                    System.out.println(yy.annaNimi()+"  siirtää:");
+                    System.out.println("Anna siirto muodossa *a3b4* ");
                     String siirt = s.nextLine();
+                    uuspeli.seuraavaSiirto(yy.annaVari(),siirt);
+                    uuspeli.tulostaNykyinenTila();
+                    System.out.println(kaa.annaNimi()+" siirtää:");
+                    System.out.println("Anna siirto muodossa *a3b4* ");
+                    siirt = s.nextLine();
+                    uuspeli.seuraavaSiirto(yy.annaVari(),siirt);
+
                 }
             }
         if(valinta==2){ //Täällä haetaan jostain tiedostosta keskeneräinen peli.
