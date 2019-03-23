@@ -71,12 +71,31 @@ public class Lauta {
      */
     public Lauta teeSiirto(Koordinaatti mista, Koordinaatti minne) {                        //Siirto pelkällä koordinaateilla
         Nappula[][] s = luoNappulaMatriisiKopio();
-        Nappula c = s[mista.annaRivi()][mista.annaSarake()];                                //Tänne jonnekki tulee oman värin tarkastusta jne.
-        s[mista.annaRivi()][mista.annaSarake()] = null;
-        s[minne.annaRivi()][minne.annaSarake()] = c;
-        Lauta l = new Lauta(s);
-        return l;
+        Nappula n = s[mista.annaRivi()][mista.annaSarake()];
+        Siirrot siirt = sallitutSiirrot(n.mahdollisetSiirrot(mista));
+        boolean found = false;
+        for (int i = 0; i < 8; i++) {
+            if (found) {                                           //Mikäli löyty, lopetetaan läpikäynti.
+                break;
+            }
+            for (Siirto si : siirt.annaSuunta(i)) {             //Käydään kaikki mahdolliset siirrot ja ilmansuunnat läpi.
+                if (si.annaKohderuutu().equals(minne)) {                      //Jos siirto löytyy sallituista, tehdään siirto.
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (found) {
+            s[mista.annaRivi()][mista.annaSarake()] = null;
+            s[minne.annaRivi()][minne.annaSarake()] = n;
+            Util.println("Siirto tehty");
+            return new Lauta(s);
+        } else {
+            Util.println("Siirto mahdoton, mieti tarkemmin seuraavalla kerralla, vuoro meni ;)");                   //Tähän joku exceptioni minkä heitttää ja palauttaa vuoron mainissa alkuun
+            return new Lauta(s);
+        }
     }
+
 
     /**
      * Siirrä Nappula n kohderuutuun
