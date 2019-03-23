@@ -78,11 +78,11 @@ class Peli {
 	}
 
 	public boolean peliOhi() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return false;
 	}
 
 	public boolean onkoShakki() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return false;
 	}
 
 	/**
