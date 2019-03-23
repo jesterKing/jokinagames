@@ -1,12 +1,12 @@
 package net.jokinagames;
 
-import java.util.ArrayList;
 import java.util.List;
 
 class KoordinaattiVirhe extends Exception {
     public KoordinaattiVirhe(String viesti) { super(viesti); }
 }
-public class Koordinaatti {
+
+class Koordinaatti {
     private int sarake; // indeksi jonoon "abcdefgh"
     private int rivi; // indeksi jonoon "12345678"
     private final String san;
@@ -33,9 +33,11 @@ public class Koordinaatti {
         Koordinaatti a = null;
         Koordinaatti b;
 
+        // luetaan sanista erikoistilanteet
         boolean syo = san.indexOf('x')>-1;
         boolean shakki = san.indexOf('+')>-1;
         boolean matti = san.indexOf('#')>-1;
+        // siivotaan erikoismerkit pois, niiden esiintyminen nyt tiedossa
         String puhdistettuSan = san.replaceAll("[x\\+#]", "");
 
         Nappula n;
@@ -45,6 +47,7 @@ public class Koordinaatti {
             // upseeri
             char nappulaChar = san.charAt(0);
             n = Util.luoNappula(nappulaChar, vuoro);
+            // nappulatyyppi handlattu, pidetään loput sanista
             puhdistettuSan = puhdistettuSan.substring(1);
         } else {
             // sotilas
@@ -55,24 +58,34 @@ public class Koordinaatti {
             throw new KoordinaattiVirhe("Väärä vuoro");
         }
 
+        // vain kohderuutu tiedossa
         if(puhdistettuSan.length()==2) {
             b = new Koordinaatti(puhdistettuSan);
-        } else if (puhdistettuSan.length()==3) { // sisältää lähtösarakkeen
+        } else if (puhdistettuSan.length()==3) {// sisältää lähtösarakkeen
             lahtoSarake = puhdistettuSan.substring(0,1);
             b = new Koordinaatti(puhdistettuSan.substring(1));
-        } else if (puhdistettuSan.length()==4) { // sisältää lähtöruudun
+        } else if (puhdistettuSan.length()==4) { // sisältää koko lähtöruudun
             a = new Koordinaatti(puhdistettuSan.substring(0,2));
             b = new Koordinaatti(puhdistettuSan.substring(2));
         } else {
             throw new KoordinaattiVirhe("SAN ei kelvollinen");
         }
 
+        // ei ollut lähtöruutua tiedossa, etsi oikea nappula/lähtöruutu
         if(a == null) {
             List<Siirto> loydot = l.annaNappulatJoillaSiirtoMahdollinen(b, n);
+            // ilmeisesti useampi nappula pääsee samalle kohderuudulle
             if(loydot.size()!=1) {
+                // lähtösarake tiedossa, joten etsitään se, jolla oikea lähtösarake
                 if(lahtoSarake!=null) {
                     for(Siirto test : loydot) {
                         if(test.annaLahtoruutu().annaSan().contains(lahtoSarake)) {
+                            /* todo
+                                mieti ja tarkista voiko olla tilanne, missä useampi
+                                nappula samalta lähtösarakkeelta pääsisi samalle
+                                kohderuudulle.
+                                HANDLAA
+                             */
                             a = test.annaLahtoruutu();
                             break;
                         }
@@ -81,6 +94,8 @@ public class Koordinaatti {
                         throw new KoordinaattiVirhe("Siirto ei löytynyt, vaikka oli lähtösarake tiedossa");
                     }
                 } else {
+                    // sotilaan tarkistus - pitää varmistaa syödäänkö (lähtösarake!=kohdesarake)
+                    // vai ei (lähtösarake == kohdesarake)
                     if(n instanceof Sotilas) {
                         if(!syo) { // löydä se suora siirto, ei vinoon kun ei syödä.
                             for(Siirto test : loydot) {
@@ -98,12 +113,12 @@ public class Koordinaatti {
                             }
 
                         }
-                        //a = loydot.get(0).annaLahtoruutu();
                     } else {
                         throw new KoordinaattiVirhe("Siirto ei löytynyt, eikä lähtösaraketta tiedossa");
                     }
                 }
             } else {
+                // kätsy, oli vain se yksi siirto
                 a = loydot.get(0).annaLahtoruutu();
             }
         }
@@ -131,7 +146,8 @@ public class Koordinaatti {
      * Koordinaatti x = new Koordinaatti("a1");
      * </code>
      *
-     * @param paikka
+     * @param   paikka
+     *          Paikka merkkijonona, esimerkiksi "a1"
      */
     public Koordinaatti (String paikka){        //Pitäis luoda koordinaatti sen mukaan minkä ruudun saa syötteenä.
         san = paikka;
@@ -142,7 +158,7 @@ public class Koordinaatti {
     /**
      * Anna sarakkeen 0-indeksi
      *
-     * @return
+     * @return  sarakkeen 0-indeksi
      */
     public int annaSarake(){      //Saadaan paikkatiedot laudalle.
         return sarake;
@@ -151,7 +167,7 @@ public class Koordinaatti {
     /**
      * Anna rivin 0-indeksi
      *
-     * @return
+     * @return  rivin 0-indeksi
      */
     public int annaRivi(){
         return rivi;
@@ -160,7 +176,7 @@ public class Koordinaatti {
     /**
      * Anna koordinaatin SAN-muotoinen merkkijono
      *
-     * @return
+     * @return  SAN merkkijonona
      */
     public String annaSan() { return san; }
 

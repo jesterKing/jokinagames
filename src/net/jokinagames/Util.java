@@ -1,11 +1,8 @@
 package net.jokinagames;
 
-import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
-import java.io.PrintWriter;
-
-public class Util {
+class Util {
 
     /**
      * Luo nappula-olio annetulla SAN-merkkijonolla. Merkkijonossa pitää olla

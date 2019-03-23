@@ -1,23 +1,20 @@
 package net.jokinagames;
 
-import java.io.*;
-import java.util.*;
+class Siirto {
 
-public class Siirto {
-
-	private Koordinaatti A;
-	private Koordinaatti B;
+	private Koordinaatti mista;
+	private Koordinaatti minne;
 
 	/**
-	 * Siirto lähtöruudusta A kohderuutuun B
-	 * @param	A
+	 * Siirto lähtöruudusta mista kohderuutuun minne
+	 * @param	mista
 	 * 			lähtöruutu
-	 * @param	B
+	 * @param	minne
 	 * 			kohderuutu
 	 */
-	public Siirto(Koordinaatti A, Koordinaatti B){
-		this.A = A;
-		this.B = B;
+	public Siirto(Koordinaatti mista, Koordinaatti minne){
+		this.mista = mista;
+		this.minne = minne;
 	}
 
 	/**
@@ -25,7 +22,7 @@ public class Siirto {
 	 * @return	lähtöruudun koordinaatti
 	 */
 	public Koordinaatti annaLahtoruutu() {
-		return A;
+		return mista;
 	}
 
 	/**
@@ -33,13 +30,13 @@ public class Siirto {
 	 * @return	kohderuudun koordinaatti
 	 */
 	public Koordinaatti annaKohderuutu() {
-		return B;
+		return minne;
 	}
 
 	@Override
 	public boolean equals(Object s) {
 		if(!(s instanceof Siirto)) return false;
 		Siirto ss = (Siirto)s;
-		return A.equals(ss.A) && B.equals(ss.B);
+		return mista.equals(ss.mista) && minne.equals(ss.minne);
 	}
 }

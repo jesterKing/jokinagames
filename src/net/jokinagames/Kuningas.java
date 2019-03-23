@@ -1,9 +1,8 @@
 package net.jokinagames;
 
-import java.io.*;
 import java.util.*;
 
-public class Kuningas extends Nappula {
+class Kuningas extends Nappula {
 
 	public Kuningas(Vari vari) {
 		super(vari);

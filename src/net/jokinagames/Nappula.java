@@ -1,24 +1,39 @@
 package net.jokinagames;
 
-import java.io.*;
-import java.util.*;
-
-public abstract class Nappula {
+abstract class Nappula {
 
 	private final Vari vari;
 	static final String[] koordinaatit = {"abcdefgh", "12345678"};
-	public Nappula() { vari = Vari.VALKOINEN; }
 
+	/**
+	 * Uusi nappula annetulla värillä
+	 * @param	vari
+	 * 			Nappulan väri
+	 */
 	public Nappula(Vari vari) {
 		this.vari = vari;
 	}
 
-	public abstract Siirrot mahdollisetSiirrot(Koordinaatti A);
+	/**
+	 * Anna nappulan mahdolliset siirrot lähtöruudusta tyhjää lautaa ajatellen
+	 * @param	mista
+	 * 			Lähtöruudun koordinaatti
+	 * @return	Siirrot-olio, johon tallennettu kaikki mahdolliset siirrot tyhjällä laudalla
+	 */
+	public abstract Siirrot mahdollisetSiirrot(Koordinaatti mista);
 
+	/**
+	 * Anna nappulan väri
+	 * @return	Nappulan väri
+	 */
 	public Vari annaVari() {
 		return vari;
 	}
 
+	/**
+	 * Anna nappulan graafisen esityksen merkkijono
+	 * @return	Nappulan graafisen esityksen merkkijono
+	 */
 	public String annaNappula() { return "[ ]";}
 
 	@Override

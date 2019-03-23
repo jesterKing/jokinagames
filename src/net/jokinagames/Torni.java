@@ -1,9 +1,8 @@
 package net.jokinagames;
 
-import java.io.*;
 import java.util.*;
 
-public class Torni extends Nappula {
+class Torni extends Nappula {
 
 	public Torni(Vari vari) {
 
@@ -37,11 +36,11 @@ public class Torni extends Nappula {
 		}
 		return siirrot;
 	}
-    public String annaNappula() {
-        if (this.annaVari() == Vari.VALKOINEN) {
-            return "[R]";
-        } else {
-            return "[r]";
-        }
-    }
+	public String annaNappula() {
+		if (this.annaVari() == Vari.VALKOINEN) {
+			return "[R]";
+		} else {
+			return "[r]";
+		}
+	}
 }
