@@ -67,6 +67,7 @@ public class Main {
             }
             if (peliasetelma == 2) {
                 System.out.println("Anna pelaajan 1 nimi(Valkoiset).");
+                s.nextLine();
                 String nimi1 = s.nextLine();
                 Pelaaja yy = new Pelaaja(nimi1, Vari.VALKOINEN);
                 System.out.println("Anna pelaajan 2 nimi(Mustat)");
