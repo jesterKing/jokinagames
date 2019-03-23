@@ -133,6 +133,7 @@ class Koordinaatti {
      * @param   rivi
      *          rivin indeksi (0-7 => 1-8)
      */
+
     public Koordinaatti(int sarake, int rivi){
         this.sarake = sarake;
         this.rivi = rivi;
