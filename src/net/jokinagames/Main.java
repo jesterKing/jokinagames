@@ -50,7 +50,12 @@ public class Main {
                     System.out.println(yy.annaNimi() + "  siirtää:");
                     System.out.println("Anna siirto muodossa *Pa3b4* ");
                     String siirt = s.nextLine();
-                   /* uuspeli.seuraavaSiirto(yy.annaVari(), siirt); */
+                    try {
+                        uuspeli.seuraavaSiirto(yy.annaVari(), siirt);
+                    }
+                    catch(KoordinaattiVirhe virhe){
+                        continue;
+                    }
                     if (uuspeli.onkoShakki()) {
                         //Tarkasta shakki täällä
                     }
@@ -58,7 +63,12 @@ public class Main {
                     System.out.println(kaa.annaNimi() + " siirtää:");
                     System.out.println("Anna siirto muodossa *pa3b4* ");
                     siirt = s.nextLine();
-                  /*  uuspeli.seuraavaSiirto(yy.annaVari(), siirt); */
+                    try {
+                        uuspeli.seuraavaSiirto(yy.annaVari(), siirt);
+                    }
+                    catch(KoordinaattiVirhe virhe){
+                        continue;
+                    }
                     if (uuspeli.onkoShakki()) {
                         //Tarkasta shakki täällä
                     }
@@ -75,12 +85,18 @@ public class Main {
                 Pelaaja kaa = new Pelaaja(nimi2, Vari.MUSTA);
                 Lauta uus = PortableGameNotationReader.alustaTranscendentalPeli();
                 Peli uuspeli = Peli.uusiPeli(yy, kaa, uus);
+                uuspeli.peliOhi();
                 while (!uuspeli.peliOhi()) {
                     uuspeli.tulostaNykyinenTila();
                     System.out.println(yy.annaNimi() + "  siirtää:");
                     System.out.println("Anna siirto muodossa *Pa3b4* ");
                     String siirt = s.nextLine();
-                   /* uuspeli.seuraavaSiirto(yy.annaVari(), siirt); */
+                    try {
+                        uuspeli.seuraavaSiirto(yy.annaVari(), siirt);
+                    }
+                    catch(KoordinaattiVirhe virhe){
+                        continue;
+                    }
                     if (uuspeli.onkoShakki()) {
                         //Tarkasta shakki täällä
                     }
@@ -88,7 +104,12 @@ public class Main {
                     System.out.println(kaa.annaNimi() + " siirtää:");
                     System.out.println("Anna siirto muodossa *pa3b4* ");
                     siirt = s.nextLine();
-                   /* uuspeli.seuraavaSiirto(yy.annaVari(), siirt); */
+                    try {
+                        uuspeli.seuraavaSiirto(yy.annaVari(), siirt);
+                    }
+                    catch(KoordinaattiVirhe virhe){
+                        continue;
+                    }
                     if (uuspeli.onkoShakki()) {
                         //Tarkasta shakki täällä
                     }

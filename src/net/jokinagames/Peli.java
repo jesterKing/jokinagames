@@ -77,11 +77,12 @@ class Peli {
 		return siirrot.get(siirrot.size()-1);
 	}
 
-	public boolean peliOhi() { throw new UnsupportedOperationException("The method is not implemented yet.");
+	public boolean peliOhi() {
+		return false;
 	}
 
 	public boolean onkoShakki() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return false;
 	}
 
 	/**
