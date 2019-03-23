@@ -1,6 +1,7 @@
 package net.jokinagames;
 
 
+import javax.sound.sampled.Port;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
@@ -127,5 +128,8 @@ class jesterTester {
         Util.print("Käsitelty " + totalgamesparsed + " peliä\n", Util.Color.BLUE_BOLD_BRIGHT, Util.Color.WHITE_BACKGROUND);
         Util.println(PortableGameNotationReader.sekoitettuTakarivi(Vari.MUSTA));
         Util.println(PortableGameNotationReader.sekoitettuTakarivi(Vari.VALKOINEN));
+
+        Lauta transcendental = PortableGameNotationReader.alustaTranscendentalPeli();
+        transcendental.tulostaLauta();
     }
 }
