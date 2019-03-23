@@ -3,7 +3,7 @@ package net.jokinagames;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Siirrot {
+class Siirrot {
     public List<Siirto> N; // ylös, eli rivi-indeksit 0-7 kasvava ... +1,0
     public List<Siirto> NE; // ylös oikealle, indeksit kasvava ... +1,+1
     public List<Siirto> E; // oikealle, eli sarake-indeksit 0-7 kasvava ... 0,+1

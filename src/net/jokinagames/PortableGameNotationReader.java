@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * PGN-spesifikaatio löytyy osoitteesta
  * http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm
  */
-public class PortableGameNotationReader {
+class PortableGameNotationReader {
     private final String gameFile;
 
     final private int firstPiece = (int)('\u2654');
@@ -91,7 +91,7 @@ public class PortableGameNotationReader {
                 while ((line = br.readLine()) != null) {
                     if (line.startsWith("[Event ")) s++;
                 }
-            } catch (IOException ioe) {
+            } catch (IOException ignored) {
 
             }
             gameCount = s;

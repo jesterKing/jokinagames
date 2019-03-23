@@ -1,9 +1,8 @@
 package net.jokinagames;
 
-import java.io.*;
 import java.util.*;
 
-public class Kuningatar extends Nappula {
+class Kuningatar extends Nappula {
 
 	private static final List<int[]> n = Arrays.asList( // Mahdollisten siirtojen luominen
 			new int[]{1, 0},
@@ -26,7 +25,7 @@ public class Kuningatar extends Nappula {
 		int ls = A.annaSarake(); // lahtosarake
 
 		for (int[] a:n){
-            int i = n.indexOf(a); // apumuuttuja siirrot luokan ilmansuuntien hakemista varten
+			int i = n.indexOf(a); // apumuuttuja siirrot luokan ilmansuuntien hakemista varten
 			int ur = a[0] + lr; // Muuttuja uudelle riville
 			int us = a[1] + ls; // Muuttuja uudelle sarakkeelle
 			while (ur>=0 && ur<=7 && us>=0 && us<=7){

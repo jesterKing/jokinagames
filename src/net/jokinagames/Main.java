@@ -20,10 +20,8 @@ public class Main {
             if (peli.peliOhi()) {
                 // ei vielä mitään.
             }
-        } catch (FileNotFoundException fnfe) {
+        } catch (IOException fnfe) {
             System.out.println(fnfe.getMessage());
-        } catch (IOException ioe) {
-            System.out.println(ioe.getMessage());
         }
     }
 }

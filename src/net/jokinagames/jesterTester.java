@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.util.Random;
 
-public class jesterTester {
+class jesterTester {
     public static void main(String[] args) {
         Random rand = new Random(); //13);
         Util.alusta();

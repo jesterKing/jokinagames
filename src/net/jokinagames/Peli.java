@@ -2,7 +2,7 @@ package net.jokinagames;
 
 import java.util.*;
 
-public class Peli {
+class Peli {
 
 	private Pelaaja valkoinenPelaaja;
 	private Pelaaja mustaPelaaja;
@@ -27,9 +27,9 @@ public class Peli {
 	 * @return	uusi Peli olio
 	 */
 	public static Peli uusiPeli(Pelaaja valkoinen, Pelaaja musta, Lauta alku) {
-	    Peli p = new Peli(valkoinen, musta);
-	    p.siirrot.add(alku);
-	    return p;
+		Peli p = new Peli(valkoinen, musta);
+		p.siirrot.add(alku);
+		return p;
 	}
 
 	/**
@@ -42,8 +42,8 @@ public class Peli {
 	 */
 	private Peli(Pelaaja valkoinen, Pelaaja musta) {
 		siirrot = new ArrayList<>();
-	    valkoinenPelaaja = valkoinen;
-	    mustaPelaaja = musta;
+		valkoinenPelaaja = valkoinen;
+		mustaPelaaja = musta;
 	}
 
 	/**
@@ -57,11 +57,11 @@ public class Peli {
 	 * @return	Lauta, joka esittää siirron jälkeistä uutta tilaa
 	 */
 	public Lauta seuraavaSiirto(Vari vuoro, String san) throws KoordinaattiVirhe {
-	    Lauta current = nykyinenTilanne();
-	    Siirto siirto = Koordinaatti.luoKoordinaatit(san, vuoro, current);
-	    Lauta uusi = current.teeSiirto(siirto.annaLahtoruutu(), siirto.annaKohderuutu());
-	    siirrot.add(uusi);
-	    return uusi;
+		Lauta current = nykyinenTilanne();
+		Siirto siirto = Koordinaatti.luoKoordinaatit(san, vuoro, current);
+		Lauta uusi = current.teeSiirto(siirto.annaLahtoruutu(), siirto.annaKohderuutu());
+		siirrot.add(uusi);
+		return uusi;
 	}
 
 	public void tulostaNykyinenTila()

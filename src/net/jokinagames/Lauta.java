@@ -14,25 +14,44 @@ public class Lauta {
     }
 
 
-    public Lauta(Nappula[][] s) {
+    private Lauta(Nappula[][] s) {
         palikat = s;
     }
 
+    /**
+     * Anna nappula-tyypin perusteella kaikki siirrot, joita on mahdollista tehdä
+     * kohderuutuun. Eli jos kaksi tornia pääsevät samalle ruudulle niin kummankin
+     * siirto tallennetaan palautettavaan listaan.
+     *
+     * @param   kohde
+     *          Kohderuudun koordinaatti
+     * @param   nappula
+     *          Nappula, jonka tyypin mukaan tarkistetaan
+     * @return  Lista siirtoja, joilla pääsee kohderuutuun kyseisellä nappulatyypillä.
+     */
     public List<Siirto> annaNappulatJoillaSiirtoMahdollinen(Koordinaatti kohde, Nappula nappula) {
         Vari vuoro = nappula.annaVari() ;
         ArrayList<Siirto> loydot = new ArrayList<>();
+
+        // käydään koko lautaa läpi, etsitään samaa tyyppiä kuin nappula
         for (int rivi = 0; rivi < 8; rivi++) {
             for (int sarake = 0; sarake < 8; sarake++) {
-
+                // katso mitä nappulaa on koordinaatilla
                 Koordinaatti lna = new Koordinaatti(sarake, rivi);
                 Nappula ln = this.annaNappula(lna);
+                // tyhjää tai väärä väri
                 if (ln == null || ln.annaVari() != vuoro) continue;
+                // löytyy oikean luokan nappula
                 if(ln.getClass() == nappula.getClass()) {
+                    // anna sen mahdolliset siirrot
                     Siirrot mahdolliset = ln.mahdollisetSiirrot(lna);
+                    // karsii pois ei-sallitut
                     Siirrot sallitut = this.sallitutSiirrot(mahdolliset);
+                    // katso onko löydetyn nappulan ja kohteen välillä
+                    // mahdollista edes siirtyä
                     Siirto tark = new Siirto(lna, kohde);
                     if(sallitut.loytyySiirto(tark)) {
-                        loydot.add(tark);
+                        loydot.add(tark); // on, lisätään
                     }
                 }
             }
@@ -42,21 +61,31 @@ public class Lauta {
 
 
     /**
-     * Siirrä Nappula a:sta b:hen
+     * Siirrä Nappula lähtöruudusta mista kohderuutuun minne
      *
-     * @param a
-     * @param b
-     * @return Lauta-olio, joka kuvaa siirronjälkeisen tilanteen
+     * @param   mista
+     *          Lähtöruudun koordinaatti
+     * @param   minne
+     *          Kohderuudun koordinaatti
+     * @return  Lauta-olio, joka kuvaa siirronjälkeisen tilanteen
      */
-    public Lauta teeSiirto(Koordinaatti a, Koordinaatti b) {                        //Siirto pelkällä koordinaateilla
+    public Lauta teeSiirto(Koordinaatti mista, Koordinaatti minne) {                        //Siirto pelkällä koordinaateilla
         Nappula[][] s = luoNappulaMatriisiKopio();
-        Nappula c = s[a.annaRivi()][a.annaSarake()];                                //Tänne jonnekki tulee oman värin tarkastusta jne.
-        s[a.annaRivi()][a.annaSarake()] = null;
-        s[b.annaRivi()][b.annaSarake()] = c;
+        Nappula c = s[mista.annaRivi()][mista.annaSarake()];                                //Tänne jonnekki tulee oman värin tarkastusta jne.
+        s[mista.annaRivi()][mista.annaSarake()] = null;
+        s[minne.annaRivi()][minne.annaSarake()] = c;
         Lauta l = new Lauta(s);
         return l;
     }
 
+    /**
+     * Siirrä Nappula n kohderuutuun
+     * @param   n
+     *          Siirrettävä nappula
+     * @param   kohde
+     *          Kohderuudun koordinaatti
+     * @return  Lauta-olio, joka kuvaa siirronjälkeisen tilanteen
+     */
     public Lauta teeSiirto(Nappula n, Koordinaatti kohde)
     {
         Nappula[][] s = luoNappulaMatriisiKopio();
@@ -68,24 +97,33 @@ public class Lauta {
         return null;
     }
 
-    public Lauta teeSiirto(Nappula n, Koordinaatti a, Koordinaatti b) {              //Ylikuormitettu versio siirrosta nappulaoliolla.
+    /**
+     * Siirrä Nappula lähtöruudusta mista kohderuutuun minne
+     *
+     * @param   mista
+     *          Lähtöruudun koordinaatti
+     * @param   minne
+     *          Kohderuudun koordinaatti
+     * @return  Lauta-olio, joka kuvaa siirronjälkeisen tilanteen
+     */
+    public Lauta teeSiirto(Nappula n, Koordinaatti mista, Koordinaatti minne) {              //Ylikuormitettu versio siirrosta nappulaoliolla.
         Nappula[][] s = luoNappulaMatriisiKopio();
-        Siirrot siirt = sallitutSiirrot(n.mahdollisetSiirrot(a));
+        Siirrot siirt = sallitutSiirrot(n.mahdollisetSiirrot(mista));
         boolean found = false;
         for (int i = 0; i < 8; i++) {
             if (found) {                                           //Mikäli löyty, lopetetaan läpikäynti.
                 break;
             }
             for (Siirto si : siirt.annaSuunta(i)) {             //Käydään kaikki mahdolliset siirrot ja ilmansuunnat läpi.
-                if (si.annaKohderuutu().equals(b)) {                      //Jos siirto löytyy sallituista, tehdään siirto.
+                if (si.annaKohderuutu().equals(minne)) {                      //Jos siirto löytyy sallituista, tehdään siirto.
                     found = true;
                     break;
                 }
             }
         }
         if (found) {
-            s[a.annaRivi()][a.annaSarake()] = null;
-            s[b.annaRivi()][b.annaSarake()] = n;
+            s[mista.annaRivi()][mista.annaSarake()] = null;
+            s[minne.annaRivi()][minne.annaSarake()] = n;
             Util.println("Siirto tehty");
             return new Lauta(s);
         } else {
@@ -105,6 +143,9 @@ public class Lauta {
         return s;
     }
 
+    /**
+     * Tulostaa Lauta näytölle.
+     */
     public void tulostaLauta() {                                //(Pistetään jos koetaan tarpeeliseksi)
         System.out.println("--------------------------");
         System.out.println();
@@ -152,6 +193,12 @@ public class Lauta {
         return palikat[k.annaRivi()][k.annaSarake()];
     }
 
+    /**
+     * Anna sallitut siirrot mahdollisten siirtojen perusteella.
+     * @param   mahdolliset
+     *          Siirrot-olio, johon on tallennettu mahdolliset siirrot
+     * @return  Siirrot-olio, johon on tallennettu sallitut siirrot
+     */
     public Siirrot sallitutSiirrot(Siirrot mahdolliset) {
         Siirrot sallitut = new Siirrot();
         for (int i = 0; i < 8; i++) {
@@ -175,75 +222,3 @@ public class Lauta {
         return sallitut;
     }
 }
-
-//HYLÄTYN KOODIN HAUTAUSMAA; Rest in pieces.
-/*
-    public List<Siirto> sallitutSiirrot(List<Siirto> e) {
-        List<Siirto> siirrot = new ArrayList<>();                       // uusi sallittujen siirtojen lista.
-        for (Siirto s : e) {
-            Koordinaatti k = s.annaKohderuutu();                                  //Haetaan määränpääkoordinaatti.
-            if (palikat[k.annaRivi()][k.annaSarake()] != null) {            //Mikäli koordinaatti ei vapaa, tarkistetaan kenen on.
-                Koordinaatti o = s.annaLahtoruutu();                                  // Apunappulat värin tarkistuksen
-                Nappula n2 = palikat[o.annaRivi()][o.annaSarake()];
-                Nappula n = palikat[k.annaRivi()][k.annaSarake()];
-                if (n2.annaVari() != n.annaVari()) {
-                    siirrot.add(s);                                     //Jos vastustajan nappula, siirto mahdollinen(tähän joku logiikka syömiselle)
-                }
-                continue;                                           //Jos oma, ei lisätä siirtoa listaan, koska ei sallittu.
-            }
-            siirrot.add(s);
-        }
-        return siirrot;
-    }
-}
-
-    public int[] annaSuunta(Koordinaatti a, Koordinaatti b){
-        int yy = a.annaSarake();                                        //Tässä pitäs olla hellpo seurata ajatuksen kulkua.
-        int kaa = a.annaRivi();
-        int koo = b.annaSarake();
-        int nee = b.annaRivi();
-        int sarake = koo - yy;
-        int rivi = kaa - nee ;
-        if(sarake>0){
-            sarake = 1;
-        }
-        if(sarake<0) {
-            sarake = -1;
-        }
-        if(rivi>0){
-            rivi = 1;
-        }
-        if(rivi<0) {
-            rivi = -1;
-        }
-        int[] suunta = {rivi, sarake};                                   //Tarkastamme siis mihin suuntaan lähdetään.
-        return suunta;
-    }
-
-        if(a.equals(b)) {
-            System.out.println("Siirto tehty");
-            s[a.annaRivi()][a.annaSarake()] = n;
-            Lauta l = new Lauta(s);
-            return l;
-        }
-        int[] suunta = annaSuunta(a, b);                                                //Mihin suuntaan lähdetään liikkumaan.
-        List<Siirto> siirt = sallitutSiirrot(n.mahdollisetSiirrot(a));                  //Kaikki sallitut siirrot
-        Koordinaatti k = new Koordinaatti(a.annaSarake()+suunta[0],a.annaRivi()+suunta[1]);     //Seuraava määränpääkoordinaatti.
-        for(Siirto si:siirt){
-            if(si.annaKohderuutu().equals(k)){                                            //Onko määränpää sallittujen listalla.
-                if(alkup[si.annaLahtoruutu().annaRivi()][si.annaLahtoruutu().annaSarake()].annaVari()!=alkup[si.annaKohderuutu().annaRivi()][si.annaKohderuutu().annaSarake()].annaVari()
-                   && alkup[si.annaKohderuutu().annaRivi()][si.annaKohderuutu().annaSarake()].annaVari()!=null){     //Tarkistetaan tapahtuuko syönti siirrettäessä.
-                    teeSiirto(n,b,b);
-                }
-                s[si.annaLahtoruutu().annaRivi()][si.annaLahtoruutu().annaSarake()]=null;
-                s[si.annaKohderuutu().annaRivi()][si.annaKohderuutu().annaSarake()]=n;
-                Lauta l = new Lauta(s);
-                tulostaLauta(l);
-                teeSiirto(n,k,b);
-            }
-            else {
-                System.out.println("Ei mahdollinen siirto");
-                break;
-            }
-        }*/
-

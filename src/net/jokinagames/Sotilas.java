@@ -1,9 +1,8 @@
 package net.jokinagames;
 
-import java.io.*;
 import java.util.*;
 
-public class Sotilas extends Nappula {
+class Sotilas extends Nappula {
 
 	public Sotilas(Vari vari) {
 		super(vari);

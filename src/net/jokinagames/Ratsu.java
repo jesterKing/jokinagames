@@ -1,10 +1,9 @@
 package net.jokinagames;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 
-public class Ratsu extends Nappula {
+class Ratsu extends Nappula {
 
     public Ratsu(Vari vari)
     {
