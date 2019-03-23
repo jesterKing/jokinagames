@@ -47,17 +47,20 @@ public class Main {
                 while(!uuspeli.peliOhi()){
                     uuspeli.tulostaNykyinenTila();
                     System.out.println(yy.annaNimi()+"  siirtää:");
-                    System.out.println("Anna siirto muodossa *a3b4* ");
+                    System.out.println("Anna siirto muodossa *Pa3b4* ");
                     String siirt = s.nextLine();
                     uuspeli.seuraavaSiirto(yy.annaVari(),siirt);
+                    if(uuspeli.onkoShakki()){
+                        //Tarkasta shakki täällä
+                    }
                     uuspeli.tulostaNykyinenTila();
                     System.out.println(kaa.annaNimi()+" siirtää:");
-                    System.out.println("Anna siirto muodossa *a3b4* ");
+                    System.out.println("Anna siirto muodossa *pa3b4* ");
                     siirt = s.nextLine();
                     uuspeli.seuraavaSiirto(yy.annaVari(),siirt);
-
-
-
+                    if(uuspeli.onkoShakki()){
+                        //Tarkasta shakki täällä
+                    }
                 }
 
             }
@@ -73,16 +76,22 @@ public class Main {
                 while(!uuspeli.peliOhi()){
                     uuspeli.tulostaNykyinenTila();
                     System.out.println(yy.annaNimi()+"  siirtää:");
-                    System.out.println("Anna siirto muodossa *a3b4* ");
+                    System.out.println("Anna siirto muodossa *Pa3b4* ");
                     String siirt = s.nextLine();
                     uuspeli.seuraavaSiirto(yy.annaVari(),siirt);
+                    if(uuspeli.onkoShakki()){
+                        //Tarkasta shakki täällä
+                    }
                     uuspeli.tulostaNykyinenTila();
                     System.out.println(kaa.annaNimi()+" siirtää:");
-                    System.out.println("Anna siirto muodossa *a3b4* ");
+                    System.out.println("Anna siirto muodossa *pa3b4* ");
                     siirt = s.nextLine();
                     uuspeli.seuraavaSiirto(yy.annaVari(),siirt);
-
+                    if(uuspeli.onkoShakki()){
+                        //Tarkasta shakki täällä
+                    }
                 }
+                System.out.println("Peli ohi! ");
             }
         if(valinta==2){ //Täällä haetaan jostain tiedostosta keskeneräinen peli.
 
