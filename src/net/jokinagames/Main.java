@@ -30,13 +30,14 @@ public class Main {
         System.out.println("Syötä 1 jos haluat uuden pelin.");
         System.out.println("Syötä 2 jos haluat jatkaa vanhaa peliä.");
         int valinta = s.nextInt();
-        if(valinta==1){
+        if(valinta==1) {
             System.out.println("Haluatko tavallisen vai transcendental aloituksen?");
             System.out.println("Syötä 1 tavalliseen aloitukseen.");
             System.out.println("Syötä 2 transcendental aloitukseen.");
             int peliasetelma = s.nextInt();
-            if(peliasetelma==1) {
+            if (peliasetelma == 1) {
                 System.out.println("Anna pelaajan 1 nimi(Valkoiset).");                 //Nämä kaks tulee jostain syystä samaan aikaan.
+                s.nextLine();
                 String nimi = s.nextLine();
                 Pelaaja yy = new Pelaaja(nimi, Vari.VALKOINEN);
                 System.out.println("Anna pelaajan 2 nimi(Mustat.)");                     // -||-
@@ -44,27 +45,27 @@ public class Main {
                 Pelaaja kaa = new Pelaaja(nimi, Vari.MUSTA);
                 Lauta uus = PortableGameNotationReader.alustaTavallinenPeli();
                 Peli uuspeli = Peli.uusiPeli(yy, kaa, uus);
-                while(!uuspeli.peliOhi()){
+                while (!uuspeli.peliOhi()) {
                     uuspeli.tulostaNykyinenTila();
-                    System.out.println(yy.annaNimi()+"  siirtää:");
+                    System.out.println(yy.annaNimi() + "  siirtää:");
                     System.out.println("Anna siirto muodossa *Pa3b4* ");
                     String siirt = s.nextLine();
-                    uuspeli.seuraavaSiirto(yy.annaVari(),siirt);
-                    if(uuspeli.onkoShakki()){
+                   /* uuspeli.seuraavaSiirto(yy.annaVari(), siirt); */
+                    if (uuspeli.onkoShakki()) {
                         //Tarkasta shakki täällä
                     }
                     uuspeli.tulostaNykyinenTila();
-                    System.out.println(kaa.annaNimi()+" siirtää:");
+                    System.out.println(kaa.annaNimi() + " siirtää:");
                     System.out.println("Anna siirto muodossa *pa3b4* ");
                     siirt = s.nextLine();
-                    uuspeli.seuraavaSiirto(yy.annaVari(),siirt);
-                    if(uuspeli.onkoShakki()){
+                  /*  uuspeli.seuraavaSiirto(yy.annaVari(), siirt); */
+                    if (uuspeli.onkoShakki()) {
                         //Tarkasta shakki täällä
                     }
                 }
 
             }
-            if(peliasetelma==2) {
+            if (peliasetelma == 2) {
                 System.out.println("Anna pelaajan 1 nimi(Valkoiset).");
                 String nimi1 = s.nextLine();
                 Pelaaja yy = new Pelaaja(nimi1, Vari.VALKOINEN);
@@ -73,30 +74,30 @@ public class Main {
                 Pelaaja kaa = new Pelaaja(nimi2, Vari.MUSTA);
                 Lauta uus = PortableGameNotationReader.alustaTranscendentalPeli();
                 Peli uuspeli = Peli.uusiPeli(yy, kaa, uus);
-                while(!uuspeli.peliOhi()){
+                while (!uuspeli.peliOhi()) {
                     uuspeli.tulostaNykyinenTila();
-                    System.out.println(yy.annaNimi()+"  siirtää:");
+                    System.out.println(yy.annaNimi() + "  siirtää:");
                     System.out.println("Anna siirto muodossa *Pa3b4* ");
                     String siirt = s.nextLine();
-                    uuspeli.seuraavaSiirto(yy.annaVari(),siirt);
-                    if(uuspeli.onkoShakki()){
+                   /* uuspeli.seuraavaSiirto(yy.annaVari(), siirt); */
+                    if (uuspeli.onkoShakki()) {
                         //Tarkasta shakki täällä
                     }
                     uuspeli.tulostaNykyinenTila();
-                    System.out.println(kaa.annaNimi()+" siirtää:");
+                    System.out.println(kaa.annaNimi() + " siirtää:");
                     System.out.println("Anna siirto muodossa *pa3b4* ");
                     siirt = s.nextLine();
-                    uuspeli.seuraavaSiirto(yy.annaVari(),siirt);
-                    if(uuspeli.onkoShakki()){
+                   /* uuspeli.seuraavaSiirto(yy.annaVari(), siirt); */
+                    if (uuspeli.onkoShakki()) {
                         //Tarkasta shakki täällä
                     }
                 }
                 System.out.println("Peli ohi! ");
             }
-        if(valinta==2){ //Täällä haetaan jostain tiedostosta keskeneräinen peli.
+            if (valinta == 2) { //Täällä haetaan jostain tiedostosta keskeneräinen peli.
 
+            }
         }
 
-        }
     }
 }
