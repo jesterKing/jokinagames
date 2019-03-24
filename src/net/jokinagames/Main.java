@@ -37,44 +37,19 @@ public class Main {
             System.out.println("Syötä 2 transcendental aloitukseen.");
             int peliasetelma = s.nextInt();
             if (peliasetelma == 1) {
-                System.out.println("Anna pelaajan 1 nimi (Valkoiset).");                 //Nämä kaks tulee jostain syystä samaan aikaan.
+                System.out.println("Anna pelaajan 1 nimi (Valkoiset).");
                 s.nextLine();
                 String nimi = s.nextLine();
                 Pelaaja yy = new Pelaaja(nimi, Vari.VALKOINEN);
-                System.out.println("Anna pelaajan 2 nimi (Mustat)");                     // -||-
+                System.out.println("Anna pelaajan 2 nimi (Mustat)");
                 nimi = s.nextLine();
                 Pelaaja kaa = new Pelaaja(nimi, Vari.MUSTA);
                 Lauta uus = PortableGameNotationReader.alustaTavallinenPeli();
                 Peli uuspeli = Peli.uusiPeli(yy, kaa, uus);
                 while (!uuspeli.peliOhi()) {
-                    uuspeli.tulostaNykyinenTila();
-                    System.out.println("Anna siirto muodossa *Pa3b4* ");
-                    System.out.println(yy.annaNimi() + " (Valkoinen) siirtää:");
-                    String siirt = s.nextLine();
-                    try {
-                        uuspeli.seuraavaSiirto(yy.annaVari(), siirt);
-                    }
-                    catch(KoordinaattiVirhe virhe){
-                        continue;
-                    }
-                    if (uuspeli.onkoShakki()) {
-                        //Tarkasta shakki täällä
-                    }
-                    uuspeli.tulostaNykyinenTila();
-                    System.out.println("Anna siirto muodossa *pa3b4* ");
-                    System.out.print(kaa.annaNimi() + " (Musta) siirtää:");
-                    siirt = s.nextLine();
-                    try {
-                        uuspeli.seuraavaSiirto(yy.annaVari(), siirt);
-                    }
-                    catch(KoordinaattiVirhe virhe){
-                        continue;
-                    }
-                    if (uuspeli.onkoShakki()) {
-                        //Tarkasta shakki täällä
-                    }
+                    handlaaVuoro(yy, uuspeli);
+                    handlaaVuoro(kaa, uuspeli);
                 }
-
             }
             if (peliasetelma == 2) {
                 System.out.println("Anna pelaajan 1 nimi (Valkoiset).");
@@ -86,41 +61,32 @@ public class Main {
                 Pelaaja kaa = new Pelaaja(nimi2, Vari.MUSTA);
                 Lauta uus = PortableGameNotationReader.alustaTranscendentalPeli();
                 Peli uuspeli = Peli.uusiPeli(yy, kaa, uus);
-                uuspeli.peliOhi();
                 while (!uuspeli.peliOhi()) {
-                    uuspeli.tulostaNykyinenTila();
-                    System.out.println("Anna siirto muodossa *Pa3b4* ");
-                    System.out.println(yy.annaNimi() + " (Valkoinen) siirtää:");
-                    String siirt = s.nextLine();
-                    try {
-                        uuspeli.seuraavaSiirto(yy.annaVari(), siirt);
-                    }
-                    catch(KoordinaattiVirhe virhe){
-                        continue;
-                    }
-                    if (uuspeli.onkoShakki()) {
-                        //Tarkasta shakki täällä
-                    }
-                    uuspeli.tulostaNykyinenTila();
-                    System.out.println("Anna siirto muodossa *pa3b4* ");
-                    System.out.print(kaa.annaNimi() + " (Musta) siirtää:");
-                    siirt = s.nextLine();
-                    try {
-                        uuspeli.seuraavaSiirto(yy.annaVari(), siirt);
-                    }
-                    catch(KoordinaattiVirhe virhe){
-                        continue;
-                    }
-                    if (uuspeli.onkoShakki()) {
-                        //Tarkasta shakki täällä
-                    }
+                    handlaaVuoro(yy,uuspeli);
+                    handlaaVuoro(kaa,uuspeli);
                 }
+
                 System.out.println("Peli ohi! ");
             }
             if (valinta == 2) { //Täällä haetaan jostain tiedostosta keskeneräinen peli.
 
             }
         }
-
+    }
+    public static void handlaaVuoro(Pelaaja p,Peli p2){
+        Scanner sca = new Scanner(System.in);
+        p2.tulostaNykyinenTila();
+        System.out.println("Anna siirto muodossa *P/pa3b4* tai *N/nc6* ");
+        System.out.println(p.annaNimi() + " " + p.annaVari() + " siirtää:");
+        String siirt = sca.nextLine();
+        try {
+            p2.seuraavaSiirto(p.annaVari(), siirt);
+        }
+        catch(KoordinaattiVirhe virhe){
+            virhe.getMessage();
+        }
+        if (p2.onkoShakki()) {
+            //Tarkasta shakki täällä
+        }
     }
 }
