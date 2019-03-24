@@ -46,10 +46,12 @@ public class Main {
                 Pelaaja kaa = new Pelaaja(nimi, Vari.MUSTA);
                 Lauta uus = PortableGameNotationReader.alustaTavallinenPeli();
                 Peli uuspeli = Peli.uusiPeli(yy, kaa, uus);
+                int siirtovuoro = 0;
                 while (!uuspeli.peliOhi()) {
-                    handlaaVuoro(yy, uuspeli);
-                    handlaaVuoro(kaa, uuspeli);
+                    handlaaVuoro(siirtovuoro%2==0?yy:kaa,uuspeli);
+                    siirtovuoro++;
                 }
+                System.out.println("Peli ohi! ");
             }
             if (peliasetelma == 2) {
                 System.out.println("Anna pelaajan 1 nimi (Valkoiset).");
@@ -61,11 +63,11 @@ public class Main {
                 Pelaaja kaa = new Pelaaja(nimi2, Vari.MUSTA);
                 Lauta uus = PortableGameNotationReader.alustaTranscendentalPeli();
                 Peli uuspeli = Peli.uusiPeli(yy, kaa, uus);
+                int siirtovuoro = 0;
                 while (!uuspeli.peliOhi()) {
-                    handlaaVuoro(yy,uuspeli);
-                    handlaaVuoro(kaa,uuspeli);
+                    handlaaVuoro(siirtovuoro%2==0?yy:kaa,uuspeli);
+                    siirtovuoro++;
                 }
-
                 System.out.println("Peli ohi! ");
             }
             if (valinta == 2) { //Täällä haetaan jostain tiedostosta keskeneräinen peli.
@@ -76,7 +78,7 @@ public class Main {
     public static void handlaaVuoro(Pelaaja p,Peli p2){
         Scanner sca = new Scanner(System.in);
         p2.tulostaNykyinenTila();
-        System.out.println("Anna siirto muodossa *P/pa3b4* tai *N/nc6* ");
+        System.out.println("Anna siirto muodossa *Pa3b4* tai *Nc6* ");
         System.out.println(p.annaNimi() + " " + p.annaVari() + " siirtää:");
         String siirt = sca.nextLine();
         try {
