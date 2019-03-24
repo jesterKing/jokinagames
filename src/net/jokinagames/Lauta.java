@@ -69,9 +69,15 @@ public class Lauta {
      *          Kohderuudun koordinaatti
      * @return  Lauta-olio, joka kuvaa siirronjälkeisen tilanteen
      */
-    public Lauta teeSiirto(Koordinaatti mista, Koordinaatti minne) {                        //Siirto pelkällä koordinaateilla
+    public Lauta teeSiirto(Koordinaatti mista, Koordinaatti minne) throws KoordinaattiVirhe {                       //Siirto pelkällä koordinaateilla
         Nappula[][] s = luoNappulaMatriisiKopio();
-        Nappula n = s[mista.annaRivi()][mista.annaSarake()];
+        Nappula n;
+        try{
+            n = s[mista.annaRivi()][mista.annaSarake()];
+        }
+        catch(NullPointerException ex){
+            throw new KoordinaattiVirhe("Viihkoon män, uusiks vaan");
+        }
         Siirrot siirt = sallitutSiirrot(n.mahdollisetSiirrot(mista));
         boolean found = false;
         for (int i = 0; i < 8; i++) {
@@ -91,7 +97,7 @@ public class Lauta {
             Util.println("Siirto tehty");
             return new Lauta(s);
         } else {
-            Util.println("Siirto mahdoton, mieti tarkemmin seuraavalla kerralla, vuoro meni ;)");                   //Tähän joku exceptioni minkä heitttää ja palauttaa vuoron mainissa alkuun
+            Util.println("Siirto mahdoton, mieti tarkemmin seuraavalla kerralla :P");                   //Tähän joku exceptioni minkä heitttää ja palauttaa vuoron mainissa alkuun
             return new Lauta(s);
         }
     }
@@ -146,8 +152,8 @@ public class Lauta {
             Util.println("Siirto tehty");
             return new Lauta(s);
         } else {
-            Util.println("Siirto mahdoton");
-            return null;
+            Util.println("Siirto mahdoton, mieti tarkemmin seuraavalla kerralla, vuoro meni ;)");                   //Tähän joku exceptioni minkä heitttää ja palauttaa vuoron mainissa alkuun
+            return new Lauta(s);
         }
     }
 

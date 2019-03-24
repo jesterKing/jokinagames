@@ -85,7 +85,8 @@ public class Main {
             p2.seuraavaSiirto(p.annaVari(), siirt);
         }
         catch(KoordinaattiVirhe virhe){
-            virhe.getMessage();
+            System.out.println(virhe.getMessage());
+            handlaaVuoro(p,p2);
         }
         if (p2.onkoShakki()) {
             //Tarkasta shakki täällä
