@@ -103,4 +103,5 @@ class Peli {
 		return mustaPelaaja;
 	}
 
+
 }
