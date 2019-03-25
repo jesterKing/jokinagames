@@ -48,7 +48,7 @@ public class Main {
                 Peli uuspeli = Peli.uusiPeli(yy, kaa, uus);
                 int siirtovuoro = 0;
                 while (!uuspeli.peliOhi()) {
-                    handlaaVuoro(siirtovuoro%2==0?yy:kaa,uuspeli);
+                    handlaaVuoro(siirtovuoro%2==0?yy:kaa,uuspeli, s);
                     siirtovuoro++;
                 }
                 System.out.println("Peli ohi! ");
@@ -65,7 +65,7 @@ public class Main {
                 Peli uuspeli = Peli.uusiPeli(yy, kaa, uus);
                 int siirtovuoro = 0;
                 while (!uuspeli.peliOhi()) {
-                    handlaaVuoro(siirtovuoro%2==0?yy:kaa,uuspeli);
+                    handlaaVuoro(siirtovuoro%2==0?yy:kaa,uuspeli, s);
                     siirtovuoro++;
                 }
                 System.out.println("Peli ohi! ");
@@ -75,19 +75,27 @@ public class Main {
             }
         }
     }
-    public static void handlaaVuoro(Pelaaja p,Peli p2){
-        Scanner sca = new Scanner(System.in);
-        p2.tulostaNykyinenTila();
-        System.out.println("Anna siirto muodossa *Pa3b4* tai *Nc6* ");
-        System.out.println(p.annaNimi() + " " + p.annaVari() + " siirtää:");
-        String siirt = sca.nextLine();
-        try {
-            p2.seuraavaSiirto(p.annaVari(), siirt);
+    public static void handlaaVuoro(Pelaaja pelaaja,Peli peli, Scanner sca){
+        peli.tulostaNykyinenTila();
+        System.out.println("Anna siirto muodossa *Pa3b4*, *de5* tai *Nc6* ");
+        System.out.println(pelaaja.annaNimi() + " " + pelaaja.annaVari() + " siirtää:");
+        boolean siirtoOk = false;
+        while(!siirtoOk) {
+            try {
+                String siirt = sca.nextLine();
+                peli.seuraavaSiirto(pelaaja.annaVari(), siirt);
+                siirtoOk = true;
+            } catch (KoordinaattiVirhe virhe) {
+                System.out.println(virhe.getMessage());
+            } catch (PelkkaKohderuutuEiRiita pelkka) {
+                System.out.println(pelkka.getMessage());
+                System.out.println("Yritä vielä lisäämällä lähtösarake");
+            } catch (KohderuutuJaLahtosarakeEiRiita lahto) {
+                System.out.println(lahto.getMessage());
+                System.out.println("Yritä vielä lisäämällä koko lähtöruudun nimi");
+            }
         }
-        catch(KoordinaattiVirhe virhe){
-            virhe.getMessage();
-        }
-        if (p2.onkoShakki()) {
+        if (peli.onkoShakki()) {
             //Tarkasta shakki täällä
         }
     }
