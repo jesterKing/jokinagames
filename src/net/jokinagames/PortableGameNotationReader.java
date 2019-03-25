@@ -295,6 +295,12 @@ class PortableGameNotationReader {
             } catch (KoordinaattiVirhe kv) {
                 Util.print(kv.getMessage(), Util.Color.RED, Util.Color.BLACK_BACKGROUND);
                 Util.print("\n", Util.Color.RESET);
+            } catch (PelkkaKohderuutuEiRiita pker ) {
+                Util.print(pker.getMessage(), Util.Color.RED, Util.Color.BLACK_BACKGROUND);
+                Util.print("\n", Util.Color.RESET);
+            } catch (KohderuutuJaLahtosarakeEiRiita kjler) {
+                Util.print(kjler.getMessage(), Util.Color.RED, Util.Color.BLACK_BACKGROUND);
+                Util.print("\n", Util.Color.RESET);
             }
 
 

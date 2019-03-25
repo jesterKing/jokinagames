@@ -56,7 +56,7 @@ class Peli {
 	 * 			SAN-muotoinen merkkijono
 	 * @return	Lauta, joka esittää siirron jälkeistä uutta tilaa
 	 */
-	public Lauta seuraavaSiirto(Vari vuoro, String san) throws KoordinaattiVirhe {
+	public Lauta seuraavaSiirto(Vari vuoro, String san) throws KoordinaattiVirhe, PelkkaKohderuutuEiRiita, KohderuutuJaLahtosarakeEiRiita {
 		Lauta current = nykyinenTilanne();
 		Siirto siirto = Koordinaatti.luoKoordinaatit(san, vuoro, current);
 		Lauta uusi = current.teeSiirto(siirto.annaLahtoruutu(), siirto.annaKohderuutu());
