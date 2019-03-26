@@ -6,6 +6,14 @@ class KoordinaattiVirhe extends Exception {
     public KoordinaattiVirhe(String viesti) { super(viesti); }
 }
 
+class PelkkaKohderuutuEiRiita extends Exception {
+    public PelkkaKohderuutuEiRiita(String viesti) { super(viesti); }
+}
+
+class KohderuutuJaLahtosarakeEiRiita extends Exception {
+    public KohderuutuJaLahtosarakeEiRiita(String viesti) { super(viesti); }
+}
+
 class Koordinaatti {
     private int sarake; // indeksi jonoon "abcdefgh"
     private int rivi; // indeksi jonoon "12345678"
@@ -29,7 +37,7 @@ class Koordinaatti {
      * @throws  KoordinaattiVirhe
      *          jos SAN-merkkijonon perusteella ei laudalta löytynyt vastaava siirtoa
      */
-    public static Siirto luoKoordinaatit(String san, Vari vuoro, Lauta l) throws KoordinaattiVirhe {
+    public static Siirto luoKoordinaatit(String san, Vari vuoro, Lauta l) throws KoordinaattiVirhe, PelkkaKohderuutuEiRiita, KohderuutuJaLahtosarakeEiRiita {
         Koordinaatti a = null;
         Koordinaatti b;
 
@@ -75,7 +83,7 @@ class Koordinaatti {
         if(a == null) {
             List<Siirto> loydot = l.annaNappulatJoillaSiirtoMahdollinen(b, n);
             // ilmeisesti useampi nappula pääsee samalle kohderuudulle
-            if(loydot.size()!=1) {
+            if(loydot.size()>1) {
                 // lähtösarake tiedossa, joten etsitään se, jolla oikea lähtösarake
                 if(lahtoSarake!=null) {
                     for(Siirto test : loydot) {
@@ -91,7 +99,7 @@ class Koordinaatti {
                         }
                     }
                     if(a==null) {
-                        throw new KoordinaattiVirhe("Siirto ei löytynyt, vaikka oli lähtösarake tiedossa");
+                        throw new KohderuutuJaLahtosarakeEiRiita("Siirto ei löytynyt, vaikka oli lähtösarake tiedossa");
                     }
                 } else {
                     // sotilaan tarkistus - pitää varmistaa syödäänkö (lähtösarake!=kohdesarake)
@@ -114,7 +122,7 @@ class Koordinaatti {
 
                         }
                     } else {
-                        throw new KoordinaattiVirhe("Siirto ei löytynyt, eikä lähtösaraketta tiedossa");
+                        throw new PelkkaKohderuutuEiRiita("Siirto ei löytynyt, eikä lähtösaraketta tiedossa");
                     }
                 }
             } else {
