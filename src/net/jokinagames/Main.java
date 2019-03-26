@@ -32,45 +32,34 @@ public class Main {
             System.out.println("Syötä 1 tavalliseen aloitukseen.");
             System.out.println("Syötä 2 transcendental aloitukseen.");
             int peliasetelma = skanneri.nextInt();
-            if (peliasetelma == 1) {
-                System.out.println("Anna pelaajan 1 nimi (Valkoiset).");
-                skanneri.nextLine();
-                String nimi = skanneri.nextLine();
-                Pelaaja valkoinenPelaaja = new Pelaaja(nimi, Vari.VALKOINEN);
-                System.out.println("Anna pelaajan 2 nimi (Mustat)");
-                nimi = skanneri.nextLine();
-                Pelaaja mustaPelaaja = new Pelaaja(nimi, Vari.MUSTA);
-                Lauta alkuLauta = PortableGameNotationReader.alustaTavallinenPeli();
-                Peli uuspeli = Peli.uusiPeli(valkoinenPelaaja, mustaPelaaja, alkuLauta);
-                int siirtovuoro = 0;
-                while (!uuspeli.peliOhi()) {
-                    handlaaVuoro(siirtovuoro%2==0?valkoinenPelaaja:mustaPelaaja,uuspeli, skanneri);
-                    siirtovuoro++;
-                }
-                System.out.println("Peli ohi! ");
-            }
-            if (peliasetelma == 2) {
-                System.out.println("Anna pelaajan 1 nimi (Valkoiset).");
-                skanneri.nextLine();
-                String nimi1 = skanneri.nextLine();
-                Pelaaja valkoinenPelaaja = new Pelaaja(nimi1, Vari.VALKOINEN);
-                System.out.println("Anna pelaajan 2 nimi (Mustat)");
-                String nimi2 = skanneri.nextLine();
-                Pelaaja mustaPelaaja = new Pelaaja(nimi2, Vari.MUSTA);
-                Lauta alkuLauta = PortableGameNotationReader.alustaTranscendentalPeli();
-                Peli uuspeli = Peli.uusiPeli(valkoinenPelaaja, mustaPelaaja, alkuLauta);
-                int siirtovuoro = 0;
-                while (!uuspeli.peliOhi()) {
-                    handlaaVuoro(siirtovuoro%2==0?valkoinenPelaaja:mustaPelaaja,uuspeli, skanneri);
-                    siirtovuoro++;
-                }
-                System.out.println("Peli ohi! ");
-            }
-            if (valinta == 2) { //Täällä haetaan jostain tiedostosta keskeneräinen peli.
 
+            System.out.println("Anna pelaajan 1 nimi (Valkoiset).");
+            skanneri.nextLine();
+            String nimi = skanneri.nextLine();
+            Pelaaja valkoinenPelaaja = new Pelaaja(nimi, Vari.VALKOINEN);
+            System.out.println("Anna pelaajan 2 nimi (Mustat)");
+            nimi = skanneri.nextLine();
+            Pelaaja mustaPelaaja = new Pelaaja(nimi, Vari.MUSTA);
+
+            Lauta alkuLauta = peliasetelma == 1
+                    ?PortableGameNotationReader.alustaTavallinenPeli()
+                    :PortableGameNotationReader.alustaTranscendentalPeli();
+
+            Peli uuspeli = Peli.uusiPeli(valkoinenPelaaja, mustaPelaaja, alkuLauta);
+            int siirtovuoro = 0;
+            while (!uuspeli.peliOhi()) {
+                handlaaVuoro(siirtovuoro%2==0?valkoinenPelaaja:mustaPelaaja,uuspeli, skanneri);
+                siirtovuoro++;
             }
+
+            System.out.println("Peli ohi! ");
+            }
+
+        if (valinta == 2) { //Täällä haetaan jostain tiedostosta keskeneräinen peli.
+
         }
     }
+
     public static void handlaaVuoro(Pelaaja pelaaja,Peli peli, Scanner sca){
         peli.tulostaNykyinenTila();
         System.out.println("Anna siirto muodossa *Pa3b4*, *de5* tai *Nc6* ");
