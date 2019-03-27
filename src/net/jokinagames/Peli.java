@@ -6,6 +6,7 @@ class Peli {
 
 	private Pelaaja valkoinenPelaaja;
 	private Pelaaja mustaPelaaja;
+	private Tulos tulos;
 	protected ArrayList<Lauta> siirrot;
 
 	/*
@@ -81,9 +82,14 @@ class Peli {
 		return false;
 	}
 
-	public boolean onkoShakki() {
-		return false;
+	public boolean onkoShakki(Lauta lauta, Vari v) {
+		if (lauta.annaKaikkiKoordinaatit(lauta, v).contains(lauta.etsiKuningas(lauta,v))){
+			return true;
+		} else {
+			return false;
+		}
 	}
+
 
 	/**
 	 * Anna valkoinen pelaaja
@@ -103,5 +109,21 @@ class Peli {
 		return mustaPelaaja;
 	}
 
+
+	// Tuloksen ilmaisua varten:
+	enum Tulos{
+		KESKEN,
+		TASAPELI,
+		MUSTA_VOITTI,
+		VALKOINEN_VOITTI
+	}
+	public void asetaTulos(Tulos t){
+		this.tulos = t;
+
+	}
+
+	public Tulos annaTulos(){
+		return this.tulos;
+	}
 
 }

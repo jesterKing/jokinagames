@@ -80,8 +80,8 @@ public class Main {
                 System.out.println("Yritä vielä lisäämällä koko lähtöruudun nimi");
             }
         }
-        if (peli.onkoShakki()) {
-            //Tarkasta shakki täällä
+        if (peli.onkoShakki(peli.nykyinenTilanne(), pelaaja.annaVari())) {
+            System.out.println("Shakki");
         }
     }
 }
