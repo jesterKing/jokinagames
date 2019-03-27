@@ -41,4 +41,15 @@ public class KoordinaattiTest {
             Assert.assertTrue(e instanceof KoordinaattiVirhe);
         }
     }
+
+    @Test
+    public void yritaTyhjanRuudunSiirto() {
+        Lauta l = PortableGameNotationReader.alustaTavallinenPeli();
+        try {
+            Koordinaatti.luoKoordinaatit("e3d6", Vari.VALKOINEN, l);
+        } catch (Exception e) {
+            Assert.assertTrue(e instanceof KoordinaattiVirhe);
+        }
+
+    }
 }

@@ -23,6 +23,12 @@ public class Koordinaatti {
     private final String san;
     /**
      * Kaikki sarakenimet yhtenä merkkijonona.
+     * <p>
+     * <p>
+     * <code>"abcdefghij"</code>
+     * <p>
+     * Merkkijonosta löytyvät myös "i" ja "j" jos halutaan
+     * laajentaa laudan kokoa 10x8 (Capablanca Chess, Capablanca Random Chess)
      */
     private static String sarakkeet = "abcdefghij";                //Esim. a1 asettaa koordinaatin rivin ja sarakkeen indx [0],[7].
     /**
@@ -89,6 +95,11 @@ public class Koordinaatti {
         } else if (puhdistettuSan.length()==4) { // sisältää koko lähtöruudun
             a = new Koordinaatti(puhdistettuSan.substring(0,2));
             b = new Koordinaatti(puhdistettuSan.substring(2));
+            // varmista että lähtöruudussa on annettua nappulaa
+            Nappula lahtoNappula = l.annaNappula(a);
+            if(lahtoNappula==null || !lahtoNappula.equals(n)) {
+                throw new KoordinaattiVirhe("Annetulla lähtöruudulla ei ole (oikeaa) nappulaa.");
+            }
         } else {
             throw new KoordinaattiVirhe("SAN ei kelvollinen");
         }
