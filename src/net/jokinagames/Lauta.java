@@ -224,7 +224,7 @@ public class Lauta {
      * @return Kuninkaan koordinaatti
      */
     public Koordinaatti etsiKuningas(Lauta l, Vari v) {
-        Koordinaatti kuningas = new Koordinaatti(""); // Alustetaan palautettava koordinaatti
+        Koordinaatti kuningas = new Koordinaatti("a1"); // Alustetaan palautettava koordinaatti
         for (int r = 0; r < 8; r++) { // Käydään lauta läpi
             for (int sa = 0; sa < 8; sa++) {
                 Koordinaatti y = new Koordinaatti(sa, r);  // Tehdään koordinaatti ruudusta missä ollaan
