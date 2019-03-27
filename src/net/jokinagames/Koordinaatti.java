@@ -2,27 +2,37 @@ package net.jokinagames;
 
 import java.util.List;
 
-class KoordinaattiVirhe extends Exception {
-    public KoordinaattiVirhe(String viesti) { super(viesti); }
-}
-
-class PelkkaKohderuutuEiRiita extends Exception {
-    public PelkkaKohderuutuEiRiita(String viesti) { super(viesti); }
-}
-
-class KohderuutuJaLahtosarakeEiRiita extends Exception {
-    public KohderuutuJaLahtosarakeEiRiita(String viesti) { super(viesti); }
-}
-
-class Koordinaatti {
-    private int sarake; // indeksi jonoon "abcdefgh"
-    private int rivi; // indeksi jonoon "12345678"
-    private final String san;
-    private static String sar = "abcdefgh";                //Esim. a1 asettaa koordinaatin rivin ja sarakkeen indx [0],[7].
-    private static String riv = "12345678";
+/**
+ * <em>Koordinaatti</em> auttaa muuntamaan SAN-notaation <em>Lauta</em>-luokan
+ * ymmärtämään muotoon.
+ *
+ * @author Nathan Letwory
+ */
+public class Koordinaatti {
     /**
-     * Luo Koordinaatti-oliot annetun SAN-notaation mukaan
-     *
+     * Indeksi merkkijonoon sarakkeet
+     */
+    private int sarake; // indeksi jonoon "abcdefgh"
+    /**
+     * Indeksi merkkijonoon rivi
+     */
+    private int rivi; // indeksi jonoon "12345678"
+    /**
+     * Koordinaatin SAN-merkintä
+     */
+    private final String san;
+    /**
+     * Kaikki sarakenimet yhtenä merkkijonona.
+     */
+    private static String sarakkeet = "abcdefghij";                //Esim. a1 asettaa koordinaatin rivin ja sarakkeen indx [0],[7].
+    /**
+     * Kaikki rivinumerot yhtenä merkkijonona.
+     */
+    private static String rivit = "12345678";
+    /**
+     * Luo Koordinaatti-oliot annetun SAN-notaation mukaan.
+     * <p>
+     * <p>
      * <code>
      *     Koordinaatti[] siirto = Koordinaatti.luoKoordinaatti("Nb3", Vari.VALKOINEN, l);
      * </code>
@@ -36,6 +46,10 @@ class Koordinaatti {
      *
      * @throws  KoordinaattiVirhe
      *          jos SAN-merkkijonon perusteella ei laudalta löytynyt vastaava siirtoa
+     * @throws  PelkkaKohderuutuEiRiita
+     *          jos annetulla SAN-notaatiolla, joka on muotoa "e4" tai "Nc3" ei yksiselitteistä siirtoa löydy
+     * @throws  KohderuutuJaLahtosarakeEiRiita
+     *          jos annetulla SAN-notaatiolla, joka on muotoa "Nbc3" ei yksiselitteistä siirtoa löydy
      */
     public static Siirto luoKoordinaatit(String san, Vari vuoro, Lauta l) throws KoordinaattiVirhe, PelkkaKohderuutuEiRiita, KohderuutuJaLahtosarakeEiRiita {
         Koordinaatti a = null;
@@ -137,31 +151,33 @@ class Koordinaatti {
     /**
      * Luo koordinaatti 0-based indeksien avulla. a1 on 0,0
      * @param   sarake
-     *          sarakkeen indeksi (0-7 => a-h)
+     *          sarakkeen indeksi {@code (0-7 => a-h)}
      * @param   rivi
-     *          rivin indeksi (0-7 => 1-8)
+     *          rivin indeksi {@code (0-7 => 1-8)}
      */
 
     public Koordinaatti(int sarake, int rivi){
         this.sarake = sarake;
         this.rivi = rivi;
-        san = sar.charAt(sarake) + "" + riv.charAt(rivi);
+        san = sarakkeet.charAt(sarake) + "" + rivit.charAt(rivi);
     }
 
     /**
-     * Luo koordinaatti SAN-notaation mukaan
-     *
-     * <code>
+     * Luo koordinaatti SAN-notaation mukaan.
+     * <p>
+     * <p>
+     * {@code
      * Koordinaatti x = new Koordinaatti("a1");
-     * </code>
+     * Koordinaatti y = new Koordinaatti("f7");
+     * }
      *
      * @param   paikka
      *          Paikka merkkijonona, esimerkiksi "a1"
      */
     public Koordinaatti (String paikka){        //Pitäis luoda koordinaatti sen mukaan minkä ruudun saa syötteenä.
         san = paikka;
-        this.sarake = sar.indexOf(paikka.charAt(0));
-        this.rivi = riv.indexOf(paikka.charAt(1));
+        this.sarake = sarakkeet.indexOf(paikka.charAt(0));
+        this.rivi = rivit.indexOf(paikka.charAt(1));
     }
 
     /**
@@ -189,11 +205,21 @@ class Koordinaatti {
      */
     public String annaSan() { return san; }
 
+    /**
+     * Palauttaa Koordinaatti-olion kuvauksen merkkijonona muodossa "SAN (rivi, sarake)"
+     * @return Merkkijonon muodossa "SAN (rivi, sarake)"
+     */
     @Override
     public String toString() {
         return annaSan()+ " (" + annaRivi()+ ", " + annaSarake() + ")";
     }
 
+    /**
+     * Vertailee oliota annettuun. Sarakkeen ja rivin on oltava samat, jotta
+     * <code>equals()</code> palauttaa <code>true</code>
+     * @param b
+     * @return <code>true</code> jos b on tyyppiä <code>Koordinaatti</code> ja sarakkeet ja rivit ovat kummallakin samat.
+     */
     @Override
     public boolean equals(Object b) {
         if(!(b instanceof Koordinaatti)) return false;
