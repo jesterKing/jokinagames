@@ -14,12 +14,31 @@ class KohderuutuJaLahtosarakeEiRiita extends Exception {
     public KohderuutuJaLahtosarakeEiRiita(String viesti) { super(viesti); }
 }
 
+/**
+ * <em>Koordinaatti</em> auttaa muuntamaan SAN-notaation <em>Lauta</em>-luokan
+ * ymmärtämään muotoon.
+ */
 public class Koordinaatti {
+    /**
+     * Indeksi merkkijonoon sarakkeet
+     */
     private int sarake; // indeksi jonoon "abcdefgh"
+    /**
+     * Indeksi merkkijonoon rivi
+     */
     private int rivi; // indeksi jonoon "12345678"
+    /**
+     * Koordinaatin SAN-merkintä
+     */
     private final String san;
-    private static String sar = "abcdefgh";                //Esim. a1 asettaa koordinaatin rivin ja sarakkeen indx [0],[7].
-    private static String riv = "12345678";
+    /**
+     * Kaikki sarakenimet yhtenä merkkijonona.
+     */
+    private static String sarakkeet = "abcdefghij";                //Esim. a1 asettaa koordinaatin rivin ja sarakkeen indx [0],[7].
+    /**
+     * Kaikki rivinumerot yhtenä merkkijonona.
+     */
+    private static String rivit = "12345678";
     /**
      * Luo Koordinaatti-oliot annetun SAN-notaation mukaan
      *
@@ -137,15 +156,15 @@ public class Koordinaatti {
     /**
      * Luo koordinaatti 0-based indeksien avulla. a1 on 0,0
      * @param   sarake
-     *          sarakkeen indeksi (0-7 => a-h)
+     *          sarakkeen indeksi (0-7 =&gt; a-h)
      * @param   rivi
-     *          rivin indeksi (0-7 => 1-8)
+     *          rivin indeksi (0-7 =&gt; 1-8)
      */
 
     public Koordinaatti(int sarake, int rivi){
         this.sarake = sarake;
         this.rivi = rivi;
-        san = sar.charAt(sarake) + "" + riv.charAt(rivi);
+        san = sarakkeet.charAt(sarake) + "" + rivit.charAt(rivi);
     }
 
     /**
@@ -160,8 +179,8 @@ public class Koordinaatti {
      */
     public Koordinaatti (String paikka){        //Pitäis luoda koordinaatti sen mukaan minkä ruudun saa syötteenä.
         san = paikka;
-        this.sarake = sar.indexOf(paikka.charAt(0));
-        this.rivi = riv.indexOf(paikka.charAt(1));
+        this.sarake = sarakkeet.indexOf(paikka.charAt(0));
+        this.rivi = rivit.indexOf(paikka.charAt(1));
     }
 
     /**

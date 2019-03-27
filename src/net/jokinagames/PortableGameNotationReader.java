@@ -140,7 +140,7 @@ public class PortableGameNotationReader {
      *
      * Tyhjat rivit jätetään välistä.
      * @param index
-     * @return ArrayList<String> jossa pelin tagit ja movetext
+     * @return ArrayList&lt;String&gt; jossa pelin tagit ja movetext
      */
     private ArrayList<String> luePeli(int index) {
         ArrayList<String> peliPgn = new ArrayList<>(15);
