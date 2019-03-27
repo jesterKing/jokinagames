@@ -1,6 +1,6 @@
 package net.jokinagames;
 
-enum Vari {
+public enum Vari {
 	VALKOINEN,
 	MUSTA,
 	KATSOKIRJAIMESTA // käytetään FEN-parsinnassa

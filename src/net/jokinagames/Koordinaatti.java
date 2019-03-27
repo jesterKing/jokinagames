@@ -139,9 +139,11 @@ public class Koordinaatti {
                         throw new PelkkaKohderuutuEiRiita("Siirto ei löytynyt, eikä lähtösaraketta tiedossa");
                     }
                 }
-            } else {
+            } else if(loydot.size()==1) {
                 // kätsy, oli vain se yksi siirto
                 a = loydot.get(0).annaLahtoruutu();
+            } else {
+                throw new KoordinaattiVirhe("Annettu siirto ei löytynyt");
             }
         }
 
