@@ -14,7 +14,7 @@ class KohderuutuJaLahtosarakeEiRiita extends Exception {
     public KohderuutuJaLahtosarakeEiRiita(String viesti) { super(viesti); }
 }
 
-class Koordinaatti {
+public class Koordinaatti {
     private int sarake; // indeksi jonoon "abcdefgh"
     private int rivi; // indeksi jonoon "12345678"
     private final String san;

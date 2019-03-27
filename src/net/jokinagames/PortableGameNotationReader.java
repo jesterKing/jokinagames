@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * PGN-spesifikaatio löytyy osoitteesta
  * http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm
  */
-class PortableGameNotationReader {
+public class PortableGameNotationReader {
     private final String gameFile;
 
     final private int firstPiece = (int)('\u2654');
