@@ -13,6 +13,9 @@ public class Lauta {
         palikat = new Nappula[8][8];
     }
 
+    /**
+     * Luo uusi Lauta annetulla Nappula asetelmanlla.
+     */
 
     private Lauta(Nappula[][] s) {
         palikat = s;
@@ -75,11 +78,11 @@ public class Lauta {
         Siirrot siirt = sallitutSiirrot(n.mahdollisetSiirrot(mista));
         boolean found = false;
         for (int i = 0; i < 8; i++) {
-            if (found) {                                           //Mikäli löyty, lopetetaan läpikäynti.
+            if (found) {                                                                    //Mikäli löyty, lopetetaan läpikäynti.
                 break;
             }
-            for (Siirto si : siirt.annaSuunta(i)) {             //Käydään kaikki mahdolliset siirrot ja ilmansuunnat läpi.
-                if (si.annaKohderuutu().equals(minne)) {                      //Jos siirto löytyy sallituista, tehdään siirto.
+            for (Siirto si : siirt.annaSuunta(i)) {                                         //Käydään kaikki mahdolliset siirrot ja ilmansuunnat läpi.
+                if (si.annaKohderuutu().equals(minne)) {                                    //Jos siirto löytyy sallituista, tehdään siirto.
                     found = true;
                     break;
                 }
@@ -91,7 +94,7 @@ public class Lauta {
             Util.println("Siirto tehty");
             return new Lauta(s);
         } else {
-            Util.println("Siirto mahdoton, mieti tarkemmin seuraavalla kerralla, vuoro meni ;)");                   //Tähän joku exceptioni minkä heitttää ja palauttaa vuoron mainissa alkuun
+            Util.println("Siirto mahdoton");
             return new Lauta(s);
         }
     }
@@ -130,11 +133,11 @@ public class Lauta {
         Siirrot siirt = sallitutSiirrot(n.mahdollisetSiirrot(mista));
         boolean found = false;
         for (int i = 0; i < 8; i++) {
-            if (found) {                                           //Mikäli löyty, lopetetaan läpikäynti.
+            if (found) {                                                                      //Mikäli löyty, lopetetaan läpikäynti.
                 break;
             }
-            for (Siirto si : siirt.annaSuunta(i)) {             //Käydään kaikki mahdolliset siirrot ja ilmansuunnat läpi.
-                if (si.annaKohderuutu().equals(minne)) {                      //Jos siirto löytyy sallituista, tehdään siirto.
+            for (Siirto si : siirt.annaSuunta(i)) {                                            //Käydään kaikki mahdolliset siirrot ja ilmansuunnat läpi.
+                if (si.annaKohderuutu().equals(minne)) {                                        //Jos siirto löytyy sallituista, tehdään siirto.
                     found = true;
                     break;
                 }
@@ -165,7 +168,7 @@ public class Lauta {
     /**
      * Tulostaa Lauta näytölle.
      */
-    public void tulostaLauta() {                                //(Pistetään jos koetaan tarpeeliseksi)
+    public void tulostaLauta() {
         System.out.println("--------------------------");
         System.out.println();
         for (int rivi = 7; rivi >= 0; rivi--) {
@@ -199,7 +202,7 @@ public class Lauta {
      *          ruudun koordinaatti
      */
     public void asetaNappula(Nappula n, Koordinaatti x) {
-        palikat[x.annaRivi()][x.annaSarake()] = n;                      //Käpistellään ilman getteriä, liekö väliä.
+        palikat[x.annaRivi()][x.annaSarake()] = n;
     }
 
     /**
@@ -223,11 +226,11 @@ public class Lauta {
         for (int i = 0; i < 8; i++) {
             for (Siirto mahd : mahdolliset.annaSuunta(i)) {
                 Nappula n1 = annaNappula(mahd.annaLahtoruutu());                         //Lähtö
-                Nappula n2 = annaNappula(mahd.annaKohderuutu());                      //Määränpää
+                Nappula n2 = annaNappula(mahd.annaKohderuutu());                         //Määränpää
                 if (n2 == null) {
-                    sallitut.annaSuunta(i).add(mahd);                          //Jos tyhjä, saa liikkua.
+                    sallitut.annaSuunta(i).add(mahd);                                    //Jos tyhjä, saa liikkua.
                 } else {
-                    if (n1.annaVari() == n2.annaVari()) {                       //Jos oma, matka tyssää sinne suuntaan siihen.
+                    if (n1.annaVari() == n2.annaVari()) {                                //Jos oma, matka tyssää sinne suuntaan siihen.
                         if(n1 instanceof Ratsu) continue;
                         else break;
                     } else {
