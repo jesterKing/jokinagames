@@ -2,7 +2,7 @@ package net.jokinagames;
 
 import java.util.*;
 
-class Peli {
+public class Peli {
 
 	private Pelaaja valkoinenPelaaja;
 	private Pelaaja mustaPelaaja;
