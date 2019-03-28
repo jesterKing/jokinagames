@@ -30,8 +30,11 @@ class Kuningatar extends Nappula {
 			int us = a[1] + ls; // Muuttuja uudelle sarakkeelle
 			while (ur>=0 && ur<=7 && us>=0 && us<=7){
 				Koordinaatti uk = new Koordinaatti(koordinaatit[0].charAt(us) +""+koordinaatit[1].charAt(ur)); // Luodaan uusi koordinaatti
+				Siirto uS = new Siirto(A, uk);  // Jos ollaan, generoidaan uusi siirto
+				siirrot.annaSuunta(i).add(uS); // ja lisätään siirtolistaan
 				ur = a[0] + ur;
 				us = a[1] + us;
+
 			}
 		}
 		return siirrot;

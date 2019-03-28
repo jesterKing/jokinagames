@@ -285,4 +285,5 @@ public class Lauta {
         }
         return sallitut;
     }
+
 }

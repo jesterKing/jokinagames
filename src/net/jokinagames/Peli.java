@@ -82,13 +82,16 @@ class Peli {
 		return false;
 	}
 
-	public boolean onkoShakki(Lauta lauta, Vari v) {
-		if (lauta.annaKaikkiKoordinaatit(lauta, v).contains(lauta.etsiKuningas(lauta,v))){
+	public boolean onkoShakki(Vari v) {
+		Lauta L = this.nykyinenTilanne();
+
+		if (L.annaKaikkiKoordinaatit(L, v).contains(L.etsiKuningas(L,v))){
 			return true;
 		} else {
 			return false;
 		}
 	}
+
 
 
 	/**
