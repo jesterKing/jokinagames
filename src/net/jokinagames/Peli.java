@@ -1,5 +1,6 @@
 package net.jokinagames;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Peli {
@@ -8,6 +9,10 @@ public class Peli {
 	private Pelaaja mustaPelaaja;
 	private Tulos tulos;
 	protected ArrayList<Lauta> siirrot;
+	protected ArrayList<String> sansiirrot;
+
+	private String pvm;
+	private String aika;
 
 	/*
 		TODO:
@@ -43,8 +48,11 @@ public class Peli {
 	 */
 	private Peli(Pelaaja valkoinen, Pelaaja musta) {
 		siirrot = new ArrayList<>();
+		sansiirrot = new ArrayList<>();
 		valkoinenPelaaja = valkoinen;
 		mustaPelaaja = musta;
+		pvm = new SimpleDateFormat("yyyy.MM.dd").format(Calendar.getInstance().getTime());
+		aika = new SimpleDateFormat("HH-mm-ss").format(Calendar.getInstance().getTime());
 	}
 
 	/**
@@ -62,6 +70,7 @@ public class Peli {
 		Siirto siirto = Koordinaatti.luoKoordinaatit(san, vuoro, current);
 		Lauta uusi = current.teeSiirto(siirto.annaLahtoruutu(), siirto.annaKohderuutu());
 		siirrot.add(uusi);
+		sansiirrot.add(san);
 		return uusi;
 	}
 
@@ -110,6 +119,18 @@ public class Peli {
 	public Pelaaja annaMustaPelaaja()
 	{
 		return mustaPelaaja;
+	}
+
+	public String annaPaivamaara() {
+		return pvm;
+	}
+
+	public String annaAika() {
+		return aika;
+	}
+
+	public String annaAloitusFen() {
+		return siirrot.get(0).annaFen();
 	}
 
 

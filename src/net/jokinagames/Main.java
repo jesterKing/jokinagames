@@ -68,6 +68,11 @@ public class Main {
         while(!siirtoOk) {
             try {
                 String siirt = sca.nextLine();
+                if(siirt.equals("tallenna")) {
+                    PortableGameNotationReader.tallennaPeli(peli);
+                    System.out.println("... tallennettu");
+                    continue;
+                }
                 peli.seuraavaSiirto(pelaaja.annaVari(), siirt);
                 siirtoOk = true;
             } catch (KoordinaattiVirhe virhe) {
