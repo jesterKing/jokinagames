@@ -286,4 +286,29 @@ public class Lauta {
         return sallitut;
     }
 
+    public String annaFen() {
+       StringBuilder fenBuilder = new StringBuilder();
+       for(int rivi=7; rivi>=0; rivi--) {
+           int emptycnt = 0;
+           for(int sarake=0; sarake<8; sarake++) {
+               Koordinaatti k = new Koordinaatti(sarake, rivi);
+               Nappula n = annaNappula(k);
+               if(n==null) {
+                   emptycnt++;
+               } else {
+                   if(emptycnt>0) {
+                       fenBuilder.append(emptycnt);
+                       emptycnt=0;
+                   }
+                   char nappulaMerkki = n.annaNappula().charAt(1);
+                   if(n.annaVari()==Vari.MUSTA) nappulaMerkki = Character.toLowerCase(nappulaMerkki);
+                   else nappulaMerkki = Character.toUpperCase(nappulaMerkki);
+                   fenBuilder.append(nappulaMerkki);
+               }
+           }
+           if(rivi>0) fenBuilder.append('/');
+       }
+       return fenBuilder.toString();
+    }
+
 }

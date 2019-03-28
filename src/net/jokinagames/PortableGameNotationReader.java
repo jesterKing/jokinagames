@@ -1,6 +1,9 @@
 package net.jokinagames;
 
 import java.io.*;
+import java.nio.file.FileSystems;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -21,7 +24,7 @@ public class PortableGameNotationReader {
 
     final private int firstPiece = (int)('\u2654');
     static final public String nappulat = "KQRBNPkqrbnp";
-    static final public String sarakkeet = "abcdefgh";
+    static final public String sarakkeet = "abcdefghij";
     static final public HashMap<Character, Character> nappulaMerkit = new HashMap<>();
     static private boolean nappulatAlustettu = false;
 
@@ -307,6 +310,47 @@ public class PortableGameNotationReader {
         }
 
         return peli;
+    }
+
+    public static void tallennaPeli(Peli peli)
+    {
+        final String rootFolder = FileSystems.getDefault().getPath(".").normalize().toAbsolutePath().toString();
+        String dataFolder = rootFolder + File.separator + "data" + File.separator;
+        String timeStamp = peli.annaPaivamaara() + "_" + peli.annaAika();
+        timeStamp = timeStamp.replaceAll("\\.", "-");
+
+        String pgnFile = dataFolder + timeStamp + ".pgn";
+        File f = new File(pgnFile);
+
+            try {
+                if(f.createNewFile()) {
+                    BufferedWriter pgnWriter = new BufferedWriter(new FileWriter(pgnFile));
+                    pgnWriter.write("[Event \"?\"]\n");
+                    pgnWriter.write("[Site \"?\"]\n");
+                    pgnWriter.write("[Round \"?\"]\n");
+                    pgnWriter.write("[White \""+peli.annaValkoinenPelaaja().annaNimi()+"\"]\n");
+                    pgnWriter.write("[Black \""+peli.annaMustaPelaaja().annaNimi()+"\"]\n");
+                    pgnWriter.write("[Date \""+ peli.annaPaivamaara()+"\"]\n");
+                    // TODO oikea lopputulos
+                    pgnWriter.write("[Result \""+ (peli.peliOhi() ? "1/2-1/2" : "*")+"\"]\n");
+                    pgnWriter.write("[FEN \""+ peli.annaAloitusFen() +"\"]\n");
+                    pgnWriter.write("\n");
+                    int puoliVuoro = 0;
+                    for(String san : peli.sansiirrot) {
+                        if(puoliVuoro%2==0) {
+                            pgnWriter.write((puoliVuoro / 2 + 1)+". ");
+                        }
+                       pgnWriter.write(san + " ");
+                       puoliVuoro++;
+                    }
+                    // TODO oikea lopputulos
+                    pgnWriter.write((peli.peliOhi() ? "1/2-1/2" : "*"));
+                    pgnWriter.flush();
+                    pgnWriter.close();
+                }
+            } catch(IOException ignored) {
+
+            }
     }
 
     /**
