@@ -191,6 +191,51 @@ public class Lauta {
         return palikat;
     }
 
+
+    /**
+     * Palauttaa pelaajan kaikkien nappuloiden mahdolliset loppukoordinaatit listana
+     *
+     * @param l nykyinen lauta
+     * @param v pelaajan väri
+     * @return koordinaattilista mahdollisista pelaajan siirroista
+     */
+    public List<Koordinaatti> annaKaikkiKoordinaatit(Lauta l, Vari v) {
+        ArrayList<Koordinaatti> loppukoordinaatit = new ArrayList<>(); // Alustetaan palautettava koordinaattilista
+        for (int r = 0; r < 8; r++) { // Käydään lauta läpi
+            for (int sa = 0; sa < 8; sa++) {
+                Koordinaatti y = new Koordinaatti(sa, r); // Tehdään koordinaatti ruudusta missä ollaan
+                if (l.annaNappula(y)!=null && l.annaNappula(y).annaVari() == v){ // Tarkistetaan onko koordinaatissa nappula ja onko se oikean värinen
+                    Siirrot valisiirrot =  sallitutSiirrot(l.annaNappula(y).mahdollisetSiirrot(y)); // Haetaan nappulan mahdolliset  siirrot
+                    for(int suunta=0; suunta<8; suunta++) { // Käytään Siirrot olio läpi
+                        for (Siirto siirto : valisiirrot.annaSuunta(suunta)) {
+                            loppukoordinaatit.add(siirto.annaKohderuutu()); // Lisätään siirron kohderuutu listaan
+                        }
+                    }
+                }
+            }
+        }
+        return loppukoordinaatit;
+    }
+
+    /**
+     * Etsitään kuninkaan koordinaatti
+     * @param l nykyinen lauta
+     * @param v pelaajan väri
+     * @return Kuninkaan koordinaatti
+     */
+    public Koordinaatti etsiKuningas(Lauta l, Vari v) {
+        Koordinaatti kuningas = new Koordinaatti("a1"); // Alustetaan palautettava koordinaatti
+        for (int r = 0; r < 8; r++) { // Käydään lauta läpi
+            for (int sa = 0; sa < 8; sa++) {
+                Koordinaatti y = new Koordinaatti(sa, r);  // Tehdään koordinaatti ruudusta missä ollaan
+                if (l.annaNappula(y)!=null && l.annaNappula(y) instanceof Kuningas && l.annaNappula(y).annaVari() != v) { // Tarkistetaan onko nappula kuningas
+                    kuningas = y; // Jos on, tallennetaan koordinaatti
+                }
+            }
+        }
+        return kuningas; // Palautetaan koordinaatti
+    }
+
     /**
      * Laita Nappula-olio laudan ruudulle x
      * @param   n
@@ -240,4 +285,5 @@ public class Lauta {
         }
         return sallitut;
     }
+
 }

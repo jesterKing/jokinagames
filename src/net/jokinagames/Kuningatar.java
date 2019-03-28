@@ -34,10 +34,13 @@ class Kuningatar extends Nappula {
 				siirrot.annaSuunta(i).add(uS); // ja lisätään siirtolistaan
 				ur = a[0] + ur;
 				us = a[1] + us;
+
 			}
 		}
 		return siirrot;
 	}
+
+
 
 	public String annaNappula() {
 		if (this.annaVari() == Vari.VALKOINEN) {
