@@ -305,6 +305,9 @@ public class Lauta {
                    else nappulaMerkki = Character.toUpperCase(nappulaMerkki);
                    fenBuilder.append(nappulaMerkki);
                }
+               if(sarake==7 && emptycnt>0) {
+                   fenBuilder.append(emptycnt);
+               }
            }
            if(rivi>0) fenBuilder.append('/');
        }
