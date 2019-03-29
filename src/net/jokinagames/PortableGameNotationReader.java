@@ -228,13 +228,19 @@ public class PortableGameNotationReader {
         String ekanimi = null;
         String tokanimi = null;
         String fen = null;
+        String pvm = null;
+        String klo = null;
+        String event = null;
+        String round = null;
+        String site = null;
+        String result = null;
         for(String tag : peliRivit) {
             if(tag.startsWith("[Event ")) {
-                String event = tagArvo(tag, "Event");
+                event = tagArvo(tag, "Event");
                 tulostaTagArvo("Tapahtuman nimi", event);
             }
             else if(tag.startsWith("[Site ")) {
-                String site = tagArvo(tag, "Site");
+                site = tagArvo(tag, "Site");
                 tulostaTagArvo("Tapaptuman paikka", site);
             }
             else if(tag.startsWith("[White ")) {
@@ -246,15 +252,19 @@ public class PortableGameNotationReader {
                 tulostaTagArvo("Musta pelaaja", tokanimi);
             }
             else if(tag.startsWith("[Date ")) {
-                String date = tagArvo(tag, "Date");
-                tulostaTagArvo("Pelin päivämäärä", date);
+                pvm = tagArvo(tag, "Date");
+                tulostaTagArvo("Pelin päivämäärä", pvm);
+            }
+            else if(tag.startsWith("[Time ")) {
+                klo = tagArvo(tag, "Time");
+                tulostaTagArvo("Pelin aloitusaika", klo);
             }
             else if(tag.startsWith("[Round ")) {
-                String round = tagArvo(tag, "Round");
+                round = tagArvo(tag, "Round");
                 tulostaTagArvo("Tapahtuman kierros", round);
             }
             else if(tag.startsWith("[Result ")) {
-                String result = tagArvo(tag, "Result");
+                result = tagArvo(tag, "Result");
                 tulostaTagArvo("Pelin tulos", result);
             }
             else if(tag.startsWith("[FEN ")) {
@@ -287,6 +297,12 @@ public class PortableGameNotationReader {
         // Luo peli
         Peli peli = Peli.uusiPeli(valkoinen, musta, lauta);
         peli.tulostaNykyinenTila();
+        if(pvm!=null) {
+            peli.asetaPaivamaara(pvm);
+        }
+        if(klo!=null) {
+            peli.asetaAika(klo);
+        }
 
         Pattern p = Pattern.compile("\\d+\\.+ \\S+( \\S+)?");
         Matcher m = p.matcher(movetext);
@@ -342,40 +358,43 @@ public class PortableGameNotationReader {
         final String rootFolder = FileSystems.getDefault().getPath(".").normalize().toAbsolutePath().toString();
         String dataFolder = rootFolder + File.separator + "data" + File.separator;
         String timeStamp = peli.annaPaivamaara() + "_" + peli.annaAika();
-        timeStamp = timeStamp.replaceAll("\\.", "-");
+        timeStamp = timeStamp.replaceAll("[\\.:]", "-");
 
         String pgnFile = dataFolder + timeStamp + ".pgn";
         File f = new File(pgnFile);
 
-            try {
-                if(f.createNewFile()) {
-                    BufferedWriter pgnWriter = new BufferedWriter(new FileWriter(pgnFile));
-                    pgnWriter.write("[Event \"?\"]\n");
-                    pgnWriter.write("[Site \"?\"]\n");
-                    pgnWriter.write("[Round \"?\"]\n");
-                    pgnWriter.write("[White \""+peli.annaValkoinenPelaaja().annaNimi()+"\"]\n");
-                    pgnWriter.write("[Black \""+peli.annaMustaPelaaja().annaNimi()+"\"]\n");
-                    pgnWriter.write("[Date \""+ peli.annaPaivamaara()+"\"]\n");
-                    pgnWriter.write("[Result \""+ peli.annaTulosToString() +"\"]\n");
-                    if(!peli.annaAloitusFen().equals(PortableGameNotationReader.perusFen)) {
-                        pgnWriter.write("[FEN \"" + peli.annaAloitusFen() + "\"]\n");
-                    }
-                    pgnWriter.write("\n");
-                    int puoliVuoro = 0;
-                    for(String san : peli.sansiirrot) {
-                        if(puoliVuoro%2==0) {
-                            pgnWriter.write((puoliVuoro / 2 + 1)+". ");
-                        }
-                       pgnWriter.write(san + " ");
-                       puoliVuoro++;
-                    }
-                    pgnWriter.write(peli.annaTulosToString());
-                    pgnWriter.flush();
-                    pgnWriter.close();
+        try {
+            f.createNewFile();
+
+            try (BufferedWriter pgnWriter = new BufferedWriter(new FileWriter(pgnFile))) {
+                pgnWriter.write("[Event \"?\"]\n");
+                pgnWriter.write("[Site \"?\"]\n");
+                pgnWriter.write("[Round \"?\"]\n");
+                pgnWriter.write("[White \"" + peli.annaValkoinenPelaaja().annaNimi() + "\"]\n");
+                pgnWriter.write("[Black \"" + peli.annaMustaPelaaja().annaNimi() + "\"]\n");
+                pgnWriter.write("[Date \"" + peli.annaPaivamaara() + "\"]\n");
+                pgnWriter.write("[Time \"" + peli.annaAika() + "\"]\n");
+                pgnWriter.write("[Result \"" + peli.annaTulosToString() + "\"]\n");
+                if (!peli.annaAloitusFen().equals(PortableGameNotationReader.perusFen)) {
+                    pgnWriter.write("[FEN \"" + peli.annaAloitusFen() + "\"]\n");
                 }
-            } catch(IOException ignored) {
+                pgnWriter.write("\n");
+                int puoliVuoro = 0;
+                for (String san : peli.sansiirrot) {
+                    if (puoliVuoro % 2 == 0) {
+                        pgnWriter.write((puoliVuoro / 2 + 1) + ". ");
+                    }
+                    pgnWriter.write(san + " ");
+                    puoliVuoro++;
+                }
+                pgnWriter.write(peli.annaTulosToString());
+                pgnWriter.flush();
+            } catch (IOException ignored) {
 
             }
+        } catch (IOException ignored) {
+
+        }
     }
 
     /**

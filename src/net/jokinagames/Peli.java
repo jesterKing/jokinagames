@@ -52,7 +52,7 @@ public class Peli {
 		puoliVuoro = 1;
 		pelaajanVuoro = Vari.VALKOINEN;
 		pvm = new SimpleDateFormat("yyyy.MM.dd").format(Calendar.getInstance().getTime());
-		aika = new SimpleDateFormat("HH-mm-ss").format(Calendar.getInstance().getTime());
+		aika = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
 	}
 
 	/**
@@ -152,13 +152,22 @@ public class Peli {
 		return pvm;
 	}
 
+	public void asetaPaivamaara(String paivamaara) {
+		pvm = paivamaara;
+	}
+
+
 	/**
-	 * Anna pelin aloitusaika muodossa <code>"08-24-12"</code>.
+	 * Anna pelin aloitusaika muodossa <code>"08:24:12"</code>.
 	 * @return	pelin aloitusaika
 	 * @author	Nathan Letwory
 	 */
 	public String annaAika() {
 		return aika;
+	}
+
+	public void asetaAika(String aika) {
+		this.aika = aika;
 	}
 
 	/**
