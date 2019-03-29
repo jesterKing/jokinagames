@@ -18,10 +18,11 @@ import java.util.stream.Collectors;
  * <p>
  * PGN-spesifikaatio löytyy osoitteesta
  * http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm
+ *
+ * @author  Nathan Letwory
  */
 public class PortableGameNotationReader {
     private final String gameFile;
-
     final private int firstPiece = (int)('\u2654');
     static final public String nappulat = "KQRBNPkqrbnp";
     static final public String sarakkeet = "abcdefghij";
@@ -29,11 +30,14 @@ public class PortableGameNotationReader {
     static private boolean nappulatAlustettu = false;
 
     static final public String perusUpseeriAsetelma = "RNBQKBNR";
+    static final public String perusFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
 
     /**
      * Konstruktori, joka ottaa polun PGN-tiedostoon.
      *
-     * @param gameFile polku PGN-tiedostoon.
+     * @param   gameFile
+     *          polku PGN-tiedostoon.
+     * @author  Nathan Letwory
      */
     public PortableGameNotationReader(String gameFile) throws IOException {
         this.gameFile = gameFile;
@@ -70,7 +74,8 @@ public class PortableGameNotationReader {
      * Jos PGN-tiedostossa on useampi peli vain ensimmäinen
      * parsitaan.
      *
-     * @return Peli siirtoineen
+     * @return  Peli siirtoineen
+     * @author  Nathan Letwory
      */
     public Peli parsePgn() {
         return parsePgn(0);
@@ -81,7 +86,8 @@ public class PortableGameNotationReader {
 
     /**
      * Laskee pelien määrä annetussa PGN-tiedostossa
-     * @return pelien määrä
+     * @return  pelien määrä
+     * @author  Nathan Letwory
      */
     public int laskePelit() {
         File f = new File(gameFile);
@@ -142,8 +148,9 @@ public class PortableGameNotationReader {
      * nämä yhdistetään yhdeksi riviksi, välilyönnillä erotettuna.
      *
      * Tyhjat rivit jätetään välistä.
-     * @param index
-     * @return ArrayList&lt;String&gt; jossa pelin tagit ja movetext
+     * @param   index
+     * @return  ArrayList&lt;String&gt; jossa pelin tagit ja movetext
+     * @author  Nathan Letwory
      */
     private ArrayList<String> luePeli(int index) {
         ArrayList<String> peliPgn = new ArrayList<>(15);
@@ -206,8 +213,10 @@ public class PortableGameNotationReader {
     /**
      * Parsitaan PGN-tiedostosta peli annetusta indeksistä.
      *
-     * @param index [0, pelien määrä)
-     * @return Peli-olio valitusta pelistä
+     * @param   index
+     *          [0, pelien määrä)
+     * @return  Peli-olio valitusta pelistä
+     * @author  Nathan Letwory
      */
     public Peli parsePgn(int index) throws IndexOutOfBoundsException {
         int pelienMaara = laskePelit();
@@ -304,6 +313,9 @@ public class PortableGameNotationReader {
             } catch (KohderuutuJaLahtosarakeEiRiita kjler) {
                 Util.print(kjler.getMessage(), Util.Color.RED, Util.Color.BLACK_BACKGROUND);
                 Util.print("\n", Util.Color.RESET);
+            } catch (VuoroVirhe vv) {
+                Util.print(vv.getMessage(), Util.Color.RED, Util.Color.BLACK_BACKGROUND);
+                Util.print("\n", Util.Color.RESET);
             }
 
 
@@ -312,6 +324,19 @@ public class PortableGameNotationReader {
         return peli;
     }
 
+    /**
+     * Tallenna annettu peli tiedostoon PGN-muotoisena. Tiedoston nimi
+     * on mallia <code>"2019-03-29_07-58-00.pgn"</code>.
+     * <p>
+     * {@code
+     * String siivottuPvm = peli.annaPaivamaara().replaceAll("\\.", "-");
+     * String pgnTiedostonNimi = siivottuPvm + "_" + peli.annaAika() + ".pgn";
+     * }
+     * <p>
+     * @param   peli
+     *          tallennettava peli
+     * @author  Nathan Letwory
+     */
     public static void tallennaPeli(Peli peli)
     {
         final String rootFolder = FileSystems.getDefault().getPath(".").normalize().toAbsolutePath().toString();
@@ -331,9 +356,10 @@ public class PortableGameNotationReader {
                     pgnWriter.write("[White \""+peli.annaValkoinenPelaaja().annaNimi()+"\"]\n");
                     pgnWriter.write("[Black \""+peli.annaMustaPelaaja().annaNimi()+"\"]\n");
                     pgnWriter.write("[Date \""+ peli.annaPaivamaara()+"\"]\n");
-                    // TODO oikea lopputulos
-                    pgnWriter.write("[Result \""+ (peli.peliOhi() ? "1/2-1/2" : "*")+"\"]\n");
-                    pgnWriter.write("[FEN \""+ peli.annaAloitusFen() +"\"]\n");
+                    pgnWriter.write("[Result \""+ peli.annaTulosToString() +"\"]\n");
+                    if(!peli.annaAloitusFen().equals(PortableGameNotationReader.perusFen)) {
+                        pgnWriter.write("[FEN \"" + peli.annaAloitusFen() + "\"]\n");
+                    }
                     pgnWriter.write("\n");
                     int puoliVuoro = 0;
                     for(String san : peli.sansiirrot) {
@@ -343,8 +369,7 @@ public class PortableGameNotationReader {
                        pgnWriter.write(san + " ");
                        puoliVuoro++;
                     }
-                    // TODO oikea lopputulos
-                    pgnWriter.write((peli.peliOhi() ? "1/2-1/2" : "*"));
+                    pgnWriter.write(peli.annaTulosToString());
                     pgnWriter.flush();
                     pgnWriter.close();
                 }
@@ -366,8 +391,10 @@ public class PortableGameNotationReader {
      * Lisätietoja Wikipediasta osoitteessa
      * https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation
      *
-     * @param fen FEN-notaation mukainen merkkijono
-     * @return Lauta
+     * @param   fen
+     *          FEN-notaation mukainen merkkijono
+     * @return  Lauta
+     * @author  Nathan Letwory
      */
     public static Lauta parseFen(String fen) {
         Lauta fenLauta = new Lauta();
@@ -408,15 +435,19 @@ public class PortableGameNotationReader {
 
     /**
      * Alustaa Lauta-olion perusshakki-asettelulla.
-     * @return
+     * @return  perusshakin asettelulla alustettu Lauta-olio
+     * @author  Nathan Letwory
      */
     public static Lauta alustaTavallinenPeli() {
         return parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1");
     }
 
     /**
-     * Alustaa Lauta-olion transcendental shakkia varten.
-     * @return
+     * Alustaa Lauta-olion transcendental shakkia varten. Transcendental shakissa
+     * takarivit ovat sekoitettuja, eikä pelaajien rivit välttämättä ole peilikuvia
+     * kuten tavallisessa shakissa.
+     * @return  Transcendentalshakkia varten alustettu Lauta-olio
+     * @author  Nathan Letwory
      */
     public static Lauta alustaTranscendentalPeli() {
         return parseFen(sekoitettuTakarivi(Vari.MUSTA) + "/pppppppp/8/8/8/8/PPPPPPPP/" + sekoitettuTakarivi(Vari.VALKOINEN) + " w - - 0 1");
@@ -425,19 +456,19 @@ public class PortableGameNotationReader {
     /**
      * Antaa takarivin, joka on sekoitettu versio perustakarivistä.
      *
-     * @param vari
-     * @return Sekoitettu merkkijono värin mukaan. Pienet kirjaimet
-     *         mustia nappuloita ja isot kirjaimet valkoisia nappuloita
-     *         varten
+     * @param   vari
+     *          Pelaajan väri, jonka takarivia sekoitetaan
+     * @return  Sekoitettu merkkijono värin mukaan. Pienet kirjaimet
+     *          mustia nappuloita ja isot kirjaimet valkoisia nappuloita
+     *          varten
+     * @author  Nathan Letwory
      */
     public static String sekoitettuTakarivi(Vari vari) {
-
         List<Character> l = perusUpseeriAsetelma.chars().mapToObj(c -> (char) c).collect(Collectors.toList());
         Collections.shuffle(l);
         StringBuilder sb = new StringBuilder();
         l.forEach(c -> sb.append(c));
         if(vari == Vari.MUSTA) { return sb.toString().toLowerCase();}
         else { return sb.toString(); }
-
     }
 }
