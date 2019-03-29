@@ -4,9 +4,8 @@ import java.util.*;
 
 class Torni extends Nappula {
 
-	public Torni(Vari vari) {
-
-		super(vari);
+	public Torni(Vari vari, int sarakeMax, int riviMax) {
+		super(vari, sarakeMax, riviMax);
 	}
 
 	private static final List<int[]> n = Arrays.asList( // Mahdollisten siirtojen luominen
@@ -25,8 +24,8 @@ class Torni extends Nappula {
 
 			int ur = a[0] + lr; // Muuttuja uudelle riville
 			int us = a[1] + ls; // Muuttuja uudelle sarakkeelle
-			while (ur>=0 && ur<=7 && us>=0 && us<=7){
-				Koordinaatti uk = new Koordinaatti(koordinaatit[0].charAt(us) +""+koordinaatit[1].charAt(ur)); // Luodaan uusi koordinaatti
+			while (ur>=0 && ur<riviMax && us>=0 && us<sarakeMax){
+				Koordinaatti uk = new Koordinaatti(koordinaatit.charAt(us) +""+(ur+1)); // Luodaan uusi koordinaatti
 				Siirto uS = new Siirto(A, uk);  // Jos ollaan, generoidaan uusi siirto
 				siirrot.annaSuunta(i).add(uS);
 				ur = a[0] + ur;

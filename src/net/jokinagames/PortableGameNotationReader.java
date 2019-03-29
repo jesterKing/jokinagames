@@ -24,13 +24,15 @@ import java.util.stream.Collectors;
 public class PortableGameNotationReader {
     private final String gameFile;
     final private int firstPiece = (int)('\u2654');
-    static final public String nappulat = "KQRBNPkqrbnp";
-    static final public String sarakkeet = "abcdefghij";
+    static final public String nappulat = "KQACRBNPkqacrbnp";
+    static final public String sarakkeet = "abcdefghijklmnopqrstuvwxyz";
     static final public HashMap<Character, Character> nappulaMerkit = new HashMap<>();
     static private boolean nappulatAlustettu = false;
 
     static final public String perusUpseeriAsetelma = "RNBQKBNR";
+    static final public String capablancaUpseeriAsetelma = "RNABQKBCNR";
     static final public String perusFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
+    static final public String grandChessFen = "r8r/1nbqkcabn1/pppppppppp/10/10/10/10/PPPPPPPPPP/1NBQKCABN1/R8R w - - 0 1";
 
     /**
      * Konstruktori, joka ottaa polun PGN-tiedostoon.
@@ -416,37 +418,67 @@ public class PortableGameNotationReader {
      * @author  Nathan Letwory
      */
     public static Lauta parseFen(String fen) {
-        Lauta fenLauta = new Lauta();
-
         String[] splitOnWhitespace = fen.split(" ");
         String lautaString = splitOnWhitespace[0];
         String[] rivit = lautaString.split("/");
 
-        if(rivit.length!=8) throw new IllegalArgumentException("Virheellinen FEN: " + fen);
+        Pattern p = Pattern.compile("(\\D{1})|(\\d{1,2})");
+        Matcher m = p.matcher(rivit[0]);
+        int sarakkeetMax = 0;
+        while(m.find()) {
+            String nappulaTaiTyhja = m.group();
+            int tyhja;
+            try {
+                tyhja = Integer.parseInt(nappulaTaiTyhja);
+                sarakkeetMax+=tyhja;
+            } catch (NumberFormatException ignored) {
+                sarakkeetMax++;
+            }
+        }
 
-        for(int riviIndeksi=0; riviIndeksi<8; riviIndeksi++) {
+        int rivitMax = rivit.length;
+        Lauta fenLauta = new Lauta(sarakkeetMax, rivitMax);
+
+        for(int riviIndeksi=0; riviIndeksi<rivitMax; riviIndeksi++) {
             String rivi = rivit[riviIndeksi];
             int sarakeIndeksi = 0;
+
+            m = p.matcher(rivi);
+            while(m.find()) {
+                String nappulaTaiTyhja = m.group();
+
+                int tyhja = 0;
+                char nappulaChar;
+                try {
+                    tyhja = Integer.parseInt(nappulaTaiTyhja);
+                    sarakeIndeksi+=tyhja;
+                } catch (NumberFormatException ignored) {
+                    nappulaChar = nappulaTaiTyhja.charAt(0);
+                    String paikka = sarakkeet.charAt(sarakeIndeksi) + "" + (rivitMax-riviIndeksi);
+                    Koordinaatti x = new Koordinaatti(paikka);
+                    Nappula n = Util.luoNappula(nappulaChar, Vari.KATSOKIRJAIMESTA, sarakkeetMax, rivitMax);
+                    fenLauta.asetaNappula(n, x);
+                    sarakeIndeksi++;
+                }
+            }
+
+            /*
             for(int nappulaIndeksi = 0; nappulaIndeksi < rivi.length(); nappulaIndeksi++) {
                 int emptcnt = "0123456789".indexOf(rivi.charAt(nappulaIndeksi));
                 if(emptcnt>0) {
                     for(int j=0; j< emptcnt;j++) {
-                        //Util.print("    ");
                         sarakeIndeksi++;
                     }
                 } else {
-                    String paikka = sarakkeet.charAt(sarakeIndeksi) + "" + (8-riviIndeksi);
+                    String paikka = sarakkeet.charAt(sarakeIndeksi) + "" + (rivitMax-riviIndeksi);
                     Koordinaatti x = new Koordinaatti(paikka);
 
                     char nappulaChar = rivi.charAt(nappulaIndeksi);
                     Nappula n = Util.luoNappula(nappulaChar, Vari.KATSOKIRJAIMESTA);
                     fenLauta.asetaNappula(n, x);
-                    //Util.Color col = isBlack ? Util.Color.BLACK : Util.Color.WHITE;
-                    //Util.print(" " + nappulaMerkit.get(nappulaChar) + "  ", col);
                     sarakeIndeksi++;
                 }
-            }
-            //Util.ln();
+            }*/
         }
 
         return fenLauta;
@@ -470,6 +502,17 @@ public class PortableGameNotationReader {
      */
     public static Lauta alustaTranscendentalPeli() {
         return parseFen(sekoitettuTakarivi(Vari.MUSTA) + "/pppppppp/8/8/8/8/PPPPPPPP/" + sekoitettuTakarivi(Vari.VALKOINEN) + " w - - 0 1");
+    }
+
+    /**
+     * Alustaa Lauta-olion Grand Chessia varten.
+     * <p>
+     * Lauta on 10x10, ja lisäksi on satunappuloita arkkipiispa (A)
+     * ja kansleri (C)
+     * @return
+     */
+    public static Lauta alustaGrandChessPeli() {
+        return parseFen(grandChessFen);
     }
 
     /**

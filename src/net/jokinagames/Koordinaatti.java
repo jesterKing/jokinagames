@@ -30,11 +30,7 @@ public class Koordinaatti {
      * Merkkijonosta löytyvät myös "i" ja "j" jos halutaan
      * laajentaa laudan kokoa 10x8 (Capablanca Chess, Capablanca Random Chess)
      */
-    private static String sarakkeet = "abcdefghij";                //Esim. a1 asettaa koordinaatin rivin ja sarakkeen indx [0],[7].
-    /**
-     * Kaikki rivinumerot yhtenä merkkijonona.
-     */
-    private static String rivit = "12345678";
+    private static String sarakkeet = "abcdefghijklmnopqrstuvwxyz";                //Esim. a1 asettaa koordinaatin rivin ja sarakkeen indx [0],[7].
     /**
      * Luo Koordinaatti-oliot annetun SAN-notaation mukaan.
      * <p>
@@ -56,8 +52,10 @@ public class Koordinaatti {
      *          jos annetulla SAN-notaatiolla, joka on muotoa "e4" tai "Nc3" ei yksiselitteistä siirtoa löydy
      * @throws  KohderuutuJaLahtosarakeEiRiita
      *          jos annetulla SAN-notaatiolla, joka on muotoa "Nbc3" ei yksiselitteistä siirtoa löydy
+     * @throws  VuoroVirhe
+     *          jos pelaaja yrittää siirtää vastustajan nappulaa
      */
-    public static Siirto luoKoordinaatit(String san, Vari vuoro, Lauta l) throws KoordinaattiVirhe, PelkkaKohderuutuEiRiita, KohderuutuJaLahtosarakeEiRiita {
+    public static Siirto luoKoordinaatit(String san, Vari vuoro, Lauta l) throws VuoroVirhe, KoordinaattiVirhe, PelkkaKohderuutuEiRiita, KohderuutuJaLahtosarakeEiRiita {
         Koordinaatti a = null;
         Koordinaatti b;
 
@@ -74,16 +72,16 @@ public class Koordinaatti {
         if(san.length()>2 && PortableGameNotationReader.nappulat.indexOf(san.charAt(0))>-1) {
             // upseeri
             char nappulaChar = san.charAt(0);
-            n = Util.luoNappula(nappulaChar, vuoro);
+            n = Util.luoNappula(nappulaChar, vuoro, l.annaSarakkeetMax(), l.annaRivitMax());
             // nappulatyyppi handlattu, pidetään loput sanista
             puhdistettuSan = puhdistettuSan.substring(1);
         } else {
             // sotilas
-            n = new Sotilas(vuoro);
+            n = new Sotilas(vuoro, l.annaSarakkeetMax(), l.annaRivitMax());
         }
 
         if(n.annaVari()!=vuoro) {
-            throw new KoordinaattiVirhe("Väärä vuoro");
+            throw new VuoroVirhe("Vääränvärinen nappula, yritit " + n.annaVari().toString());
         }
 
         // vain kohderuutu tiedossa
@@ -164,15 +162,15 @@ public class Koordinaatti {
     /**
      * Luo koordinaatti 0-based indeksien avulla. a1 on 0,0
      * @param   sarake
-     *          sarakkeen indeksi {@code (0-7 => a-h)}
+     *          sarakkeen indeksi
      * @param   rivi
-     *          rivin indeksi {@code (0-7 => 1-8)}
+     *          rivin indeksi
      */
 
     public Koordinaatti(int sarake, int rivi){
         this.sarake = sarake;
         this.rivi = rivi;
-        san = sarakkeet.charAt(sarake) + "" + rivit.charAt(rivi);
+        san = sarakkeet.charAt(sarake) + "" + (rivi+1);
     }
 
     /**
@@ -190,7 +188,7 @@ public class Koordinaatti {
     public Koordinaatti (String paikka){        //Pitäis luoda koordinaatti sen mukaan minkä ruudun saa syötteenä.
         san = paikka;
         this.sarake = sarakkeet.indexOf(paikka.charAt(0));
-        this.rivi = rivit.indexOf(paikka.charAt(1));
+        this.rivi = Integer.parseInt(paikka.substring(1))-1;
     }
 
     /**

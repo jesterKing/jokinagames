@@ -1,5 +1,7 @@
 package net.jokinagames;
 
+import static java.lang.Math.abs;
+
 class Siirto {
 
 	private Koordinaatti mista;
@@ -31,6 +33,13 @@ class Siirto {
 	 */
 	public Koordinaatti annaKohderuutu() {
 		return minne;
+	}
+
+	public boolean onkoRatsuHyppy() {
+		int sardelta = abs(minne.annaSarake()-mista.annaSarake());
+		int rivdelta = abs(minne.annaRivi()-mista.annaRivi());
+
+		return sardelta==2 && rivdelta==1 || sardelta==1 && rivdelta==2;
 	}
 
 	@Override

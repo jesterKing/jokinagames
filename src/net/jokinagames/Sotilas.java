@@ -4,8 +4,8 @@ import java.util.*;
 
 class Sotilas extends Nappula {
 
-	public Sotilas(Vari vari) {
-		super(vari);
+	public Sotilas(Vari vari, int sarakeMax, int riviMax) {
+		super(vari, sarakeMax, riviMax);
 	}
 
 	private static final List<int[]> n = Arrays.asList( // Mahdollisten siirtojen luominen
@@ -32,10 +32,10 @@ class Sotilas extends Nappula {
 			int us = a[1] + ls; // Muuttuja uudelle sarakkeelle
 
 
-			if (ur >= 0 && ur <= 7 && us >= 0 && us <= 7) {  // Tarkistetaan, että ollaanko laudalla ko. siirron tapauksessa
+			if (ur >= 0 && ur < riviMax && us >= 0 && us < sarakeMax) {  // Tarkistetaan, että ollaanko laudalla ko. siirron tapauksessa
 
 
-				Koordinaatti uk = new Koordinaatti(koordinaatit[0].charAt(us) + "" + koordinaatit[1].charAt(ur)); // Luodaan uusi koordinaatti
+				Koordinaatti uk = new Koordinaatti(koordinaatit.charAt(us) + "" + (ur+1)); // Luodaan uusi koordinaatti
 				Siirto uS = new Siirto(A, uk);  // Jos ollaan, generoidaan uusi siirto
 				if (n.indexOf(a) == 0 && kerroin == 1){
 					siirrot.N.add(uS);                // ja lisätään siirtolistaan
@@ -54,12 +54,14 @@ class Sotilas extends Nappula {
 			}
 		}
 
-		if(lr==1 && this.annaVari() == Vari.VALKOINEN) { // Tarkistetaan vielä oliko ensimmäine siirto vai ei
-			Koordinaatti uK = new Koordinaatti(koordinaatit[0].charAt(ls) + "" + koordinaatit[1].charAt(lr+2));
+		int lahtorivivalkoinen = riviMax==8 ? 1 : 2;
+		int lahtorivimusta = riviMax==8 ? 6 : 7;
+		if(lr==lahtorivivalkoinen && this.annaVari() == Vari.VALKOINEN) { // Tarkistetaan vielä oliko ensimmäine siirto vai ei
+			Koordinaatti uK = new Koordinaatti(koordinaatit.charAt(ls) + "" + (lr+3));
 			Siirto uS1 = new Siirto(A, uK);
 			siirrot.N.add(uS1);
-		} else if (lr==6 && this.annaVari() == Vari.MUSTA){
-			Koordinaatti uK = new Koordinaatti(koordinaatit[0].charAt(ls) + "" + koordinaatit[1].charAt(lr-2));
+		} else if (lr==lahtorivimusta && this.annaVari() == Vari.MUSTA){
+			Koordinaatti uK = new Koordinaatti(koordinaatit.charAt(ls) + "" + (lr-3));
 			Siirto uS1 = new Siirto(A, uK);
 			siirrot.S.add(uS1);
 		}
