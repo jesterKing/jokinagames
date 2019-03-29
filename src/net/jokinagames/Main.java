@@ -23,9 +23,9 @@ public class Main {
             System.out.println("Syötä 1 tavalliseen aloitukseen.");
             System.out.println("Syötä 2 transcendental aloitukseen.");
             int peliasetelma = skanneri.nextInt();
+            skanneri.nextLine();
 
             System.out.println("Anna pelaajan 1 nimi (Valkoiset).");
-            skanneri.nextLine();
             String nimi = skanneri.nextLine();
             Pelaaja valkoinenPelaaja = new Pelaaja(nimi, Vari.VALKOINEN);
             System.out.println("Anna pelaajan 2 nimi (Mustat)");
@@ -36,13 +36,9 @@ public class Main {
                     ?PortableGameNotationReader.alustaTavallinenPeli()
                     :PortableGameNotationReader.alustaTranscendentalPeli();
 
-            Peli uuspeli = Peli.uusiPeli(valkoinenPelaaja, mustaPelaaja, alkuLauta);
-            while (!uuspeli.peliOhi()) {
-                handlaaVuoro(uuspeli.annaVuorossoOlevaPelaaja(),uuspeli, skanneri);
-            }
+            Peli peli = Peli.uusiPeli(valkoinenPelaaja, mustaPelaaja, alkuLauta);
+            pelisilmukka(skanneri, peli);
 
-            PortableGameNotationReader.tallennaPeli(uuspeli);
-            System.out.println("Peli ohi! ");
         }
 
         if (valinta == 2) { //Täällä haetaan jostain tiedostosta keskeneräinen peli.
@@ -71,17 +67,14 @@ public class Main {
                 }
                 System.out.println("Valitse tiedosto [1-" + fileIdx+"]:");
                 int valittuFileIdx = skanneri.nextInt();
+                skanneri.nextLine();
                 if(valittuFileIdx<1 || valittuFileIdx>fileIdx ) {
                     System.out.println("Tiedosto " + valittuFileIdx + " ei ole olemassa");
                 } else {
                     try {
                         PortableGameNotationReader pgnReader = new PortableGameNotationReader(filesInFolder.get(valittuFileIdx - 1).getAbsolutePath());
                         Peli peli = pgnReader.parsePgn();
-                        while (!peli.peliOhi()) {
-                            handlaaVuoro(peli.annaVuorossoOlevaPelaaja(),peli, skanneri);
-                        }
-                        PortableGameNotationReader.tallennaPeli(peli);
-                        System.out.println("Peli ohi!");
+                        pelisilmukka(skanneri, peli);
                     } catch (IOException ignored) {
 
                     }
@@ -89,29 +82,22 @@ public class Main {
             } else {
                 System.out.println("Ei ole vanhoja pelejä");
             }
-
-            /*
-            // haetaan current working dir.
-            // data oletetaan olevan siinä alla, eli $CWD$/data, jne.
-            final String rootFolder = FileSystems.getDefault().getPath(".").normalize().toAbsolutePath().toString();
-            String dataFolder = rootFolder + File.separator + "data" + File.separator;
-
-            // Nathan PGN testin alku - voi kommentoida pois jos ei sitä vielä kaipaa.
-            try {
-                PortableGameNotationReader pgnReader = new PortableGameNotationReader(dataFolder + "test_regular_game.pgn");
-                Peli peli = pgnReader.parsePgn();
-                if (peli.peliOhi()) {
-                    // ei vielä mitään.
-                }
-            } catch (IOException fnfe) {
-                System.out.println(fnfe.getMessage());
-            }
-        */
-
         }
     }
 
-    public static void handlaaVuoro(Pelaaja pelaaja, Peli peli, Scanner sca){
+    public static void pelisilmukka(Scanner skanneri, Peli peli) {
+        try {
+            while (!peli.peliOhi()) {
+                handlaaVuoro(peli.annaVuorossoOlevaPelaaja(), peli, skanneri);
+            }
+            PortableGameNotationReader.tallennaPeli(peli);
+            System.out.println("Peli ohi!");
+        } catch(HalutaanKeskeytys keskeytys) {
+            System.out.println("Peli keskeytetty, voit jatkaa myöhemmin.");
+        }
+    }
+
+    public static void handlaaVuoro(Pelaaja pelaaja, Peli peli, Scanner sca) throws HalutaanKeskeytys {
         peli.tulostaNykyinenTila();
         System.out.println("Anna siirto muodossa *Pa3b4*, *de5* tai *Nc6* ");
         System.out.println("Vuoro " + peli.annaKokoVuoro());
@@ -134,6 +120,12 @@ public class Main {
                 else if(siirt.equals("tasapeli")) {
                     System.out.println("tasapeli");
                     peli.asetaTulos(Peli.Tulos.TASAPELI);
+                }
+                else if(siirt.equals("kesken")) {
+                    System.out.println("Keskeytetään ja tallennetaan peli, voit jatkaa myöhemmin");
+                    peli.asetaTulos(Peli.Tulos.KESKEN);
+                    PortableGameNotationReader.tallennaPeli(peli);
+                    throw new HalutaanKeskeytys("Keskeytys ja tallennus.");
                 }
                 peli.seuraavaSiirto(pelaaja.annaVari(), siirt);
                 siirtoOk = true;
