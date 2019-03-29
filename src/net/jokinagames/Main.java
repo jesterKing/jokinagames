@@ -41,7 +41,7 @@ public class Main {
                 handlaaVuoro(uuspeli.annaVuorossoOlevaPelaaja(),uuspeli, skanneri);
             }
 
-            PortableGameNotationReader.tallennaPeli(peli);
+            PortableGameNotationReader.tallennaPeli(uuspeli);
             System.out.println("Peli ohi! ");
         }
 
