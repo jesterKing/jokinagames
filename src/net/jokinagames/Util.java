@@ -11,11 +11,11 @@ class Util {
      *          Merkkijono, jonka perusteella luodaan Nappula-olio
      * @return  Nappula-olio
      */
-    public static Nappula luoNappula(String san, Vari vari) {
+    public static Nappula luoNappula(String san, Vari vari, int sarakkeetMax, int rivitMax) {
         if(PortableGameNotationReader.nappulat.indexOf(san.charAt(0))>-1) {
             // upseeri
             char nappulaChar = san.charAt(0);
-            return Util.luoNappula(nappulaChar, vari);
+            return Util.luoNappula(nappulaChar, vari, sarakkeetMax, rivitMax);
         }
         return null;
     }
@@ -32,31 +32,39 @@ class Util {
      *          ja isot kirjaiment valkoisia nappuloita).
      * @return  Nappula-olio
      */
-    public static Nappula luoNappula(char nappulaChar, Vari vari) {
+    public static Nappula luoNappula(char nappulaChar, Vari vari, int sarakkeetMax, int rivitMax) {
         if(vari==Vari.KATSOKIRJAIMESTA) {
             vari = Character.isLowerCase(nappulaChar) ? Vari.MUSTA : Vari.VALKOINEN;
         }
         String nappulaS = ("" + nappulaChar).toLowerCase();
-        Nappula n = null;
+        Nappula n;
         switch(nappulaS) {
             case "k":
-                n = new Kuningas(vari);
+                n = new Kuningas(vari, sarakkeetMax, rivitMax);
                 break;
             case "q":
-                n = new Kuningatar(vari);
+                n = new Kuningatar(vari, sarakkeetMax, rivitMax);
                 break;
             case "r":
-                n = new Torni(vari);
+                n = new Torni(vari, sarakkeetMax, rivitMax);
                 break;
             case "b":
-                n = new Lahetti(vari);
+                n = new Lahetti(vari, sarakkeetMax, rivitMax);
                 break;
             case "n":
-                n = new Ratsu(vari);
+                n = new Ratsu(vari, sarakkeetMax, rivitMax);
                 break;
             case "p":
-                n = new Sotilas(vari);
+                n = new Sotilas(vari, sarakkeetMax, rivitMax);
                 break;
+            case "a":
+                n = new Arkkipiispa(vari, sarakkeetMax, rivitMax);
+                break;
+            case "c":
+                n = new Kansleri(vari, sarakkeetMax, rivitMax);
+                break;
+            default:
+                throw new TuntematonNappula("Nappulamerkki " + nappulaS + " tuntematon");
         }
         return n;
     }

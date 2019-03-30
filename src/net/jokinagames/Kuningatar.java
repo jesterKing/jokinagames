@@ -14,8 +14,8 @@ class Kuningatar extends Nappula {
 			new int[]{0, -1},
 			new int[]{1, -1});
 
-	public Kuningatar(Vari vari) {
-		super(vari);
+	public Kuningatar(Vari vari, int sarakeMax, int riviMax) {
+		super(vari, sarakeMax, riviMax);
 	}
 
 	public Siirrot mahdollisetSiirrot(Koordinaatti A) {
@@ -28,8 +28,8 @@ class Kuningatar extends Nappula {
 			int i = n.indexOf(a); // apumuuttuja siirrot luokan ilmansuuntien hakemista varten
 			int ur = a[0] + lr; // Muuttuja uudelle riville
 			int us = a[1] + ls; // Muuttuja uudelle sarakkeelle
-			while (ur>=0 && ur<=7 && us>=0 && us<=7){
-				Koordinaatti uk = new Koordinaatti(koordinaatit[0].charAt(us) +""+koordinaatit[1].charAt(ur)); // Luodaan uusi koordinaatti
+			while (ur>=0 && ur<riviMax && us>=0 && us<sarakeMax){
+				Koordinaatti uk = new Koordinaatti(koordinaatit.charAt(us) +""+(ur+1)); // Luodaan uusi koordinaatti
 				Siirto uS = new Siirto(A, uk);  // Jos ollaan, generoidaan uusi siirto
 				siirrot.annaSuunta(i).add(uS); // ja lisätään siirtolistaan
 				ur = a[0] + ur;
