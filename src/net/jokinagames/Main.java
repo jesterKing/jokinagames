@@ -33,7 +33,7 @@ public class Main {
             nimi = skanneri.nextLine();
             Pelaaja mustaPelaaja = new Pelaaja(nimi, Vari.MUSTA);
             System.out.println("Syötä *tallenna* tallentaaksesi pelin pelatessasi");
-            System.out.println("Syötä *luovuta* luovuttaaksesi pelin vuorollasi");
+            System.out.println("Syötä *luovutan* luovuttaaksesi pelin vuorollasi");
             System.out.println("Syötä *keskeytä* tallentaaksesi ja poistuaksesi pelistä");
             Lauta alkuLauta = peliasetelma == 1
                     ? PortableGameNotationReader.alustaTavallinenPeli()
