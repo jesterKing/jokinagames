@@ -4,8 +4,17 @@ import java.util.*;
 
 class Kuningas extends Nappula {
 
-	public Kuningas(Vari vari) {
-		super(vari);
+	/**
+	 * Uusi nappula annetulla värillä
+	 * @param	vari
+	 * 			Nappulan väri
+	 * @param 	sarakeMax
+	 * 			sarakkeiden määrä laudalla
+	 * @param 	riviMax
+	 * 			rivien määrä laudalla
+	 */
+	public Kuningas(Vari vari, int sarakeMax, int riviMax) {
+		super(vari, sarakeMax, riviMax);
 	}
 
 	private static final List<int[]> n = Arrays.asList( // Mahdollisten siirtojen luominen
@@ -18,6 +27,11 @@ class Kuningas extends Nappula {
 			new int[]{0, -1},
 			new int[]{1, -1});
 
+	@Override
+
+	/**
+	 * Kuninkaan mahdolliset siirrot annetusta lähtökoordinaatista tyhjällä laudalla.
+	 */
 	public Siirrot mahdollisetSiirrot(Koordinaatti A) {
 		Siirrot siirrot = new Siirrot(); // Alustetaan uusi palautettava lista siirroista
 
@@ -28,8 +42,8 @@ class Kuningas extends Nappula {
 			int i = n.indexOf(a); // apumuuttuja siirrot luokan ilmansuuntien hakemista varten
 			int ur = a[0] + lr; // Muuttuja uudelle riville
 			int us = a[1] + ls; // Muuttuja uudelle sarakkeelle
-			if (ur >= 0 && ur <= 7 && us >= 0 && us <= 7) {  // Tarkistetaan, että ollaanko laudalla ko. siirron tapauksessa
-				Koordinaatti uk = new Koordinaatti(koordinaatit[0].charAt(us) + "" + koordinaatit[1].charAt(ur)); // Luodaan uusi koordinaatti
+			if (ur>=0 && ur<riviMax  && us>=0 && us<sarakeMax) {  // Tarkistetaan, että ollaanko laudalla ko. siirron tapauksessa
+				Koordinaatti uk = new Koordinaatti(koordinaatit.charAt(us) + "" + (ur+1)); // Luodaan uusi koordinaatti
 				Siirto uS = new Siirto(A, uk);  // Jos ollaan, generoidaan uusi siirto
 				siirrot.annaSuunta(i).add(uS);                // ja lisätään siirtolistaan
 			}
@@ -38,6 +52,11 @@ class Kuningas extends Nappula {
 		return siirrot;
 
 	}
+	@Override
+
+	/**
+	 * Kuninkaan värin havainnointimetodi
+	 */
 	public String annaNappula() {
 		if (this.annaVari() == Vari.VALKOINEN) {
 			return "[K]";

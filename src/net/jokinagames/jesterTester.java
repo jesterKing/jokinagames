@@ -15,7 +15,7 @@ class jesterTester {
         Util.alusta();
         // haetaan current working dir.
         // data oletetaan olevan siinä alla, eli $CWD$/data, jne.
-        final String rootFolder = FileSystems.getDefault().getPath(".").normalize().toAbsolutePath().toString();
+        /*final String rootFolder = FileSystems.getDefault().getPath(".").normalize().toAbsolutePath().toString();
         String dataFolder = rootFolder + File.separator + "data" + File.separator;
         String[] pgnFiles = null;
 
@@ -31,7 +31,7 @@ class jesterTester {
         }
         Util.println("");
 
-        int totalgamesparsed = 0;
+        int totalgamesparsed = 0;*/
         // Nathan PGN testin alku - voi kommentoida pois jos ei sitä vielä kaipaa.
         try {
 
@@ -48,7 +48,7 @@ class jesterTester {
 
 
 
-            String pgnFile = //dataFolder + pgnFiles[rand.nextInt(pgnFiles.length)];
+            /*String pgnFile = //dataFolder + pgnFiles[rand.nextInt(pgnFiles.length)];
             dataFolder + "test_regular_games_many_nocastling.pgn";
             PortableGameNotationReader pgnReader = new PortableGameNotationReader(pgnFile); //dataFolder + "test_regular_game.pgn");
             int pelienMaara = pgnReader.laskePelit();
@@ -57,7 +57,7 @@ class jesterTester {
                 Peli peli = pgnReader.parsePgn(i);
                 Util.println(peli.toString());
                 totalgamesparsed++;
-            }
+            }*/
             //Peli peli = pgnReader.parsePgn();
             //System.out.println(peli.siirrot);
 
@@ -118,18 +118,21 @@ class jesterTester {
             }
             */
 
-        } catch (FileNotFoundException fnfe) {
+            Lauta grandChessLauta = PortableGameNotationReader.parseFen("r8r/1nbqkcabn1/pppppppppp/10/10/10/10/PPPPPPPPPP/1NBQKCABN1/R8R");
+            grandChessLauta.tulostaLauta();
+
+        } finally {} /*catch (FileNotFoundException fnfe) {
             Util.println(fnfe.getMessage());
         } catch (IOException ioe) {
             Util.println(ioe.getMessage());
-        } /*catch (KoordinaattiVirhe kv) {
+        }*/ /*catch (KoordinaattiVirhe kv) {
             Util.println(kv.getMessage());
         }*/
-        Util.print("Käsitelty " + totalgamesparsed + " peliä\n", Util.Color.BLUE_BOLD_BRIGHT, Util.Color.WHITE_BACKGROUND);
+        /*Util.print("Käsitelty " + totalgamesparsed + " peliä\n", Util.Color.BLUE_BOLD_BRIGHT, Util.Color.WHITE_BACKGROUND);
         Util.println(PortableGameNotationReader.sekoitettuTakarivi(Vari.MUSTA));
         Util.println(PortableGameNotationReader.sekoitettuTakarivi(Vari.VALKOINEN));
 
         Lauta transcendental = PortableGameNotationReader.alustaTranscendentalPeli();
-        transcendental.tulostaLauta();
+        transcendental.tulostaLauta();*/
     }
 }
