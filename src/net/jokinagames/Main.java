@@ -17,29 +17,31 @@ public class Main {
         System.out.println("Tervetuloa pelaamaan shakkia!");
         System.out.println("Syötä 1 jos haluat uuden pelin.");
         System.out.println("Syötä 2 jos haluat jatkaa vanhaa peliä.");
-        int valinta = skanneri.nextInt();
+        int valinta = skanneri.nextInt();                                   //Otetaanko uusi peli vai jatketaanko tallennettua.
         if(valinta==1) {
-            System.out.println("Haluatko tavallisen vai transcendental aloituksen?");
+            System.out.println("Haluatko tavallisen, transcendental vai grand chess aloituksen?");
             System.out.println("Syötä 1 tavalliseen aloitukseen.");
             System.out.println("Syötä 2 transcendental aloitukseen.");
             System.out.println("Syötä 3 grand chess aloitukseen.");
-            int peliasetelma = skanneri.nextInt();
+            int peliasetelma = skanneri.nextInt();                              //Valitaan pelille alkuasetelma.
             skanneri.nextLine();
 
-            System.out.println("Anna pelaajan 1 nimi (Valkoiset).");
+            System.out.println("Anna pelaajan 1 nimi (Valkoiset).");            //Pelaajien nimet.
             String nimi = skanneri.nextLine();
             Pelaaja valkoinenPelaaja = new Pelaaja(nimi, Vari.VALKOINEN);
             System.out.println("Anna pelaajan 2 nimi (Mustat)");
             nimi = skanneri.nextLine();
             Pelaaja mustaPelaaja = new Pelaaja(nimi, Vari.MUSTA);
-
+            System.out.println("Syötä *tallenna* tallentaaksesi pelin pelatessasi");
+            System.out.println("Syötä *luovuta* luovuttaaksesi pelin vuorollasi");
+            System.out.println("Syötä *keskeytä* tallentaaksesi ja poistuaksesi pelistä");
             Lauta alkuLauta = peliasetelma == 1
                     ? PortableGameNotationReader.alustaTavallinenPeli()
                     : peliasetelma==2
                         ? PortableGameNotationReader.alustaTranscendentalPeli()
                         : PortableGameNotationReader.alustaGrandChessPeli();
 
-            Peli peli = Peli.uusiPeli(valkoinenPelaaja, mustaPelaaja, alkuLauta);
+            Peli peli = Peli.uusiPeli(valkoinenPelaaja, mustaPelaaja, alkuLauta);       //Alustetaan uusi peli valintojen mukaan
             pelisilmukka(skanneri, peli);
 
         }
@@ -90,7 +92,7 @@ public class Main {
 
     public static void pelisilmukka(Scanner skanneri, Peli peli) {
         try {
-            while (!peli.peliOhi()) {
+            while (!peli.peliOhi()) {                                               //Pelataan kunnes peli ohi tai keskeytetty.
                 handlaaVuoro(peli.annaVuorossoOlevaPelaaja(), peli, skanneri);
             }
             PortableGameNotationReader.tallennaPeli(peli);
@@ -102,14 +104,14 @@ public class Main {
 
     public static void handlaaVuoro(Pelaaja pelaaja, Peli peli, Scanner sca) throws HalutaanKeskeytys {
         peli.tulostaNykyinenTila();
-        System.out.println("Anna siirto muodossa *Pa3b4*, *de5* tai *Nc6* ");
+        System.out.println("Anna siirto muodossa *Pa3b4*, *de5* tai *Nc6* ");                       //Pyydetään pelaajalta syötettä
         System.out.println("Vuoro " + peli.annaKokoVuoro());
         System.out.println(pelaaja.annaNimi() + " (" + pelaaja.annaVari() + ") siirtää:");
         boolean siirtoOk = false;
         while(!siirtoOk) {
             try {
                 String siirt = sca.nextLine();
-                if(siirt.equals("tallenna")) {
+                if(siirt.equals("tallenna")) {                          //Toimitaan pelaajan syötteen mukaan
                     PortableGameNotationReader.tallennaPeli(peli);
                     System.out.println("... tallennettu, voit jatkaa peliä nyt antamalla siirtosi");
                     continue;
@@ -132,7 +134,7 @@ public class Main {
                 }
                 peli.seuraavaSiirto(pelaaja.annaVari(), siirt);
                 siirtoOk = true;
-            } catch (KoordinaattiVirhe virhe) {
+            } catch (KoordinaattiVirhe virhe) {                             //Napataan errorit
                 System.out.println(virhe.getMessage());
             } catch (PelkkaKohderuutuEiRiita pelkka) {
                 System.out.println(pelkka.getMessage());
