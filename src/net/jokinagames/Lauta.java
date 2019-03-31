@@ -11,7 +11,12 @@ public class Lauta {
 
 
     /**
-     * Luo perusshakki -Lauta-olion
+     * Luo perusshakki -Lauta-olion.
+     *
+     * @param   sarakkeet
+     *          Sarakkeiden määrä laudalla
+     * @param   rivit
+     *          Rivien määrä laudalla.
      */
     public Lauta(int sarakkeet, int rivit) {
         sarakkeetMax = sarakkeet;
@@ -20,6 +25,12 @@ public class Lauta {
     }
 
 
+    /**
+     * Piilotettu konstruktori. Käytetään sisäisesti.
+     *
+     * @param   s
+     *          Nappulamatriisi, jolla alustaa.
+     */
     private Lauta(Nappula[][] s) {
         sarakkeetMax = s[0].length;
         rivitMax = s.length;
@@ -127,6 +138,8 @@ public class Lauta {
     /**
      * Siirrä Nappula lähtöruudusta mista kohderuutuun minne
      *
+     * @param   n
+     *          Siirrettävä nappula
      * @param   mista
      *          Lähtöruudun koordinaatti
      * @param   minne

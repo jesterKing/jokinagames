@@ -24,18 +24,18 @@ public class Koordinaatti {
     private final String san;
     /**
      * Kaikki sarakenimet yhtenä merkkijonona.
-     * <p>
-     * <p>
+     * <p>&nbsp;</p>
+     * <p>&nbsp;</p>
      * <code>"abcdefghij"</code>
-     * <p>
+     * <p>&nbsp;</p>
      * Merkkijonosta löytyvät myös "i" ja "j" jos halutaan
      * laajentaa laudan kokoa 10x8 (Capablanca Chess, Capablanca Random Chess)
      */
     private static String sarakkeet = "abcdefghijklmnopqrstuvwxyz";                //Esim. a1 asettaa koordinaatin rivin ja sarakkeen indx [0],[7].
     /**
      * Luo Koordinaatti-oliot annetun SAN-notaation mukaan.
-     * <p>
-     * <p>
+     * <p>&nbsp;</p>
+     * <p>&nbsp;</p>
      * <code>
      *     Koordinaatti[] siirto = Koordinaatti.luoKoordinaatti("Nb3", Vari.VALKOINEN, l);
      * </code>
@@ -178,8 +178,8 @@ public class Koordinaatti {
 
     /**
      * Luo koordinaatti SAN-notaation mukaan.
-     * <p>
-     * <p>
+     * <p>&nbsp;</p>
+     * <p>&nbsp;</p>
      * {@code
      * Koordinaatti x = new Koordinaatti("a1");
      * Koordinaatti y = new Koordinaatti("f7");
@@ -231,7 +231,8 @@ public class Koordinaatti {
     /**
      * Vertailee oliota annettuun. Sarakkeen ja rivin on oltava samat, jotta
      * <code>equals()</code> palauttaa <code>true</code>
-     * @param b
+     * @param   b
+     *          objekti johon verrataan.
      * @return <code>true</code> jos b on tyyppiä <code>Koordinaatti</code> ja sarakkeet ja rivit ovat kummallakin samat.
      */
     @Override

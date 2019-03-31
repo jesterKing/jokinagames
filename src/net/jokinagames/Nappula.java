@@ -11,6 +11,10 @@ public abstract class Nappula {
 	 * Uusi nappula annetulla värillä
 	 * @param	vari
 	 * 			Nappulan väri
+	 * @param 	sarakeMax
+	 * 			sarakkeiden määrä laudalla
+	 * @param 	riviMax
+	 * 			rivien määrä laudalla
 	 */
 	public Nappula(Vari vari, int sarakeMax, int riviMax) {
 		this.sarakeMax = sarakeMax;

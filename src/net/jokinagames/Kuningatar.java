@@ -14,6 +14,15 @@ class Kuningatar extends Nappula {
 			new int[]{0, -1},
 			new int[]{1, -1});
 
+	/**
+	 * Uusi nappula annetulla värillä
+	 * @param	vari
+	 * 			Nappulan väri
+	 * @param 	sarakeMax
+	 * 			sarakkeiden määrä laudalla
+	 * @param 	riviMax
+	 * 			rivien määrä laudalla
+	 */
 	public Kuningatar(Vari vari, int sarakeMax, int riviMax) {
 		super(vari, sarakeMax, riviMax);
 	}

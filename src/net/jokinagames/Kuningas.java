@@ -4,6 +4,15 @@ import java.util.*;
 
 class Kuningas extends Nappula {
 
+	/**
+	 * Uusi nappula annetulla värillä
+	 * @param	vari
+	 * 			Nappulan väri
+	 * @param 	sarakeMax
+	 * 			sarakkeiden määrä laudalla
+	 * @param 	riviMax
+	 * 			rivien määrä laudalla
+	 */
 	public Kuningas(Vari vari, int sarakeMax, int riviMax) {
 		super(vari, sarakeMax, riviMax);
 	}

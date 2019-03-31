@@ -41,6 +41,8 @@ public class PortableGameNotationReader {
      *
      * @param   gameFile
      *          polku PGN-tiedostoon.
+     * @throws  IOException
+     *          jos tiedostonkäsittelyssä ilmenee ongelmia.
      * @author  Nathan Letwory
      */
     public PortableGameNotationReader(String gameFile) throws IOException {
@@ -147,12 +149,13 @@ public class PortableGameNotationReader {
 
     /**
      * Lue PGN-tiedostosta peli annetussa indeksissa
-     *
+     * <p>
      * Jos PGN-pelissa MOVETEXT ja lopputulos ovat eri riveillä
      * nämä yhdistetään yhdeksi riviksi, välilyönnillä erotettuna.
-     *
+     * </p>
      * Tyhjat rivit jätetään välistä.
      * @param   index
+     *          Luettavan pelin indeksi.
      * @return  ArrayList&lt;String&gt; jossa pelin tagit ja movetext
      * @author  Nathan Letwory
      */
@@ -511,12 +514,18 @@ public class PortableGameNotationReader {
      * <p>
      * Lauta on 10x10, ja lisäksi on satunappuloita arkkipiispa (A)
      * ja kansleri (C)
-     * @return
+     * @return  10x10 Grand Chess lauta aloitusasetelmineen
      */
     public static Lauta alustaGrandChessPeli() {
         return parseFen(grandChessFen);
     }
 
+    /**
+     * Alustaa Lauta-olion Capablancaa varten.
+     * <p>
+     * Lauta on 10x8
+     * @return  10x8 Capablancaa varten alustettu Lauta
+     */
     public static Lauta alustaCapablancaPeli() {
         return parseFen(cpablancaFen);
     }

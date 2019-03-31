@@ -9,6 +9,12 @@ class Util {
      * nappulamerkki.
      * @param   san
      *          Merkkijono, jonka perusteella luodaan Nappula-olio
+     * @param   vari
+     *          Nappulan väri. Jos Vari.KATSOKIRJAIMESTA päätellään väriä kirjaimesta
+     * @param   sarakkeetMax
+     *          Laudan sarakkeiden määrä
+     * @param   rivitMax
+     *          Laudan rivien määrä
      * @return  Nappula-olio
      */
     public static Nappula luoNappula(String san, Vari vari, int sarakkeetMax, int rivitMax) {
@@ -30,6 +36,10 @@ class Util {
      *          tässäkin. Anna Vari.KATSOKIRJAIMESTA kun tietää että
      *          kirjain kertoo oikean värin (pienet kirjaimet on mustia
      *          ja isot kirjaiment valkoisia nappuloita).
+     * @param   sarakkeetMax
+     *          Laudan sarakkeiden määrä
+     * @param   rivitMax
+     *          Laudan rivien määrä
      * @return  Nappula-olio
      */
     public static Nappula luoNappula(char nappulaChar, Vari vari, int sarakkeetMax, int rivitMax) {
@@ -163,7 +173,8 @@ class Util {
 
     /**
      * Tulosta UTF-8 merkkijono
-     * @param string
+     * @param   string
+     *          tulostettava merkkijono
      */
     public static void println(String string) {
         AnsiConsole.out.println(Color.BLACK_BACKGROUND_BRIGHT + string + Color.RESET);
