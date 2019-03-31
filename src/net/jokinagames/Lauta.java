@@ -6,15 +6,23 @@ import java.util.List;
 public class Lauta {
     private final Nappula[][] palikat;
 
+    private final int sarakkeetMax;
+    private final int rivitMax;
+
+
     /**
      * Luo perusshakki -Lauta-olion
      */
-    public Lauta() {
-        palikat = new Nappula[8][8];
+    public Lauta(int sarakkeet, int rivit) {
+        sarakkeetMax = sarakkeet;
+        rivitMax = rivit;
+        palikat = new Nappula[rivitMax][sarakkeetMax];
     }
 
 
     private Lauta(Nappula[][] s) {
+        sarakkeetMax = s[0].length;
+        rivitMax = s.length;
         palikat = s;
     }
 
@@ -34,8 +42,8 @@ public class Lauta {
         ArrayList<Siirto> loydot = new ArrayList<>();
 
         // käydään koko lautaa läpi, etsitään samaa tyyppiä kuin nappula
-        for (int rivi = 0; rivi < 8; rivi++) {
-            for (int sarake = 0; sarake < 8; sarake++) {
+        for (int rivi = 0; rivi < rivitMax; rivi++) {
+            for (int sarake = 0; sarake < sarakkeetMax; sarake++) {
                 // katso mitä nappulaa on koordinaatilla
                 Koordinaatti lna = new Koordinaatti(sarake, rivi);
                 Nappula ln = this.annaNappula(lna);
@@ -152,10 +160,10 @@ public class Lauta {
     }
 
     private Nappula[][] luoNappulaMatriisiKopio() {
-        Nappula[][] s = new Nappula[8][8];
+        Nappula[][] s = new Nappula[rivitMax][sarakkeetMax];
         Nappula[][] alkup = getPalikat();
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
+        for (int i = 0; i < rivitMax; i++) {
+            for (int j = 0; j < sarakkeetMax; j++) {
                 s[i][j] = alkup[i][j];
             }
         }
@@ -168,9 +176,11 @@ public class Lauta {
     public void tulostaLauta() {                                //(Pistetään jos koetaan tarpeeliseksi)
         System.out.println("--------------------------");
         System.out.println();
-        for (int rivi = 7; rivi >= 0; rivi--) {
-            System.out.print(rivi+1 + " ");
-            for (int sarake = 0; sarake < 8; sarake++) {
+        for (int rivi = rivitMax-1; rivi >= 0; rivi--) {
+            System.out.print(rivi+1);
+            if(rivi+1<10) System.out.print("  ");
+            else System.out.print(" ");
+            for (int sarake = 0; sarake < sarakkeetMax; sarake++) {
                 Koordinaatti x = new Koordinaatti(sarake, rivi);
                 Nappula n = annaNappula(x);
                 if (n != null) {
@@ -181,8 +191,16 @@ public class Lauta {
             }
             System.out.println();
             if (rivi == 0) {
-                System.out.println("  [a][b][c][d][e][f][g][h]");
-                System.out.println("--------------------------");
+                System.out.print("   ");
+                StringBuilder line = new StringBuilder("___");
+                for(int sarakeIdx = 0; sarakeIdx< sarakkeetMax; sarakeIdx++) {
+                    System.out.print("[");
+                    System.out.print(PortableGameNotationReader.sarakkeet.charAt(sarakeIdx));
+                    System.out.print("]");
+                    line.append("___");
+                }
+                System.out.println();
+                System.out.println(line.toString());
             }
         }
     }
@@ -201,8 +219,8 @@ public class Lauta {
      */
     public List<Koordinaatti> annaKaikkiKoordinaatit(Lauta l, Vari v) {
         ArrayList<Koordinaatti> loppukoordinaatit = new ArrayList<>(); // Alustetaan palautettava koordinaattilista
-        for (int r = 0; r < 8; r++) { // Käydään lauta läpi
-            for (int sa = 0; sa < 8; sa++) {
+        for (int r = 0; r < rivitMax; r++) { // Käydään lauta läpi
+            for (int sa = 0; sa < sarakkeetMax; sa++) {
                 Koordinaatti y = new Koordinaatti(sa, r); // Tehdään koordinaatti ruudusta missä ollaan
                 if (l.annaNappula(y)!=null && l.annaNappula(y).annaVari() == v){ // Tarkistetaan onko koordinaatissa nappula ja onko se oikean värinen
                     Siirrot valisiirrot =  sallitutSiirrot(l.annaNappula(y).mahdollisetSiirrot(y)); // Haetaan nappulan mahdolliset  siirrot
@@ -225,8 +243,8 @@ public class Lauta {
      */
     public Koordinaatti etsiKuningas(Lauta l, Vari v) {
         Koordinaatti kuningas = new Koordinaatti("a1"); // Alustetaan palautettava koordinaatti
-        for (int r = 0; r < 8; r++) { // Käydään lauta läpi
-            for (int sa = 0; sa < 8; sa++) {
+        for (int r = 0; r < rivitMax; r++) { // Käydään lauta läpi
+            for (int sa = 0; sa < sarakkeetMax; sa++) {
                 Koordinaatti y = new Koordinaatti(sa, r);  // Tehdään koordinaatti ruudusta missä ollaan
                 if (l.annaNappula(y)!=null && l.annaNappula(y) instanceof Kuningas && l.annaNappula(y).annaVari() != v) { // Tarkistetaan onko nappula kuningas
                     kuningas = y; // Jos on, tallennetaan koordinaatti
@@ -274,10 +292,14 @@ public class Lauta {
                 } else {
                     if (n1.annaVari() == n2.annaVari()) {                       //Jos oma, matka tyssää sinne suuntaan siihen.
                         if(n1 instanceof Ratsu) continue;
+                        if(n1 instanceof Kansleri) continue;
+                        if(n1 instanceof Arkkipiispa) continue;
                         else break;
                     } else {
                         sallitut.annaSuunta(i).add(mahd);                               //Jos vihulainen, sallittu ja viimeinen.
                         if(n1 instanceof Ratsu) continue;
+                        else if(n1 instanceof Kansleri) continue;
+                        else if(n1 instanceof Arkkipiispa) continue;
                         else break;
                     }
                 }
@@ -288,9 +310,9 @@ public class Lauta {
 
     public String annaFen() {
        StringBuilder fenBuilder = new StringBuilder();
-       for(int rivi=7; rivi>=0; rivi--) {
+       for(int rivi=rivitMax-1; rivi>=0; rivi--) {
            int emptycnt = 0;
-           for(int sarake=0; sarake<8; sarake++) {
+           for(int sarake=0; sarake<sarakkeetMax; sarake++) {
                Koordinaatti k = new Koordinaatti(sarake, rivi);
                Nappula n = annaNappula(k);
                if(n==null) {
@@ -305,7 +327,7 @@ public class Lauta {
                    else nappulaMerkki = Character.toUpperCase(nappulaMerkki);
                    fenBuilder.append(nappulaMerkki);
                }
-               if(sarake==7 && emptycnt>0) {
+               if(sarake==sarakkeetMax-1 && emptycnt>0) {
                    fenBuilder.append(emptycnt);
                }
            }
@@ -313,5 +335,8 @@ public class Lauta {
        }
        return fenBuilder.toString();
     }
+
+    public int annaSarakkeetMax() { return sarakkeetMax; }
+    public int annaRivitMax() { return rivitMax; }
 
 }

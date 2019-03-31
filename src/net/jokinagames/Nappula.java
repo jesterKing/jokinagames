@@ -3,14 +3,18 @@ package net.jokinagames;
 abstract class Nappula {
 
 	private final Vari vari;
-	static final String[] koordinaatit = {"abcdefgh", "12345678"};
+	static final String koordinaatit = PortableGameNotationReader.sarakkeet;
+	protected final int sarakeMax;
+	protected final int riviMax;
 
 	/**
 	 * Uusi nappula annetulla värillä
 	 * @param	vari
 	 * 			Nappulan väri
 	 */
-	public Nappula(Vari vari) {
+	public Nappula(Vari vari, int sarakeMax, int riviMax) {
+		this.sarakeMax = sarakeMax;
+		this.riviMax = riviMax;
 		this.vari = vari;
 	}
 

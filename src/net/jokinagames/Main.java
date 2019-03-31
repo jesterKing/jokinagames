@@ -22,6 +22,7 @@ public class Main {
             System.out.println("Haluatko tavallisen vai transcendental aloituksen?");
             System.out.println("Syötä 1 tavalliseen aloitukseen.");
             System.out.println("Syötä 2 transcendental aloitukseen.");
+            System.out.println("Syötä 3 grand chess aloitukseen.");
             int peliasetelma = skanneri.nextInt();
             skanneri.nextLine();
 
@@ -33,8 +34,10 @@ public class Main {
             Pelaaja mustaPelaaja = new Pelaaja(nimi, Vari.MUSTA);
 
             Lauta alkuLauta = peliasetelma == 1
-                    ?PortableGameNotationReader.alustaTavallinenPeli()
-                    :PortableGameNotationReader.alustaTranscendentalPeli();
+                    ? PortableGameNotationReader.alustaTavallinenPeli()
+                    : peliasetelma==2
+                        ? PortableGameNotationReader.alustaTranscendentalPeli()
+                        : PortableGameNotationReader.alustaGrandChessPeli();
 
             Peli peli = Peli.uusiPeli(valkoinenPelaaja, mustaPelaaja, alkuLauta);
             pelisilmukka(skanneri, peli);
