@@ -17,21 +17,23 @@ public class Main {
         System.out.println("Tervetuloa pelaamaan shakkia!");
         System.out.println("Syötä 1 jos haluat uuden pelin.");
         System.out.println("Syötä 2 jos haluat jatkaa vanhaa peliä.");
-        int valinta = skanneri.nextInt();
+        int valinta = skanneri.nextInt();                               //Valitaan joko tallennettu peli tai uusi.
         if(valinta==1) {
-            System.out.println("Haluatko tavallisen vai transcendental aloituksen?");
+            System.out.println("Haluatko tavallisen, transcendental vai grand chess aloituksen?");
             System.out.println("Syötä 1 tavalliseen aloitukseen.");
             System.out.println("Syötä 2 transcendental aloitukseen.");
             System.out.println("Syötä 3 grand chess aloitukseen.");
-            int peliasetelma = skanneri.nextInt();
+            int peliasetelma = skanneri.nextInt();                       //Uuden pelin asetelma.
             skanneri.nextLine();
-
-            System.out.println("Anna pelaajan 1 nimi (Valkoiset).");
+            System.out.println("Anna pelaajan 1 nimi (Valkoiset).");        //Pelaajat peliin.
             String nimi = skanneri.nextLine();
             Pelaaja valkoinenPelaaja = new Pelaaja(nimi, Vari.VALKOINEN);
             System.out.println("Anna pelaajan 2 nimi (Mustat)");
             nimi = skanneri.nextLine();
             Pelaaja mustaPelaaja = new Pelaaja(nimi, Vari.MUSTA);
+            System.out.println("Voit tallentaa pelin syöttämällä vuorollasi komennon *tallenna*");
+            System.out.println("Luovuta peli komennolla *luovuta*)");
+            System.out.println("Tallenna ja poistu pelistä komennolla *keskeytä*");
 
             Lauta alkuLauta = peliasetelma == 1
                     ? PortableGameNotationReader.alustaTavallinenPeli()
@@ -39,8 +41,8 @@ public class Main {
                         ? PortableGameNotationReader.alustaTranscendentalPeli()
                         : PortableGameNotationReader.alustaGrandChessPeli();
 
-            Peli peli = Peli.uusiPeli(valkoinenPelaaja, mustaPelaaja, alkuLauta);
-            pelisilmukka(skanneri, peli);
+            Peli peli = Peli.uusiPeli(valkoinenPelaaja, mustaPelaaja, alkuLauta);       //Kun asetelmat valittu, alustetana peli.
+            pelisilmukka(skanneri, peli);                                               //Peli käyntiin.
 
         }
 
@@ -88,7 +90,7 @@ public class Main {
         }
     }
 
-    public static void pelisilmukka(Scanner skanneri, Peli peli) {
+    public static void pelisilmukka(Scanner skanneri, Peli peli) {          //Pelataan peliä kunnes tallennetaan tai peli ohi.
         try {
             while (!peli.peliOhi()) {
                 handlaaVuoro(peli.annaVuorossoOlevaPelaaja(), peli, skanneri);
@@ -102,11 +104,11 @@ public class Main {
 
     public static void handlaaVuoro(Pelaaja pelaaja, Peli peli, Scanner sca) throws HalutaanKeskeytys {
         peli.tulostaNykyinenTila();
-        System.out.println("Anna siirto muodossa *Pa3b4*, *de5* tai *Nc6* ");
+        System.out.println("Anna siirto muodossa *Pa3b4*, *de5* tai *Nc6*. ");               //Pyydetään siirtoja vuorotellen pelaajilta.
         System.out.println("Vuoro " + peli.annaKokoVuoro());
         System.out.println(pelaaja.annaNimi() + " (" + pelaaja.annaVari() + ") siirtää:");
         boolean siirtoOk = false;
-        while(!siirtoOk) {
+        while(!siirtoOk) {                                                              //Pelaajan valinta käydään läpi.
             try {
                 String siirt = sca.nextLine();
                 if(siirt.equals("tallenna")) {
@@ -132,7 +134,7 @@ public class Main {
                 }
                 peli.seuraavaSiirto(pelaaja.annaVari(), siirt);
                 siirtoOk = true;
-            } catch (KoordinaattiVirhe virhe) {
+            } catch (KoordinaattiVirhe virhe) {                         //Napataan virheet mitä tulee vastaan.
                 System.out.println(virhe.getMessage());
             } catch (PelkkaKohderuutuEiRiita pelkka) {
                 System.out.println(pelkka.getMessage());
