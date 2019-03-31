@@ -32,7 +32,7 @@ public class Main {
             nimi = skanneri.nextLine();
             Pelaaja mustaPelaaja = new Pelaaja(nimi, Vari.MUSTA);
             System.out.println("Voit tallentaa pelin syöttämällä vuorollasi komennon *tallenna*");
-            System.out.println("Luovuta peli komennolla *luovuta*)");
+            System.out.println("Luovuta peli komennolla *luovuta*");
             System.out.println("Tallenna ja poistu pelistä komennolla *keskeytä*");
 
             Lauta alkuLauta = peliasetelma == 1
