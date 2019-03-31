@@ -1,5 +1,6 @@
 package net.jokinagames;
 
+import javax.sound.sampled.Port;
 import java.util.List;
 
 /**
@@ -68,10 +69,12 @@ public class Koordinaatti {
 
         Nappula n;
 
+        String nappulat = l.annaSarakkeetMax()>=10 ? PortableGameNotationReader.nappulatSatu : PortableGameNotationReader.nappulat;
+
         String lahtoSarake = null;
-        if(san.length()>2 && PortableGameNotationReader.nappulat.indexOf(san.charAt(0))>-1) {
+        if(san.length()>2 && puhdistettuSan.matches("[a-zA-Z]{2}.*") && nappulat.indexOf(san.charAt(0))>-1) {
             // upseeri
-            char nappulaChar = san.charAt(0);
+            char nappulaChar = puhdistettuSan.charAt(0);
             n = Util.luoNappula(nappulaChar, vuoro, l.annaSarakkeetMax(), l.annaRivitMax());
             // nappulatyyppi handlattu, pidetään loput sanista
             puhdistettuSan = puhdistettuSan.substring(1);

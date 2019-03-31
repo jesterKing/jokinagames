@@ -24,7 +24,8 @@ import java.util.stream.Collectors;
 public class PortableGameNotationReader {
     private final String gameFile;
     final private int firstPiece = (int)('\u2654');
-    static final public String nappulat = "KQACRBNPkqacrbnp";
+    static final public String nappulat = "KQRBNPkqrbnp";
+    static final public String nappulatSatu = "KQACRBNPkqacrbnp";
     static final public String sarakkeet = "abcdefghijklmnopqrstuvwxyz";
     static final public HashMap<Character, Character> nappulaMerkit = new HashMap<>();
     static private boolean nappulatAlustettu = false;
@@ -33,6 +34,7 @@ public class PortableGameNotationReader {
     static final public String capablancaUpseeriAsetelma = "RNABQKBCNR";
     static final public String perusFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     static final public String grandChessFen = "r8r/1nbqkcabn1/pppppppppp/10/10/10/10/PPPPPPPPPP/1NBQKCABN1/R8R w - - 0 1";
+    static final public String cpablancaFen = capablancaUpseeriAsetelma.toLowerCase()+"pppppppppp/10/10/10/10/PPPPPPPPPP/"+capablancaUpseeriAsetelma;
 
     /**
      * Konstruktori, joka ottaa polun PGN-tiedostoon.
@@ -513,6 +515,10 @@ public class PortableGameNotationReader {
      */
     public static Lauta alustaGrandChessPeli() {
         return parseFen(grandChessFen);
+    }
+
+    public static Lauta alustaCapablancaPeli() {
+        return parseFen(cpablancaFen);
     }
 
     /**
