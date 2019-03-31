@@ -4,6 +4,15 @@ import java.util.*;
 
 class Lahetti extends Nappula {
 
+	/**
+	 * Uusi nappula annetulla värillä
+	 * @param	vari
+	 * 			Nappulan väri
+	 * @param 	sarakeMax
+	 * 			sarakkeiden määrä laudalla
+	 * @param 	riviMax
+	 * 			rivien määrä laudalla
+	 */
 	public Lahetti(Vari vari, int sarakeMax, int riviMax) {
 		super(vari, sarakeMax, riviMax);
 	}

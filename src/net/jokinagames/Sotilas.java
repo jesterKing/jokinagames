@@ -2,8 +2,17 @@ package net.jokinagames;
 
 import java.util.*;
 
-class Sotilas extends Nappula {
+public class Sotilas extends Nappula {
 
+	/**
+	 * Uusi nappula annetulla värillä
+	 * @param	vari
+	 * 			Nappulan väri
+	 * @param 	sarakeMax
+	 * 			sarakkeiden määrä laudalla
+	 * @param 	riviMax
+	 * 			rivien määrä laudalla
+	 */
 	public Sotilas(Vari vari, int sarakeMax, int riviMax) {
 		super(vari, sarakeMax, riviMax);
 	}
@@ -61,7 +70,7 @@ class Sotilas extends Nappula {
 			Siirto uS1 = new Siirto(A, uK);
 			siirrot.N.add(uS1);
 		} else if (lr==lahtorivimusta && this.annaVari() == Vari.MUSTA){
-			Koordinaatti uK = new Koordinaatti(koordinaatit.charAt(ls) + "" + (lr-3));
+			Koordinaatti uK = new Koordinaatti(koordinaatit.charAt(ls) + "" + (lr-1));
 			Siirto uS1 = new Siirto(A, uK);
 			siirrot.S.add(uS1);
 		}

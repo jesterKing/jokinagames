@@ -1,6 +1,15 @@
 package net.jokinagames;
 
 public class Kansleri extends Nappula {
+    /**
+     * Uusi nappula annetulla värillä
+     * @param	vari
+     * 			Nappulan väri
+     * @param 	sarakeMax
+     * 			sarakkeiden määrä laudalla
+     * @param 	riviMax
+     * 			rivien määrä laudalla
+     */
     public Kansleri(Vari vari, int sarakeMax, int riviMax) {
         super(vari, sarakeMax, riviMax);
     }

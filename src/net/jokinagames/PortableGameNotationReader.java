@@ -24,7 +24,8 @@ import java.util.stream.Collectors;
 public class PortableGameNotationReader {
     private final String gameFile;
     final private int firstPiece = (int)('\u2654');
-    static final public String nappulat = "KQACRBNPkqacrbnp";
+    static final public String nappulat = "KQRBNPkqrbnp";
+    static final public String nappulatSatu = "KQACRBNPkqacrbnp";
     static final public String sarakkeet = "abcdefghijklmnopqrstuvwxyz";
     static final public HashMap<Character, Character> nappulaMerkit = new HashMap<>();
     static private boolean nappulatAlustettu = false;
@@ -33,12 +34,15 @@ public class PortableGameNotationReader {
     static final public String capablancaUpseeriAsetelma = "RNABQKBCNR";
     static final public String perusFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1";
     static final public String grandChessFen = "r8r/1nbqkcabn1/pppppppppp/10/10/10/10/PPPPPPPPPP/1NBQKCABN1/R8R w - - 0 1";
+    static final public String cpablancaFen = capablancaUpseeriAsetelma.toLowerCase()+"pppppppppp/10/10/10/10/PPPPPPPPPP/"+capablancaUpseeriAsetelma;
 
     /**
      * Konstruktori, joka ottaa polun PGN-tiedostoon.
      *
      * @param   gameFile
      *          polku PGN-tiedostoon.
+     * @throws  IOException
+     *          jos tiedostonkäsittelyssä ilmenee ongelmia.
      * @author  Nathan Letwory
      */
     public PortableGameNotationReader(String gameFile) throws IOException {
@@ -145,12 +149,13 @@ public class PortableGameNotationReader {
 
     /**
      * Lue PGN-tiedostosta peli annetussa indeksissa
-     *
+     * <p>
      * Jos PGN-pelissa MOVETEXT ja lopputulos ovat eri riveillä
      * nämä yhdistetään yhdeksi riviksi, välilyönnillä erotettuna.
-     *
+     * </p>
      * Tyhjat rivit jätetään välistä.
      * @param   index
+     *          Luettavan pelin indeksi.
      * @return  ArrayList&lt;String&gt; jossa pelin tagit ja movetext
      * @author  Nathan Letwory
      */
@@ -490,7 +495,7 @@ public class PortableGameNotationReader {
      * @author  Nathan Letwory
      */
     public static Lauta alustaTavallinenPeli() {
-        return parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1");
+        return parseFen(perusFen); //"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1");
     }
 
     /**
@@ -509,10 +514,20 @@ public class PortableGameNotationReader {
      * <p>
      * Lauta on 10x10, ja lisäksi on satunappuloita arkkipiispa (A)
      * ja kansleri (C)
-     * @return
+     * @return  10x10 Grand Chess lauta aloitusasetelmineen
      */
     public static Lauta alustaGrandChessPeli() {
         return parseFen(grandChessFen);
+    }
+
+    /**
+     * Alustaa Lauta-olion Capablancaa varten.
+     * <p>
+     * Lauta on 10x8
+     * @return  10x8 Capablancaa varten alustettu Lauta
+     */
+    public static Lauta alustaCapablancaPeli() {
+        return parseFen(cpablancaFen);
     }
 
     /**

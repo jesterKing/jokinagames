@@ -11,7 +11,12 @@ public class Lauta {
 
 
     /**
-     * Luo perusshakki -Lauta-olion
+     * Luo perusshakki -Lauta-olion.
+     *
+     * @param   sarakkeet
+     *          Sarakkeiden määrä laudalla
+     * @param   rivit
+     *          Rivien määrä laudalla.
      */
     public Lauta(int sarakkeet, int rivit) {
         sarakkeetMax = sarakkeet;
@@ -19,10 +24,13 @@ public class Lauta {
         palikat = new Nappula[rivitMax][sarakkeetMax];
     }
 
-    /**
-     * Luo uusi Lauta annetulla Nappula asetelmanlla.
-     */
 
+    /**
+     * Piilotettu konstruktori. Käytetään sisäisesti.
+     *
+     * @param   s
+     *          Nappulamatriisi, jolla alustaa.
+     */
     private Lauta(Nappula[][] s) {
         sarakkeetMax = s[0].length;
         rivitMax = s.length;
@@ -86,11 +94,11 @@ public class Lauta {
         Siirrot siirt = sallitutSiirrot(n.mahdollisetSiirrot(mista));
         boolean found = false;
         for (int i = 0; i < 8; i++) {
-            if (found) {                                                                    //Mikäli löyty, lopetetaan läpikäynti.
+            if (found) {                                           //Mikäli löyty, lopetetaan läpikäynti.
                 break;
             }
-            for (Siirto si : siirt.annaSuunta(i)) {                                         //Käydään kaikki mahdolliset siirrot ja ilmansuunnat läpi.
-                if (si.annaKohderuutu().equals(minne)) {                                    //Jos siirto löytyy sallituista, tehdään siirto.
+            for (Siirto si : siirt.annaSuunta(i)) {             //Käydään kaikki mahdolliset siirrot ja ilmansuunnat läpi.
+                if (si.annaKohderuutu().equals(minne)) {                      //Jos siirto löytyy sallituista, tehdään siirto.
                     found = true;
                     break;
                 }
@@ -102,7 +110,7 @@ public class Lauta {
             Util.println("Siirto tehty");
             return new Lauta(s);
         } else {
-            Util.println("Siirto mahdoton");
+            Util.println("Siirto mahdoton, mieti tarkemmin seuraavalla kerralla, vuoro meni ;)");                   //Tähän joku exceptioni minkä heitttää ja palauttaa vuoron mainissa alkuun
             return new Lauta(s);
         }
     }
@@ -130,6 +138,8 @@ public class Lauta {
     /**
      * Siirrä Nappula lähtöruudusta mista kohderuutuun minne
      *
+     * @param   n
+     *          Siirrettävä nappula
      * @param   mista
      *          Lähtöruudun koordinaatti
      * @param   minne
@@ -141,11 +151,11 @@ public class Lauta {
         Siirrot siirt = sallitutSiirrot(n.mahdollisetSiirrot(mista));
         boolean found = false;
         for (int i = 0; i < 8; i++) {
-            if (found) {                                                                      //Mikäli löyty, lopetetaan läpikäynti.
+            if (found) {                                           //Mikäli löyty, lopetetaan läpikäynti.
                 break;
             }
-            for (Siirto si : siirt.annaSuunta(i)) {                                            //Käydään kaikki mahdolliset siirrot ja ilmansuunnat läpi.
-                if (si.annaKohderuutu().equals(minne)) {                                        //Jos siirto löytyy sallituista, tehdään siirto.
+            for (Siirto si : siirt.annaSuunta(i)) {             //Käydään kaikki mahdolliset siirrot ja ilmansuunnat läpi.
+                if (si.annaKohderuutu().equals(minne)) {                      //Jos siirto löytyy sallituista, tehdään siirto.
                     found = true;
                     break;
                 }
@@ -176,7 +186,7 @@ public class Lauta {
     /**
      * Tulostaa Lauta näytölle.
      */
-    public void tulostaLauta() {
+    public void tulostaLauta() {                                //(Pistetään jos koetaan tarpeeliseksi)
         System.out.println("--------------------------");
         System.out.println();
         for (int rivi = rivitMax-1; rivi >= 0; rivi--) {
@@ -265,7 +275,7 @@ public class Lauta {
      *          ruudun koordinaatti
      */
     public void asetaNappula(Nappula n, Koordinaatti x) {
-        palikat[x.annaRivi()][x.annaSarake()] = n;
+        palikat[x.annaRivi()][x.annaSarake()] = n;                      //Käpistellään ilman getteriä, liekö väliä.
     }
 
     /**
@@ -289,16 +299,18 @@ public class Lauta {
         for (int i = 0; i < 8; i++) {
             for (Siirto mahd : mahdolliset.annaSuunta(i)) {
                 Nappula n1 = annaNappula(mahd.annaLahtoruutu());                         //Lähtö
-                Nappula n2 = annaNappula(mahd.annaKohderuutu());                         //Määränpää
+                Nappula n2 = annaNappula(mahd.annaKohderuutu());                      //Määränpää
                 if (n2 == null) {
-                    sallitut.annaSuunta(i).add(mahd);                                    //Jos tyhjä, saa liikkua.
+                    if(n1 instanceof Sotilas && mahd.onkoYksiViistoon()) continue;
+                    sallitut.annaSuunta(i).add(mahd);                          //Jos tyhjä, saa liikkua.
                 } else {
-                    if (n1.annaVari() == n2.annaVari()) {                                //Jos oma, matka tyssää sinne suuntaan siihen.
+                    if (n1.annaVari() == n2.annaVari()) {                       //Jos oma, matka tyssää sinne suuntaan siihen.
                         if(n1 instanceof Ratsu) continue;
                         if(n1 instanceof Kansleri) continue;
                         if(n1 instanceof Arkkipiispa) continue;
                         else break;
                     } else {
+                        if(n1 instanceof Sotilas && !mahd.onkoYksiViistoon()) continue; // ei voi mennä suoraan vihun päälle
                         sallitut.annaSuunta(i).add(mahd);                               //Jos vihulainen, sallittu ja viimeinen.
                         if(n1 instanceof Ratsu) continue;
                         else if(n1 instanceof Kansleri) continue;

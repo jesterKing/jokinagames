@@ -65,9 +65,13 @@ public class Peli {
 	 * 			SAN-muotoinen merkkijono
 	 * @return	Lauta, joka esittää siirron jälkeistä uutta tilaa
 	 * @throws	VuoroVirhe
+	 * 			kun vääränväristä nappulaa siirretään
 	 * @throws	KoordinaattiVirhe
+	 * 			kun koordinaatti on virheellinen
 	 * @throws	PelkkaKohderuutuEiRiita
+	 * 			kun annettu SAN ei anna yksiselitteistä siirtoa. Ehkä riitä vielä lähtösarake.
 	 * @throws	KohderuutuJaLahtosarakeEiRiita
+	 * 			kun annettu SAN ei anna yksiselitteistä siirtoa. Tarvitaan koko lähtöruutu.
 	 */
 	public Lauta seuraavaSiirto(Vari vuoro, String san) throws VuoroVirhe, KoordinaattiVirhe, PelkkaKohderuutuEiRiita, KohderuutuJaLahtosarakeEiRiita {
 		if(vuoro!=this.pelaajanVuoro) {
@@ -110,8 +114,9 @@ public class Peli {
 	/**
 	 *
 	 * @author Kimmo Hildén
-	 * @param v
-	 * @return
+	 * @param	v
+	 * 			Tarkistusvuoro
+	 * @return	true jos v on shakittanut
 	 */
 	public boolean onkoShakki(Vari v) {
 		Lauta L = this.nykyinenTilanne();
@@ -223,8 +228,9 @@ public class Peli {
 
 	/**
 	 * Aseta tulos
-	 * @param t
-	 * @author Kimmo Hildén
+	 * @param	t
+	 * 			asetettavu tulos
+	 * @author	Kimmo Hildén
 	 */
 	public void asetaTulos(Tulos t){
 		this.tulos = t;
