@@ -63,4 +63,9 @@ public class Siirto {
 		Siirto ss = (Siirto)s;
 		return mista.equals(ss.mista) && minne.equals(ss.minne);
 	}
+
+	@Override
+	public String toString() {
+		return "Siirto " + annaLahtoruutu().toString() + " " + annaKohderuutu().toString() + " onkoYksiViistoon: "+onkoYksiViistoon()+ " onkoRatsuHyppy: " + onkoRatsuHyppy();
+	}
 }

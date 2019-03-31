@@ -288,6 +288,7 @@ public class Lauta {
                 Nappula n1 = annaNappula(mahd.annaLahtoruutu());                         //Lähtö
                 Nappula n2 = annaNappula(mahd.annaKohderuutu());                      //Määränpää
                 if (n2 == null) {
+                    if(n1 instanceof Sotilas && mahd.onkoYksiViistoon()) continue;
                     sallitut.annaSuunta(i).add(mahd);                          //Jos tyhjä, saa liikkua.
                 } else {
                     if (n1.annaVari() == n2.annaVari()) {                       //Jos oma, matka tyssää sinne suuntaan siihen.
