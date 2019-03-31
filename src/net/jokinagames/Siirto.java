@@ -2,7 +2,7 @@ package net.jokinagames;
 
 import static java.lang.Math.abs;
 
-class Siirto {
+public class Siirto {
 
 	private Koordinaatti mista;
 	private Koordinaatti minne;
