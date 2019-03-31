@@ -1,5 +1,8 @@
 package net.jokinagames;
 
+/**
+ * Nappula, joka liikkuu kuin ratsu tai torni.
+ */
 public class Kansleri extends Nappula {
     /**
      * Uusi nappula annetulla värillä

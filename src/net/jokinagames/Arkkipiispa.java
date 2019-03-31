@@ -1,5 +1,8 @@
 package net.jokinagames;
 
+/**
+ * Nappula, joka liikkuu kuin ratsu tai lähetti.
+ */
 public class Arkkipiispa extends Nappula {
     /**
      * Uusi nappula annetulla värillä
