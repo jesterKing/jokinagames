@@ -1,6 +1,6 @@
 package net.jokinagames;
 
-class Pelaaja {
+public class Pelaaja {
 
 	private final Vari vari;
 	private final String nimi;

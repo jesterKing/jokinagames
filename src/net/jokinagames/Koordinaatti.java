@@ -1,28 +1,41 @@
 package net.jokinagames;
 
+import javax.sound.sampled.Port;
 import java.util.List;
 
-class KoordinaattiVirhe extends Exception {
-    public KoordinaattiVirhe(String viesti) { super(viesti); }
-}
-
-class PelkkaKohderuutuEiRiita extends Exception {
-    public PelkkaKohderuutuEiRiita(String viesti) { super(viesti); }
-}
-
-class KohderuutuJaLahtosarakeEiRiita extends Exception {
-    public KohderuutuJaLahtosarakeEiRiita(String viesti) { super(viesti); }
-}
-
+/**
+ * <em>Koordinaatti</em> auttaa muuntamaan SAN-notaation <em>Lauta</em>-luokan
+ * ymmärtämään muotoon.
+ *
+ * @author Nathan Letwory
+ */
 public class Koordinaatti {
-    private int sarake; // indeksi jonoon "abcdefgh"
-    private int rivi; // indeksi jonoon "12345678"
-    private final String san;
-    private static String sar = "abcdefgh";                //Esim. a1 asettaa koordinaatin rivin ja sarakkeen indx [0],[7].
-    private static String riv = "12345678";
     /**
-     * Luo Koordinaatti-oliot annetun SAN-notaation mukaan
-     *
+     * Indeksi merkkijonoon sarakkeet
+     */
+    private int sarake; // indeksi jonoon "abcdefgh"
+    /**
+     * Indeksi merkkijonoon rivi
+     */
+    private int rivi; // indeksi jonoon "12345678"
+    /**
+     * Koordinaatin SAN-merkintä
+     */
+    private final String san;
+    /**
+     * Kaikki sarakenimet yhtenä merkkijonona.
+     * <p>&nbsp;</p>
+     * <p>&nbsp;</p>
+     * <code>"abcdefghij"</code>
+     * <p>&nbsp;</p>
+     * Merkkijonosta löytyvät myös "i" ja "j" jos halutaan
+     * laajentaa laudan kokoa 10x8 (Capablanca Chess, Capablanca Random Chess)
+     */
+    private static String sarakkeet = "abcdefghijklmnopqrstuvwxyz";                //Esim. a1 asettaa koordinaatin rivin ja sarakkeen indx [0],[7].
+    /**
+     * Luo Koordinaatti-oliot annetun SAN-notaation mukaan.
+     * <p>&nbsp;</p>
+     * <p>&nbsp;</p>
      * <code>
      *     Koordinaatti[] siirto = Koordinaatti.luoKoordinaatti("Nb3", Vari.VALKOINEN, l);
      * </code>
@@ -36,8 +49,14 @@ public class Koordinaatti {
      *
      * @throws  KoordinaattiVirhe
      *          jos SAN-merkkijonon perusteella ei laudalta löytynyt vastaava siirtoa
+     * @throws  PelkkaKohderuutuEiRiita
+     *          jos annetulla SAN-notaatiolla, joka on muotoa "e4" tai "Nc3" ei yksiselitteistä siirtoa löydy
+     * @throws  KohderuutuJaLahtosarakeEiRiita
+     *          jos annetulla SAN-notaatiolla, joka on muotoa "Nbc3" ei yksiselitteistä siirtoa löydy
+     * @throws  VuoroVirhe
+     *          jos pelaaja yrittää siirtää vastustajan nappulaa
      */
-    public static Siirto luoKoordinaatit(String san, Vari vuoro, Lauta l) throws KoordinaattiVirhe, PelkkaKohderuutuEiRiita, KohderuutuJaLahtosarakeEiRiita {
+    public static Siirto luoKoordinaatit(String san, Vari vuoro, Lauta l) throws VuoroVirhe, KoordinaattiVirhe, PelkkaKohderuutuEiRiita, KohderuutuJaLahtosarakeEiRiita {
         Koordinaatti a = null;
         Koordinaatti b;
 
@@ -50,20 +69,22 @@ public class Koordinaatti {
 
         Nappula n;
 
+        String nappulat = l.annaSarakkeetMax()>=10 ? PortableGameNotationReader.nappulatSatu : PortableGameNotationReader.nappulat;
+
         String lahtoSarake = null;
-        if(san.length()>2 && PortableGameNotationReader.nappulat.indexOf(san.charAt(0))>-1) {
+        if(san.length()>2 && puhdistettuSan.matches("[a-zA-Z]{2}.*") && nappulat.indexOf(san.charAt(0))>-1) {
             // upseeri
-            char nappulaChar = san.charAt(0);
-            n = Util.luoNappula(nappulaChar, vuoro);
+            char nappulaChar = puhdistettuSan.charAt(0);
+            n = Util.luoNappula(nappulaChar, vuoro, l.annaSarakkeetMax(), l.annaRivitMax());
             // nappulatyyppi handlattu, pidetään loput sanista
             puhdistettuSan = puhdistettuSan.substring(1);
         } else {
             // sotilas
-            n = new Sotilas(vuoro);
+            n = new Sotilas(vuoro, l.annaSarakkeetMax(), l.annaRivitMax());
         }
 
         if(n.annaVari()!=vuoro) {
-            throw new KoordinaattiVirhe("Väärä vuoro");
+            throw new VuoroVirhe("Vääränvärinen nappula, yritit " + n.annaVari().toString());
         }
 
         // vain kohderuutu tiedossa
@@ -75,6 +96,11 @@ public class Koordinaatti {
         } else if (puhdistettuSan.length()==4) { // sisältää koko lähtöruudun
             a = new Koordinaatti(puhdistettuSan.substring(0,2));
             b = new Koordinaatti(puhdistettuSan.substring(2));
+            // varmista että lähtöruudussa on annettua nappulaa
+            Nappula lahtoNappula = l.annaNappula(a);
+            if(lahtoNappula==null || !lahtoNappula.equals(n)) {
+                throw new KoordinaattiVirhe("Annetulla lähtöruudulla ei ole (oikeaa) nappulaa.");
+            }
         } else {
             throw new KoordinaattiVirhe("SAN ei kelvollinen");
         }
@@ -125,9 +151,11 @@ public class Koordinaatti {
                         throw new PelkkaKohderuutuEiRiita("Siirto ei löytynyt, eikä lähtösaraketta tiedossa");
                     }
                 }
-            } else {
+            } else if(loydot.size()==1) {
                 // kätsy, oli vain se yksi siirto
                 a = loydot.get(0).annaLahtoruutu();
+            } else {
+                throw new KoordinaattiVirhe("Annettu siirto ei löytynyt");
             }
         }
 
@@ -137,31 +165,33 @@ public class Koordinaatti {
     /**
      * Luo koordinaatti 0-based indeksien avulla. a1 on 0,0
      * @param   sarake
-     *          sarakkeen indeksi (0-7 => a-h)
+     *          sarakkeen indeksi
      * @param   rivi
-     *          rivin indeksi (0-7 => 1-8)
+     *          rivin indeksi
      */
 
     public Koordinaatti(int sarake, int rivi){
         this.sarake = sarake;
         this.rivi = rivi;
-        san = sar.charAt(sarake) + "" + riv.charAt(rivi);
+        san = sarakkeet.charAt(sarake) + "" + (rivi+1);
     }
 
     /**
-     * Luo koordinaatti SAN-notaation mukaan
-     *
-     * <code>
+     * Luo koordinaatti SAN-notaation mukaan.
+     * <p>&nbsp;</p>
+     * <p>&nbsp;</p>
+     * {@code
      * Koordinaatti x = new Koordinaatti("a1");
-     * </code>
+     * Koordinaatti y = new Koordinaatti("f7");
+     * }
      *
      * @param   paikka
      *          Paikka merkkijonona, esimerkiksi "a1"
      */
     public Koordinaatti (String paikka){        //Pitäis luoda koordinaatti sen mukaan minkä ruudun saa syötteenä.
         san = paikka;
-        this.sarake = sar.indexOf(paikka.charAt(0));
-        this.rivi = riv.indexOf(paikka.charAt(1));
+        this.sarake = sarakkeet.indexOf(paikka.charAt(0));
+        this.rivi = Integer.parseInt(paikka.substring(1))-1;
     }
 
     /**
@@ -189,11 +219,22 @@ public class Koordinaatti {
      */
     public String annaSan() { return san; }
 
+    /**
+     * Palauttaa Koordinaatti-olion kuvauksen merkkijonona muodossa "SAN (rivi, sarake)"
+     * @return Merkkijonon muodossa "SAN (rivi, sarake)"
+     */
     @Override
     public String toString() {
         return annaSan()+ " (" + annaRivi()+ ", " + annaSarake() + ")";
     }
 
+    /**
+     * Vertailee oliota annettuun. Sarakkeen ja rivin on oltava samat, jotta
+     * <code>equals()</code> palauttaa <code>true</code>
+     * @param   b
+     *          objekti johon verrataan.
+     * @return <code>true</code> jos b on tyyppiä <code>Koordinaatti</code> ja sarakkeet ja rivit ovat kummallakin samat.
+     */
     @Override
     public boolean equals(Object b) {
         if(!(b instanceof Koordinaatti)) return false;

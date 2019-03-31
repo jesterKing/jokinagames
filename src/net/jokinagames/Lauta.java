@@ -6,15 +6,34 @@ import java.util.List;
 public class Lauta {
     private final Nappula[][] palikat;
 
+    private final int sarakkeetMax;
+    private final int rivitMax;
+
+
     /**
-     * Luo perusshakki -Lauta-olion
+     * Luo perusshakki -Lauta-olion.
+     *
+     * @param   sarakkeet
+     *          Sarakkeiden määrä laudalla
+     * @param   rivit
+     *          Rivien määrä laudalla.
      */
-    public Lauta() {
-        palikat = new Nappula[8][8];
+    public Lauta(int sarakkeet, int rivit) {
+        sarakkeetMax = sarakkeet;
+        rivitMax = rivit;
+        palikat = new Nappula[rivitMax][sarakkeetMax];
     }
 
 
+    /**
+     * Piilotettu konstruktori. Käytetään sisäisesti.
+     *
+     * @param   s
+     *          Nappulamatriisi, jolla alustaa.
+     */
     private Lauta(Nappula[][] s) {
+        sarakkeetMax = s[0].length;
+        rivitMax = s.length;
         palikat = s;
     }
 
@@ -34,8 +53,8 @@ public class Lauta {
         ArrayList<Siirto> loydot = new ArrayList<>();
 
         // käydään koko lautaa läpi, etsitään samaa tyyppiä kuin nappula
-        for (int rivi = 0; rivi < 8; rivi++) {
-            for (int sarake = 0; sarake < 8; sarake++) {
+        for (int rivi = 0; rivi < rivitMax; rivi++) {
+            for (int sarake = 0; sarake < sarakkeetMax; sarake++) {
                 // katso mitä nappulaa on koordinaatilla
                 Koordinaatti lna = new Koordinaatti(sarake, rivi);
                 Nappula ln = this.annaNappula(lna);
@@ -119,6 +138,8 @@ public class Lauta {
     /**
      * Siirrä Nappula lähtöruudusta mista kohderuutuun minne
      *
+     * @param   n
+     *          Siirrettävä nappula
      * @param   mista
      *          Lähtöruudun koordinaatti
      * @param   minne
@@ -152,10 +173,10 @@ public class Lauta {
     }
 
     private Nappula[][] luoNappulaMatriisiKopio() {
-        Nappula[][] s = new Nappula[8][8];
+        Nappula[][] s = new Nappula[rivitMax][sarakkeetMax];
         Nappula[][] alkup = getPalikat();
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
+        for (int i = 0; i < rivitMax; i++) {
+            for (int j = 0; j < sarakkeetMax; j++) {
                 s[i][j] = alkup[i][j];
             }
         }
@@ -168,9 +189,11 @@ public class Lauta {
     public void tulostaLauta() {                                //(Pistetään jos koetaan tarpeeliseksi)
         System.out.println("--------------------------");
         System.out.println();
-        for (int rivi = 7; rivi >= 0; rivi--) {
-            System.out.print(rivi+1 + " ");
-            for (int sarake = 0; sarake < 8; sarake++) {
+        for (int rivi = rivitMax-1; rivi >= 0; rivi--) {
+            System.out.print(rivi+1);
+            if(rivi+1<10) System.out.print("  ");
+            else System.out.print(" ");
+            for (int sarake = 0; sarake < sarakkeetMax; sarake++) {
                 Koordinaatti x = new Koordinaatti(sarake, rivi);
                 Nappula n = annaNappula(x);
                 if (n != null) {
@@ -181,14 +204,69 @@ public class Lauta {
             }
             System.out.println();
             if (rivi == 0) {
-                System.out.println("  [a][b][c][d][e][f][g][h]");
-                System.out.println("--------------------------");
+                System.out.print("   ");
+                StringBuilder line = new StringBuilder("___");
+                for(int sarakeIdx = 0; sarakeIdx< sarakkeetMax; sarakeIdx++) {
+                    System.out.print("[");
+                    System.out.print(PortableGameNotationReader.sarakkeet.charAt(sarakeIdx));
+                    System.out.print("]");
+                    line.append("___");
+                }
+                System.out.println();
+                System.out.println(line.toString());
             }
         }
     }
 
     private Nappula[][] getPalikat() {                                  //Palauttaa nappulamuotoisen laudan.
         return palikat;
+    }
+
+
+    /**
+     * Palauttaa pelaajan kaikkien nappuloiden mahdolliset loppukoordinaatit listana
+     *
+     * @param l nykyinen lauta
+     * @param v pelaajan väri
+     * @return koordinaattilista mahdollisista pelaajan siirroista
+     * @author Kimmo Hilden
+     */
+    public List<Koordinaatti> annaKaikkiKoordinaatit(Lauta l, Vari v) {
+        ArrayList<Koordinaatti> loppukoordinaatit = new ArrayList<>(); // Alustetaan palautettava koordinaattilista
+        for (int r = 0; r < rivitMax; r++) { // Käydään lauta läpi
+            for (int sa = 0; sa < sarakkeetMax; sa++) {
+                Koordinaatti y = new Koordinaatti(sa, r); // Tehdään koordinaatti ruudusta missä ollaan
+                if (l.annaNappula(y)!=null && l.annaNappula(y).annaVari() == v){ // Tarkistetaan onko koordinaatissa nappula ja onko se oikean värinen
+                    Siirrot valisiirrot =  sallitutSiirrot(l.annaNappula(y).mahdollisetSiirrot(y)); // Haetaan nappulan mahdolliset  siirrot
+                    for(int suunta=0; suunta<8; suunta++) { // Käytään Siirrot olio läpi
+                        for (Siirto siirto : valisiirrot.annaSuunta(suunta)) {
+                            loppukoordinaatit.add(siirto.annaKohderuutu()); // Lisätään siirron kohderuutu listaan
+                        }
+                    }
+                }
+            }
+        }
+        return loppukoordinaatit;
+    }
+
+    /**
+     * Etsitään kuninkaan koordinaatti
+     * @param l nykyinen lauta
+     * @param v pelaajan väri
+     * @return Kuninkaan koordinaatti
+     * @author Kimmo Hilden
+     */
+    public Koordinaatti etsiKuningas(Lauta l, Vari v) {
+        Koordinaatti kuningas = new Koordinaatti("a1"); // Alustetaan palautettava koordinaatti
+        for (int r = 0; r < rivitMax; r++) { // Käydään lauta läpi
+            for (int sa = 0; sa < sarakkeetMax; sa++) {
+                Koordinaatti y = new Koordinaatti(sa, r);  // Tehdään koordinaatti ruudusta missä ollaan
+                if (l.annaNappula(y)!=null && l.annaNappula(y) instanceof Kuningas && l.annaNappula(y).annaVari() != v) { // Tarkistetaan onko nappula kuningas
+                    kuningas = y; // Jos on, tallennetaan koordinaatti
+                }
+            }
+        }
+        return kuningas; // Palautetaan koordinaatti
     }
 
     /**
@@ -225,14 +303,20 @@ public class Lauta {
                 Nappula n1 = annaNappula(mahd.annaLahtoruutu());                         //Lähtö
                 Nappula n2 = annaNappula(mahd.annaKohderuutu());                      //Määränpää
                 if (n2 == null) {
+                    if(n1 instanceof Sotilas && mahd.onkoYksiViistoon()) continue;
                     sallitut.annaSuunta(i).add(mahd);                          //Jos tyhjä, saa liikkua.
                 } else {
                     if (n1.annaVari() == n2.annaVari()) {                       //Jos oma, matka tyssää sinne suuntaan siihen.
                         if(n1 instanceof Ratsu) continue;
+                        if(n1 instanceof Kansleri) continue;
+                        if(n1 instanceof Arkkipiispa) continue;
                         else break;
                     } else {
+                        if(n1 instanceof Sotilas && !mahd.onkoYksiViistoon()) continue; // ei voi mennä suoraan vihun päälle
                         sallitut.annaSuunta(i).add(mahd);                               //Jos vihulainen, sallittu ja viimeinen.
                         if(n1 instanceof Ratsu) continue;
+                        else if(n1 instanceof Kansleri) continue;
+                        else if(n1 instanceof Arkkipiispa) continue;
                         else break;
                     }
                 }
@@ -240,4 +324,36 @@ public class Lauta {
         }
         return sallitut;
     }
+
+    public String annaFen() {
+       StringBuilder fenBuilder = new StringBuilder();
+       for(int rivi=rivitMax-1; rivi>=0; rivi--) {
+           int emptycnt = 0;
+           for(int sarake=0; sarake<sarakkeetMax; sarake++) {
+               Koordinaatti k = new Koordinaatti(sarake, rivi);
+               Nappula n = annaNappula(k);
+               if(n==null) {
+                   emptycnt++;
+               } else {
+                   if(emptycnt>0) {
+                       fenBuilder.append(emptycnt);
+                       emptycnt=0;
+                   }
+                   char nappulaMerkki = n.annaNappula().charAt(1);
+                   if(n.annaVari()==Vari.MUSTA) nappulaMerkki = Character.toLowerCase(nappulaMerkki);
+                   else nappulaMerkki = Character.toUpperCase(nappulaMerkki);
+                   fenBuilder.append(nappulaMerkki);
+               }
+               if(sarake==sarakkeetMax-1 && emptycnt>0) {
+                   fenBuilder.append(emptycnt);
+               }
+           }
+           if(rivi>0) fenBuilder.append('/');
+       }
+       return fenBuilder.toString();
+    }
+
+    public int annaSarakkeetMax() { return sarakkeetMax; }
+    public int annaRivitMax() { return rivitMax; }
+
 }

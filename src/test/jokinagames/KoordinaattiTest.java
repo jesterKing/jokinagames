@@ -1,6 +1,6 @@
 package test.jokinagames;
 
-import net.jokinagames.Koordinaatti;
+import net.jokinagames.*;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,5 +30,26 @@ public class KoordinaattiTest {
         Assert.assertThat(a1.annaSan(), is("a1"));
         Koordinaatti h1 = new Koordinaatti("h1");
         Assert.assertThat(h1.annaSan(), is("h1"));
+    }
+
+    @Test
+    public void yritaVirheellinenSiirto() {
+        Lauta l = PortableGameNotationReader.alustaTavallinenPeli();
+        try {
+            Koordinaatti.luoKoordinaatit("Pa5", Vari.VALKOINEN, l);
+        } catch (Exception e) {
+            Assert.assertTrue(e instanceof KoordinaattiVirhe);
+        }
+    }
+
+    @Test
+    public void yritaTyhjanRuudunSiirto() {
+        Lauta l = PortableGameNotationReader.alustaTavallinenPeli();
+        try {
+            Koordinaatti.luoKoordinaatit("e3d6", Vari.VALKOINEN, l);
+        } catch (Exception e) {
+            Assert.assertTrue(e instanceof KoordinaattiVirhe);
+        }
+
     }
 }

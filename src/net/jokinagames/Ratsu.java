@@ -5,9 +5,18 @@ import java.util.Arrays;
 
 class Ratsu extends Nappula {
 
-    public Ratsu(Vari vari)
+    /**
+     * Uusi nappula annetulla värillä
+     * @param	vari
+     * 			Nappulan väri
+     * @param 	sarakeMax
+     * 			sarakkeiden määrä laudalla
+     * @param 	riviMax
+     * 			rivien määrä laudalla
+     */
+    public Ratsu(Vari vari, int sarakeMax, int riviMax)
     {
-        super(vari);
+        super(vari, sarakeMax, riviMax);
     }
 
     private static final List<int[]> n = Arrays.asList( // Mahdollisten siirtojen luominen
@@ -21,7 +30,9 @@ class Ratsu extends Nappula {
             new int[]{2, -1}
             );
 
-
+    /**
+     * Ratsun mahdolliset siirrot annetusta lähtökoordinaatista tyhjällä laudalla.
+     */
     public Siirrot mahdollisetSiirrot(Koordinaatti A) {
         Siirrot siirrot = new Siirrot(); // Alustetaan uusi palautettava lista siirroista
 
@@ -33,8 +44,8 @@ class Ratsu extends Nappula {
             int i = apuja[n.indexOf(a)];
             int ur = a[0] + lr; // Muuttuja uudelle riville
             int us = a[1] + ls; // Muuttuja uudelle sarakkeelle
-            if (ur>=0 && ur<=7 && us>=0 && us<=7){  // Tarkistetaan, että ollaanko laudalla ko. siirron tapauksessa
-                Koordinaatti uk = new Koordinaatti(koordinaatit[0].charAt(us) +""+koordinaatit[1].charAt(ur)); // Luodaan uusi koordinaatti
+            if (ur>=0 && ur<riviMax && us>=0 && us<sarakeMax){  // Tarkistetaan, että ollaanko laudalla ko. siirron tapauksessa
+                Koordinaatti uk = new Koordinaatti(koordinaatit.charAt(us) +""+(ur+1)); // Luodaan uusi koordinaatti
                 Siirto uS = new Siirto(A, uk);  // Jos ollaan, generoidaan uusi siirto
                 siirrot.annaSuunta(i).add(uS);  // ja lisätään siirtolistaan
             }
@@ -43,6 +54,10 @@ class Ratsu extends Nappula {
         return siirrot; // Palautetaan siirtolista
 
     }
+
+    /**
+     * Ratsun värin havainnointimetodi
+     */
     public String annaNappula() {
         if (this.annaVari() == Vari.VALKOINEN) {
             return "[N]";

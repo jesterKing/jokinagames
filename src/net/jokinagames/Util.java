@@ -9,13 +9,19 @@ class Util {
      * nappulamerkki.
      * @param   san
      *          Merkkijono, jonka perusteella luodaan Nappula-olio
+     * @param   vari
+     *          Nappulan väri. Jos Vari.KATSOKIRJAIMESTA päätellään väriä kirjaimesta
+     * @param   sarakkeetMax
+     *          Laudan sarakkeiden määrä
+     * @param   rivitMax
+     *          Laudan rivien määrä
      * @return  Nappula-olio
      */
-    public static Nappula luoNappula(String san, Vari vari) {
+    public static Nappula luoNappula(String san, Vari vari, int sarakkeetMax, int rivitMax) {
         if(PortableGameNotationReader.nappulat.indexOf(san.charAt(0))>-1) {
             // upseeri
             char nappulaChar = san.charAt(0);
-            return Util.luoNappula(nappulaChar, vari);
+            return Util.luoNappula(nappulaChar, vari, sarakkeetMax, rivitMax);
         }
         return null;
     }
@@ -30,33 +36,45 @@ class Util {
      *          tässäkin. Anna Vari.KATSOKIRJAIMESTA kun tietää että
      *          kirjain kertoo oikean värin (pienet kirjaimet on mustia
      *          ja isot kirjaiment valkoisia nappuloita).
+     * @param   sarakkeetMax
+     *          Laudan sarakkeiden määrä
+     * @param   rivitMax
+     *          Laudan rivien määrä
      * @return  Nappula-olio
      */
-    public static Nappula luoNappula(char nappulaChar, Vari vari) {
+    public static Nappula luoNappula(char nappulaChar, Vari vari, int sarakkeetMax, int rivitMax) {
         if(vari==Vari.KATSOKIRJAIMESTA) {
             vari = Character.isLowerCase(nappulaChar) ? Vari.MUSTA : Vari.VALKOINEN;
         }
         String nappulaS = ("" + nappulaChar).toLowerCase();
-        Nappula n = null;
+        Nappula n;
         switch(nappulaS) {
             case "k":
-                n = new Kuningas(vari);
+                n = new Kuningas(vari, sarakkeetMax, rivitMax);
                 break;
             case "q":
-                n = new Kuningatar(vari);
+                n = new Kuningatar(vari, sarakkeetMax, rivitMax);
                 break;
             case "r":
-                n = new Torni(vari);
+                n = new Torni(vari, sarakkeetMax, rivitMax);
                 break;
             case "b":
-                n = new Lahetti(vari);
+                n = new Lahetti(vari, sarakkeetMax, rivitMax);
                 break;
             case "n":
-                n = new Ratsu(vari);
+                n = new Ratsu(vari, sarakkeetMax, rivitMax);
                 break;
             case "p":
-                n = new Sotilas(vari);
+                n = new Sotilas(vari, sarakkeetMax, rivitMax);
                 break;
+            case "a":
+                n = new Arkkipiispa(vari, sarakkeetMax, rivitMax);
+                break;
+            case "c":
+                n = new Kansleri(vari, sarakkeetMax, rivitMax);
+                break;
+            default:
+                throw new TuntematonNappula("Nappulamerkki " + nappulaS + " tuntematon");
         }
         return n;
     }
@@ -155,7 +173,8 @@ class Util {
 
     /**
      * Tulosta UTF-8 merkkijono
-     * @param string
+     * @param   string
+     *          tulostettava merkkijono
      */
     public static void println(String string) {
         AnsiConsole.out.println(Color.BLACK_BACKGROUND_BRIGHT + string + Color.RESET);

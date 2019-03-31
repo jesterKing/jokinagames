@@ -1,20 +1,22 @@
 package net.jokinagames;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
-class Peli {
+public class Peli {
 
 	private Pelaaja valkoinenPelaaja;
 	private Pelaaja mustaPelaaja;
+	private Tulos tulos;
 	protected ArrayList<Lauta> siirrot;
+	protected ArrayList<String> sansiirrot;
 
-	/*
-		TODO:
-		lisää seuraavat attribuutit:
-		- tapahtuman nimi
-		- pelin paikka
-		- pelin pvm
-	 */
+	private String pvm;
+	private String aika;
+
+	private int kokoVuoro;
+	private int puoliVuoro;
+	private Vari pelaajanVuoro;
 
 	/**
 	 * Luo uusi peli, johon osallistuvat pelaajat yksi ja kaksi
@@ -42,8 +44,15 @@ class Peli {
 	 */
 	private Peli(Pelaaja valkoinen, Pelaaja musta) {
 		siirrot = new ArrayList<>();
+		sansiirrot = new ArrayList<>();
 		valkoinenPelaaja = valkoinen;
 		mustaPelaaja = musta;
+		tulos = Tulos.KESKEN;
+		kokoVuoro = 1;
+		puoliVuoro = 1;
+		pelaajanVuoro = Vari.VALKOINEN;
+		pvm = new SimpleDateFormat("yyyy.MM.dd").format(Calendar.getInstance().getTime());
+		aika = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
 	}
 
 	/**
@@ -51,19 +60,40 @@ class Peli {
 	 * siirto-listaan.
 	 *
 	 * @param	vuoro
-	 * 			Väri kenen vuoro on
+	 * 			Väri kenen kokoVuoro on
 	 * @param	san
 	 * 			SAN-muotoinen merkkijono
 	 * @return	Lauta, joka esittää siirron jälkeistä uutta tilaa
+	 * @throws	VuoroVirhe
+	 * 			kun vääränväristä nappulaa siirretään
+	 * @throws	KoordinaattiVirhe
+	 * 			kun koordinaatti on virheellinen
+	 * @throws	PelkkaKohderuutuEiRiita
+	 * 			kun annettu SAN ei anna yksiselitteistä siirtoa. Ehkä riitä vielä lähtösarake.
+	 * @throws	KohderuutuJaLahtosarakeEiRiita
+	 * 			kun annettu SAN ei anna yksiselitteistä siirtoa. Tarvitaan koko lähtöruutu.
 	 */
-	public Lauta seuraavaSiirto(Vari vuoro, String san) throws KoordinaattiVirhe, PelkkaKohderuutuEiRiita, KohderuutuJaLahtosarakeEiRiita {
+	public Lauta seuraavaSiirto(Vari vuoro, String san) throws VuoroVirhe, KoordinaattiVirhe, PelkkaKohderuutuEiRiita, KohderuutuJaLahtosarakeEiRiita {
+		if(vuoro!=this.pelaajanVuoro) {
+			throw new VuoroVirhe(vuoro + " ei ole vuorossa");
+		}
 		Lauta current = nykyinenTilanne();
 		Siirto siirto = Koordinaatti.luoKoordinaatit(san, vuoro, current);
 		Lauta uusi = current.teeSiirto(siirto.annaLahtoruutu(), siirto.annaKohderuutu());
 		siirrot.add(uusi);
+		sansiirrot.add(san);
+		puoliVuoro++;
+		if(pelaajanVuoro==Vari.MUSTA) {
+			this.kokoVuoro++;
+		}
+		pelaajanVuoro = pelaajanVuoro==Vari.MUSTA ? Vari.VALKOINEN : Vari.MUSTA;
 		return uusi;
 	}
 
+	/**
+	 * Tulosta ASCII-muotoinen esitys nykyisestä pelitilanteesta viimeisimmän siirron jälkeen.
+	 * @author	Nathan Letwory
+	 */
 	public void tulostaNykyinenTila()
 	{
 		nykyinenTilanne().tulostaLauta();
@@ -78,12 +108,27 @@ class Peli {
 	}
 
 	public boolean peliOhi() {
-		return false;
+		return annaTulos()!=Tulos.KESKEN;
 	}
 
-	public boolean onkoShakki() {
-		return false;
+	/**
+	 *
+	 * @author Kimmo Hildén
+	 * @param	v
+	 * 			Tarkistusvuoro
+	 * @return	true jos v on shakittanut
+	 */
+	public boolean onkoShakki(Vari v) {
+		Lauta L = this.nykyinenTilanne();
+
+		if (L.annaKaikkiKoordinaatit(L, v).contains(L.etsiKuningas(L,v))){
+			return true;
+		} else {
+			return false;
+		}
 	}
+
+
 
 	/**
 	 * Anna valkoinen pelaaja
@@ -103,5 +148,131 @@ class Peli {
 		return mustaPelaaja;
 	}
 
+	/**
+	 * Anna pelin aloituspäivämäärä muodossa <code>"2019.03.29"</code>.
+	 * @return	pelin aloituspäivämäärä
+	 * @author	Nathan Letwory
+	 */
+	public String annaPaivamaara() {
+		return pvm;
+	}
 
+	public void asetaPaivamaara(String paivamaara) {
+		pvm = paivamaara;
+	}
+
+
+	/**
+	 * Anna pelin aloitusaika muodossa <code>"08:24:12"</code>.
+	 * @return	pelin aloitusaika
+	 * @author	Nathan Letwory
+	 */
+	public String annaAika() {
+		return aika;
+	}
+
+	public void asetaAika(String aika) {
+		this.aika = aika;
+	}
+
+	/**
+	 * Antaa alkuasetelman FEN-muodossa
+	 * @return	alkuasetelma FEN-muodossa
+	 * @author	Nathan Letwory
+	 */
+	public String annaAloitusFen() {
+		return siirrot.get(0).annaFen();
+	}
+
+	/**
+	 * Antaa pelaajan värin, jonka vuoro nyt on.
+	 * @return	Vari
+	 * @author	Nathan Letwory
+	 */
+	public Vari annaPelaajanVuoro() {
+		return pelaajanVuoro;
+	}
+
+	public Pelaaja annaVuorossoOlevaPelaaja() {
+		return annaPelaajanVuoro()==Vari.MUSTA ? annaMustaPelaaja() : annaValkoinenPelaaja();
+	}
+
+	/**
+	 * Antaa pelin vuoron numeron.
+	 * @return	käynnissä olevan vuoron numero.
+	 */
+	public int annaKokoVuoro() {
+		return kokoVuoro;
+	}
+
+	/**
+	 * Antaa pelin puolivuoron;
+	 * @return	käynnissä olevan puolivuoron numero.
+	 */
+	public int annaPuoliVuoro() {
+		return puoliVuoro;
+	}
+
+
+	/**
+	 * Tuloksen ilmaisua varten
+	 *
+	 * @author Kimmo Hildén
+ 	 */
+	public enum Tulos{
+		KESKEN,
+		TASAPELI,
+		MUSTA_VOITTI,
+		VALKOINEN_VOITTI
+	}
+
+	/**
+	 * Aseta tulos
+	 * @param	t
+	 * 			asetettavu tulos
+	 * @author	Kimmo Hildén
+	 */
+	public void asetaTulos(Tulos t){
+		this.tulos = t;
+
+	}
+
+	/**
+	 * Anna pelin tulos
+	 * @return Tulos
+	 * @author Kimmo Hildén
+	 */
+	public Tulos annaTulos(){
+		return this.tulos;
+	}
+
+	/**
+	 * Tuloksen perusteella oikea merkkijono.
+	 * {@code
+	 * TASAPELI = "1/2-1/2";
+	 * MUSTA_VOITTI = "0-1";
+	 * VALKOINEN_VOITTI = "1-0";
+	 * KESKEN = "*";
+	 * }
+	 * @return merkkijono
+	 * @author Nathan Letwory
+	 */
+	public String annaTulosToString() {
+	    String t;
+		switch(annaTulos()) {
+			case TASAPELI:
+				t = "1/2-1/2";
+				break;
+			case MUSTA_VOITTI:
+				t = "0-1";
+				break;
+			case VALKOINEN_VOITTI:
+				t = "1-0";
+				break;
+			default:
+				t = "*";
+				break;
+		}
+		return t;
+	}
 }
