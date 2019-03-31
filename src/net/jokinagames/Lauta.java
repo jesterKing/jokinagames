@@ -296,6 +296,7 @@ public class Lauta {
                         if(n1 instanceof Arkkipiispa) continue;
                         else break;
                     } else {
+                        if(n1 instanceof Sotilas && !mahd.onkoYksiViistoon()) continue; // ei voi mennä suoraan vihun päälle
                         sallitut.annaSuunta(i).add(mahd);                               //Jos vihulainen, sallittu ja viimeinen.
                         if(n1 instanceof Ratsu) continue;
                         else if(n1 instanceof Kansleri) continue;

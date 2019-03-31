@@ -1,6 +1,6 @@
 package net.jokinagames;
 
-abstract class Nappula {
+public abstract class Nappula {
 
 	private final Vari vari;
 	static final String koordinaatit = PortableGameNotationReader.sarakkeet;
