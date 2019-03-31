@@ -2,7 +2,7 @@ package net.jokinagames;
 
 import java.util.*;
 
-class Sotilas extends Nappula {
+public class Sotilas extends Nappula {
 
 	public Sotilas(Vari vari, int sarakeMax, int riviMax) {
 		super(vari, sarakeMax, riviMax);

@@ -490,7 +490,7 @@ public class PortableGameNotationReader {
      * @author  Nathan Letwory
      */
     public static Lauta alustaTavallinenPeli() {
-        return parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1");
+        return parseFen(perusFen); //"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1");
     }
 
     /**

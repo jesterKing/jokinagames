@@ -35,11 +35,26 @@ public class Siirto {
 		return minne;
 	}
 
+	/**
+	 * Kertoo edustaako Siirto ratsuhyppyä.
+	 * @return	true jos ratsuhyppy
+	 */
 	public boolean onkoRatsuHyppy() {
 		int sardelta = abs(minne.annaSarake()-mista.annaSarake());
 		int rivdelta = abs(minne.annaRivi()-mista.annaRivi());
 
 		return sardelta==2 && rivdelta==1 || sardelta==1 && rivdelta==2;
+	}
+
+	/**
+	 * Kertoo edustaako Siirto yhtä ruutua vinoon.
+	 * @return	true jos siirto on yksi ruutu vinoon
+	 */
+	public boolean onkoYksiViistoon() {
+		int sardelta = abs(minne.annaSarake()-mista.annaSarake());
+		int rivdelta = abs(minne.annaRivi()-mista.annaRivi());
+
+		return sardelta==1 && rivdelta==1;
 	}
 
 	@Override
